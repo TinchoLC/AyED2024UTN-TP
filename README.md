@@ -5,3 +5,5 @@ Cabrera, Martín
 Delgado, Mauro
 Rodriguez, Lautaro
 Rossi, Dariana
+
+Entrega primer TP: https://frro.cvg.utn.edu.ar/mod/assign/view.php?id=65227
