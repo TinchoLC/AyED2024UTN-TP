@@ -10,8 +10,7 @@ opcion = int(input("Seleccione la opcion: "))
 
 while(opcion != 0):
 	if(opcion == 1):
-		print("Elegiste gestionar tu perfil (FELICIDADES)")
-
+		print("Elegiste gestionar tu perfil :)")
 
 	if(opcion>4 or opcion<0):
 		opcion = int(input("Opcion incorrecta, seleccione otra opcion: "))
