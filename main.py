@@ -63,6 +63,13 @@ while(ingreso_correcto and opcion != 0):
 					estudiante2_bio = input("Ingrese una nueva biografia: ")
 				elif(sesion == 3):
 					estudiante3_bio = input("Ingrese una nueva biografia: ")
+			elif(opcion == 3):
+				if(sesion == 1):
+					estudiante1_hobbies = input("Ingrese un nuevo hobbie: ")
+				elif(sesion == 2):
+					estudiante2_hobbies = input("Ingrese un nuevo hobbie: ")
+				elif(sesion == 3):
+					estudiante3_hobbies = input("Ingrese un nuevo hobbie: ")
 	elif(opcion == 2):
 		print("Menu de gestion de candidatos")
 		print("\t1. Ver candidatos\n")
