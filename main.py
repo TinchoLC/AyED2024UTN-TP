@@ -7,7 +7,7 @@ estudiante3_email = "estudiante3@ayed.com"; estudiante3_contrasena = "555666"; e
 ingreso_correcto = False
 intentos_restantes = 3
 while(not ingreso_correcto and intentos_restantes > 0):
-	email = input("Ingrese su email: ")
+	email = input("Ingrese su email: ").lower() # El .lower es para forzar minusculas
 	contrasena = input("Ingrese su contraseña: ")
 
 	intentos_restantes = intentos_restantes - 1
