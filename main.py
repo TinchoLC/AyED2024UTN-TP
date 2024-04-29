@@ -1,4 +1,5 @@
 # Archivo principal
+from datetime import datetime 
 
 estudiante1_email = "a"; estudiante1_contrasena = "1"; estudiante1_nombre = "Juliancito"; estudiante1_nacimiento = "2006-01-07"; estudiante1_hobbies = "pescar, nadar"; estudiante1_bio = ""
 estudiante2_email = "estudiante2@ayed.com"; estudiante2_contrasena = "333444"; estudiante2_nombre = "Pedrito"; estudiante2_nacimiento = "2005-04-10"; estudiante2_hobbies = "comer, jugar"; estudiante2_bio = ""
@@ -7,7 +8,7 @@ estudiante3_email = "estudiante3@ayed.com"; estudiante3_contrasena = "555666"; e
 ingreso_correcto = False
 intentos_restantes = 3
 while(not ingreso_correcto and intentos_restantes > 0):
-	email = input("Ingrese su email: ")
+	email = input("Ingrese su email: ").lower() # El .lower es para forzar minusculas
 	contrasena = input("Ingrese su contraseña: ")
 
 	intentos_restantes = intentos_restantes - 1
@@ -60,7 +61,6 @@ while(ingreso_correcto and opcion != 0):
 				if(sesion == 1):
 					estudiante1_bio = input("Ingrese una nueva biografia: ")
 				elif(sesion == 2):
-
 					estudiante2_bio = input("Ingrese una nueva biografia: ")
 				elif(sesion == 3):
 					estudiante3_bio = input("Ingrese una nueva biografia: ")
@@ -74,8 +74,9 @@ while(ingreso_correcto and opcion != 0):
 	elif(opcion == 2):
 		print("Menu de gestion de candidatos")
 		print("\t1. Ver candidatos\n")
-		if(sesion==1):
-			from datetime import datetime
+		opcion = int(input("Seleccione la opcion: "))
+		
+		if(opcion == 1):
 			# Año actual
 			current_year = datetime.now().year
 			# Calcular la edad de cada estudiante
@@ -86,23 +87,12 @@ while(ingreso_correcto and opcion != 0):
 			print("Edad de Estudiante 1:", estudiante1_edad)
 			print("Edad de Estudiante 2:", estudiante2_edad)
 			print("Edad de Estudiante 3:", estudiante3_edad)
-		elif(sesion==2):
-			from datetime import datetime
-			# Año actual
-			current_year = datetime.now().year
-			# Calcular la edad de cada estudiante
-			estudiante1_edad = current_year - int(estudiante1_nacimiento[:4])
-			estudiante2_edad = current_year - int(estudiante2_nacimiento[:4])
-			estudiante3_edad = current_year - int(estudiante3_nacimiento[:4])
-		elif(sesion==3):
-			from datetime import datetime
-			# Año actual
-			current_year = datetime.now().year
-			# Calcular la edad de cada estudiante
-			estudiante1_edad = current_year - int(estudiante1_nacimiento[:4])
-			estudiante2_edad = current_year - int(estudiante2_nacimiento[:4])
-			estudiante3_edad = current_year - int(estudiante3_nacimiento[:4])
-		opcion = int(input("Seleccione la opcion: "))
+			if(sesion==1):
+				Print(sesion)#Aca va lo de elegir el nombre favorito que pide el ejercicio
+			elif(sesion==2):
+				Print(sesion)#Aca va lo de elegir el nombre favorito que pide el ejercicio
+			elif(sesion==3):
+				Print(sesion)#Aca va lo de elegir el nombre favorito que pide el ejercicio
 	elif(opcion == 3):
 		print("En construccion")
 	elif(opcion == 4):
