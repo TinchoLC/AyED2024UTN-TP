@@ -84,31 +84,34 @@ while(ingreso_correcto and opcion != 0):
 			estudiante2_edad = current_year - int(estudiante2_nacimiento[:4])
 			estudiante3_edad = current_year - int(estudiante3_nacimiento[:4])
 			
-            print("Nombre de Estudiante 1:", estudiante1_nombre)
-            print("Fecha de Nacimiento Estudiante 1:", estudiante1_nacimiento)
-			print("Edad de Estudiante 1:", estudiante1_edad)
-			print("Biografia de Estudiante 1:", estudiante1_bio)
-			print("Hobbies de Estudiante 1:", estudiante1_hobbies)
+			print("\nEstudiante 1")
+			print("Nombre:", estudiante1_nombre)
+			print("Fecha de Nacimiento:", estudiante1_nacimiento)
+			print("Edad:", estudiante1_edad)
+			print("Biografia:", estudiante1_bio)
+			print("Hobbies:", estudiante1_hobbies)
 			
-			print("Nombre de Estudiante 2:", estudiante2_nombre)
-			print("Fecha de Nacimiento Estudiante 2:", estudiante2_nacimiento)
-			print("Edad de Estudiante 2:", estudiante2_edad)
-			print("Biografia de Estudiante 2:", estudiante2_bio)
-			print("Hobbies de Estudiante 2:", estudiante2_hobbies)
+			print("\nEstudiante 2")
+			print("Nombre:", estudiante2_nombre)
+			print("Fecha de Nacimiento:", estudiante2_nacimiento)
+			print("Edad:", estudiante2_edad)
+			print("Biografia:", estudiante2_bio)
+			print("Hobbies:", estudiante2_hobbies)
 			
-			print("Nombre de Estudiante 3:", estudiante3_nombre)
-			print("Fecha de Nacimiento Estudiante 3:", estudiante3_nacimiento)
-			print("Edad de Estudiante 3:", estudiante3_edad)
-			print("Biografia de Estudiante 3:", estudiante3_bio)
-			print("Hobbies de Estudiante 3:", estudiante3_hobbies)
+			print("\nEstudiante 3")
+			print("Nombre:", estudiante3_nombre)
+			print("Fecha de Nacimiento:", estudiante3_nacimiento)
+			print("Edad:", estudiante3_edad)
+			print("Biografia:", estudiante3_bio)
+			print("Hobbies:", estudiante3_hobbies)
 			
 			# FALTA CORROBORAR SI EL NOMBRE ESTA DISPONIBLE
 			if(sesion==1):
-				me_gusta1 = input("Ingrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
+				me_gusta1 = input("\nIngrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
 			elif(sesion==2):
-				me_gusta3 = input("Ingrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
+				me_gusta2 = input("\nIngrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
 			elif(sesion==3):
-				me_gusta3 = input("Ingrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
+				me_gusta3 = input("\nIngrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
 	elif(opcion == 3):
 		print("En construccion")
 	elif(opcion == 4):
