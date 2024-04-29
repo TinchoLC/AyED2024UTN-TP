@@ -83,11 +83,25 @@ while(ingreso_correcto and opcion != 0):
 			estudiante1_edad = current_year - int(estudiante1_nacimiento[:4])
 			estudiante2_edad = current_year - int(estudiante2_nacimiento[:4])
 			estudiante3_edad = current_year - int(estudiante3_nacimiento[:4])
-
+			
+            print("Nombre de Estudiante 1:", estudiante1_nombre)
+            print("Fecha de Nacimiento Estudiante 1:", estudiante1_nacimiento)
 			print("Edad de Estudiante 1:", estudiante1_edad)
+			print("Biografia de Estudiante 1:", estudiante1_bio)
+			print("Hobbies de Estudiante 1:", estudiante1_hobbies)
+			
+			print("Nombre de Estudiante 2:", estudiante2_nombre)
+			print("Fecha de Nacimiento Estudiante 2:", estudiante2_nacimiento)
 			print("Edad de Estudiante 2:", estudiante2_edad)
+			print("Biografia de Estudiante 2:", estudiante2_bio)
+			print("Hobbies de Estudiante 2:", estudiante2_hobbies)
+			
+			print("Nombre de Estudiante 3:", estudiante3_nombre)
+			print("Fecha de Nacimiento Estudiante 3:", estudiante3_nacimiento)
 			print("Edad de Estudiante 3:", estudiante3_edad)
-
+			print("Biografia de Estudiante 3:", estudiante3_bio)
+			print("Hobbies de Estudiante 3:", estudiante3_hobbies)
+			
 			# FALTA CORROBORAR SI EL NOMBRE ESTA DISPONIBLE
 			if(sesion==1):
 				me_gusta1 = input("Ingrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
