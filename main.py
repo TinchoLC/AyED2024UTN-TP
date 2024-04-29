@@ -87,12 +87,14 @@ while(ingreso_correcto and opcion != 0):
 			print("Edad de Estudiante 1:", estudiante1_edad)
 			print("Edad de Estudiante 2:", estudiante2_edad)
 			print("Edad de Estudiante 3:", estudiante3_edad)
+
+			# FALTA CORROBORAR SI EL NOMBRE ESTA DISPONIBLE
 			if(sesion==1):
-				Print(sesion)#Aca va lo de elegir el nombre favorito que pide el ejercicio
+				me_gusta1 = input("Ingrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
 			elif(sesion==2):
-				Print(sesion)#Aca va lo de elegir el nombre favorito que pide el ejercicio
+				me_gusta3 = input("Ingrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
 			elif(sesion==3):
-				Print(sesion)#Aca va lo de elegir el nombre favorito que pide el ejercicio
+				me_gusta3 = input("Ingrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
 	elif(opcion == 3):
 		print("En construccion")
 	elif(opcion == 4):
