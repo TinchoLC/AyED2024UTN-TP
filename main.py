@@ -31,11 +31,12 @@ while(not ingreso_correcto and intentos_restantes > 0):
 
 opcion = -1 # Porque tiene que ser distinto de 0 para entrar al while
 while(ingreso_correcto and opcion != 0):
-	print("1. Gestionar mi perfil")
-	print("2. Gestionár candidatos")
-	print("3. Matcheos")
-	print("4. Reportes estadisticos")
-	print("0. Salir \n")
+	print("\nMenu Principal")
+	print("\t1. Gestionar mi perfil")
+	print("\t2. Gestionár candidatos")
+	print("\t3. Matcheos")
+	print("\t4. Reportes estadisticos")
+	print("\t0. Salir \n")
 
 	opcion = int(input("Seleccione la opcion: "))
 
@@ -48,7 +49,7 @@ while(ingreso_correcto and opcion != 0):
 			print("¿ Que desea editar ?")
 			print("\t1. fecha de nacimiento")
 			print("\t2. biografia")
-			print("\t3. hobbies")
+			print("\t3. hobbies\n")
 			opcion = int(input("Selecciona la opcion: "))
 			if(opcion == 1):
 				if(sesion == 1):
@@ -105,13 +106,18 @@ while(ingreso_correcto and opcion != 0):
 			print("Biografia:", estudiante3_bio)
 			print("Hobbies:", estudiante3_hobbies)
 			
-			# FALTA CORROBORAR SI EL NOMBRE ESTA DISPONIBLE
-			if(sesion==1):
-				me_gusta1 = input("\nIngrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
-			elif(sesion==2):
-				me_gusta2 = input("\nIngrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
-			elif(sesion==3):
-				me_gusta3 = input("\nIngrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
+			
+			me_gusta = input("\nIngrese el nombre de la persona con la que le gustaria hacer un matcheo: ").lower()
+			if(me_gusta == estudiante1_nombre.lower() or me_gusta == estudiante2_nombre.lower() or me_gusta == estudiante3_nombre.lower()):	
+				if(sesion==1):
+					me_gusta1 = me_gusta
+				elif(sesion==2):
+					me_gusta2 = me_gusta
+				elif(sesion==3):
+					me_gusta3 = me_gusta
+			else:
+				print("\nEl nombre ingresado no es correcto\n")
+
 	elif(opcion == 3):
 		print("En construccion")
 	elif(opcion == 4):
