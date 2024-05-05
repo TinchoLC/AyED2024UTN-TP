@@ -1,6 +1,45 @@
 # Archivo principal
 from datetime import datetime 
 
+def MENU_PRINCIPAL():
+	print("\nMenu Principal")
+	print("\t1. Gestionar mi perfil")
+	print("\t2. Gestionár candidatos")
+	print("\t3. Matcheos")
+	print("\t4. Reportes estadisticos")
+	print("\t0. Salir \n")
+
+	return int(input("Seleccione la opcion: "))
+
+def CALCULAR_EDAD(nacimiento):
+	ano_actual = datetime.now().year
+	mes_actual = datetime.now().month
+	dia_actual = datetime.now().day
+
+	ano_nacimiento = int(nacimiento[:4])
+	mes_nacimiento = int(nacimiento[5:7])
+	dia_nacimiento = int(nacimiento[8:])
+
+	edad = ano_actual - ano_nacimiento
+
+	if(mes_nacimiento > mes_actual):
+		edad = edad - 1
+	elif(mes_nacimiento == mes_actual):
+		if(dia_nacimiento > dia_actual):
+			edad = edad - 1
+	return edad
+
+def CALCULAR_EDADES():
+	# Año actual
+	current_year = datetime.now().year
+	# Calcular la edad de cada estudiante
+	estudiante1_edad = CALCULAR_EDAD(estudiante1_nacimiento)
+	estudiante2_edad = CALCULAR_EDAD(estudiante2_nacimiento)
+	estudiante3_edad = CALCULAR_EDAD(estudiante3_nacimiento)
+
+	return estudiante1_edad, estudiante2_edad, estudiante3_edad
+
+
 estudiante1_email = "a"; estudiante1_contrasena = "1"; estudiante1_nombre = "Juliancito"; estudiante1_nacimiento = "2006-01-07"; estudiante1_hobbies = "pescar, nadar"; estudiante1_bio = ""
 estudiante2_email = "estudiante2@ayed.com"; estudiante2_contrasena = "333444"; estudiante2_nombre = "Pedrito"; estudiante2_nacimiento = "2005-04-10"; estudiante2_hobbies = "comer, jugar"; estudiante2_bio = ""
 estudiante3_email = "estudiante3@ayed.com"; estudiante3_contrasena = "555666"; estudiante3_nombre = "Anita"; estudiante3_nacimiento = "2004-10-20"; estudiante3_hobbies = "leer sobre jojos"; estudiante3_bio = ""
@@ -31,15 +70,8 @@ while(not ingreso_correcto and intentos_restantes > 0):
 
 opcion = -1 # Porque tiene que ser distinto de 0 para entrar al while
 while(ingreso_correcto and opcion != 0):
-	print("\nMenu Principal")
-	print("\t1. Gestionar mi perfil")
-	print("\t2. Gestionár candidatos")
-	print("\t3. Matcheos")
-	print("\t4. Reportes estadisticos")
-	print("\t0. Salir \n")
-
-	opcion = int(input("Seleccione la opcion: "))
-
+	
+	opcion = MENU_PRINCIPAL()
 
 	if(opcion == 1): # Opcion Gestionar mi perfil
 		print("Menu de Gestión de Perfil")
@@ -78,13 +110,9 @@ while(ingreso_correcto and opcion != 0):
 		opcion = int(input("Seleccione la opcion: "))
 		
 		if(opcion == 1):
-			# Año actual
-			current_year = datetime.now().year
-			# Calcular la edad de cada estudiante
-			estudiante1_edad = current_year - int(estudiante1_nacimiento[:4])
-			estudiante2_edad = current_year - int(estudiante2_nacimiento[:4])
-			estudiante3_edad = current_year - int(estudiante3_nacimiento[:4])
 			
+			estudiante1_edad, estudiante2_edad, estudiante3_edad = CALCULAR_EDADES()
+
 			print("\nEstudiante 1")
 			print("Nombre:", estudiante1_nombre)
 			print("Fecha de Nacimiento:", estudiante1_nacimiento)
