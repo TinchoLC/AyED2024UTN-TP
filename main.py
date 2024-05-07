@@ -73,68 +73,69 @@ while(ingreso_correcto and opcion != 0):
 	
 	opcion = MENU_PRINCIPAL()
 
-	if(opcion == 1): # Opcion Gestionar mi perfil
-		print("Menu de Gestión de Perfil")
-		print("\t1. Editar mis datos personales\n")
-		opcion = int(input("Selecciona la opcion: "))
-		if(opcion == 1):
-			print("¿ Que desea editar ?")
-			print("\t1. fecha de nacimiento")
-			print("\t2. biografia")
-			print("\t3. hobbies\n")
-			opcion = int(input("Selecciona la opcion: "))
-			if(opcion == 1):
-				if(sesion == 1):
-					estudiante1_nacimiento = input("Ingrese una nueva fecha: ")
-				elif(sesion == 2):
-					estudiante2_nacimiento = input("Ingrese una nueva fecha: ")
-				elif(sesion == 3):
-					estudiante3_nacimiento = input("Ingrese una nueva fecha: ")
-			elif(opcion == 2):
-				if(sesion == 1):
-					estudiante1_bio = input("Ingrese una nueva biografia: ")
-				elif(sesion == 2):
-					estudiante2_bio = input("Ingrese una nueva biografia: ")
-				elif(sesion == 3):
-					estudiante3_bio = input("Ingrese una nueva biografia: ")
-			elif(opcion == 3):
-				if(sesion == 1):
-					estudiante1_hobbies = input("Ingrese un nuevo hobbie: ")
-				elif(sesion == 2):
-					estudiante2_hobbies = input("Ingrese un nuevo hobbie: ")
-				elif(sesion == 3):
-					estudiante3_hobbies = input("Ingrese un nuevo hobbie: ")
-	elif(opcion == 2):
-		print("Menu de gestion de candidatos")
-		print("\t1. Ver candidatos\n")
-		opcion = int(input("Seleccione la opcion: "))
-		
-		if(opcion == 1):
-			
-			estudiante1_edad, estudiante2_edad, estudiante3_edad = CALCULAR_EDADES()
+	match opcion:
+		case 1:
+			print("Menu de Gestión de Perfil")
+			print("\t1. Editar mis datos personales\n")
+			opcion_perfil = int(input("Seleccione una opcion: "))
+			match opcion_perfil:
+				case 1:
+					print("¿ Que desea editar ?")
+					print("\t1. fecha de nacimiento")
+					print("\t2. biografia")
+					print("\t3. hobbies\n")
+					opcion = int(input("Selecciona la opcion: "))
+					match opcion:
+						case 1:
+							if (sesion == 1):
+								estudiante1_nacimiento = input("Ingrese una nueva fecha: ")
+							elif (sesion == 2):
+								estudiante2_nacimiento = input("Ingrese una nueva fecha: ")
+							elif (sesion == 3):
+								estudiante3_nacimiento = input("Ingrese una nueva fecha: ")
+						case 2:
+							if (sesion == 1):
+								estudiante1_bio = input("Ingrese una nueva biografia: ")
+							elif(sesion == 2):
+								estudiante2_bio = input("Ingrese una nueva biografia: ")
+							elif(sesion == 3):
+								estudiante3_bio = input("Ingrese una nueva biografia: ")
+						case 3:
+							if(sesion == 1):
+								estudiante1_hobbies = input("Ingrese un nuevo hobbie: ")
+							elif(sesion == 2):
+								estudiante2_hobbies = input("Ingrese un nuevo hobbie: ")
+							elif(sesion == 3):
+								estudiante3_hobbies = input("Ingrese un nuevo hobbie: ")
+		case 2:
+			print("Menu de gestion de candidatos")
+			print("\t1. Ver candidatos\n")
+			opcion_candidatos = int(input("Seleccione la opcion: "))
+			match opcion_candidatos:
+				case 1:
+					estudiante1_edad, estudiante2_edad, estudiante3_edad = CALCULAR_EDADES()
 
-			print("\nEstudiante 1")
-			print("Nombre:", estudiante1_nombre)
-			print("Fecha de Nacimiento:", estudiante1_nacimiento)
-			print("Edad:", estudiante1_edad)
-			print("Biografia:", estudiante1_bio)
-			print("Hobbies:", estudiante1_hobbies)
-			
-			print("\nEstudiante 2")
-			print("Nombre:", estudiante2_nombre)
-			print("Fecha de Nacimiento:", estudiante2_nacimiento)
-			print("Edad:", estudiante2_edad)
-			print("Biografia:", estudiante2_bio)
-			print("Hobbies:", estudiante2_hobbies)
-			
-			print("\nEstudiante 3")
-			print("Nombre:", estudiante3_nombre)
-			print("Fecha de Nacimiento:", estudiante3_nacimiento)
-			print("Edad:", estudiante3_edad)
-			print("Biografia:", estudiante3_bio)
-			print("Hobbies:", estudiante3_hobbies)
-			
-			
+					print("\nEstudiante 1")
+					print("Nombre:", estudiante1_nombre)
+					print("Fecha de Nacimiento:", estudiante1_nacimiento)
+					print("Edad:", estudiante1_edad)
+					print("Biografia:", estudiante1_bio)
+					print("Hobbies:", estudiante1_hobbies)
+				
+					print("\nEstudiante 2")
+					print("Nombre:", estudiante2_nombre)
+					print("Fecha de Nacimiento:", estudiante2_nacimiento)
+					print("Edad:", estudiante2_edad)
+					print("Biografia:", estudiante2_bio)
+					print("Hobbies:", estudiante2_hobbies)
+					
+					print("\nEstudiante 3")
+					print("Nombre:", estudiante3_nombre)
+					print("Fecha de Nacimiento:", estudiante3_nacimiento)
+					print("Edad:", estudiante3_edad)
+					print("Biografia:", estudiante3_bio)
+					print("Hobbies:", estudiante3_hobbies)
+
 			me_gusta = input("\nIngrese el nombre de la persona con la que le gustaria hacer un matcheo: ").lower()
 			if(me_gusta == estudiante1_nombre.lower() or me_gusta == estudiante2_nombre.lower() or me_gusta == estudiante3_nombre.lower()):	
 				if(sesion==1):
@@ -144,13 +145,13 @@ while(ingreso_correcto and opcion != 0):
 				elif(sesion==3):
 					me_gusta3 = me_gusta
 			else:
-				print("\nEl nombre ingresado no es correcto\n")
-
-	elif(opcion == 3):
-		print("En construccion")
-	elif(opcion == 4):
-		print("En construccion")	
-	else: # Opcion invalida
-		print("OPCION INCORRECTA")
-
+				print("\nEl nombre ingresado no es correcto\n")		
+		case 3:
+			print("En construccion")
+		case 4:
+			print("En construccion")
+		case 0:
+			print("Usted salio del programa")
+		case _:
+			print("Opcion incorrecta")	
 print("Programa terminado.")
