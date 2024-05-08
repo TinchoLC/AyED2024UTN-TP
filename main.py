@@ -87,26 +87,30 @@ while(ingreso_correcto and opcion != 0):
 					opcion = int(input("Selecciona la opcion: "))
 					match opcion:
 						case 1:
-							if (sesion == 1):
-								estudiante1_nacimiento = input("Ingrese una nueva fecha: ")
-							elif (sesion == 2):
-								estudiante2_nacimiento = input("Ingrese una nueva fecha: ")
-							elif (sesion == 3):
-								estudiante3_nacimiento = input("Ingrese una nueva fecha: ")
+							match sesion:
+								case 1:
+									estudiante1_nacimiento = input("Ingrese una nueva fecha: ")
+								case 2:
+									estudiante2_nacimiento = input("Ingrese una nueva fecha: ")
+								case 3:
+									estudiante3_nacimiento = input("Ingrese una nueva fecha: ")
+
 						case 2:
-							if (sesion == 1):
-								estudiante1_bio = input("Ingrese una nueva biografia: ")
-							elif(sesion == 2):
-								estudiante2_bio = input("Ingrese una nueva biografia: ")
-							elif(sesion == 3):
-								estudiante3_bio = input("Ingrese una nueva biografia: ")
+							match sesion:
+								case 1:
+									estudiante1_bio = input("Ingrese una nueva biografia: ")
+								case 2:
+									estudiante2_bio = input("Ingrese una nueva biografia: ")
+								case 3:
+									estudiante3_bio = input("Ingrese una nueva biografia: ")
 						case 3:
-							if(sesion == 1):
-								estudiante1_hobbies = input("Ingrese un nuevo hobbie: ")
-							elif(sesion == 2):
-								estudiante2_hobbies = input("Ingrese un nuevo hobbie: ")
-							elif(sesion == 3):
-								estudiante3_hobbies = input("Ingrese un nuevo hobbie: ")
+							match sesion:
+								case 1:
+									estudiante1_hobbies = input("Ingrese un nuevo hobbie: ")
+								case 2:
+									estudiante2_hobbies = input("Ingrese un nuevo hobbie: ")
+								case 3:
+									estudiante3_hobbies = input("Ingrese un nuevo hobbie: ")
 		case 2:
 			print("Menu de gestion de candidatos")
 			print("\t1. Ver candidatos\n")
