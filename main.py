@@ -1,4 +1,6 @@
 # Archivo principal
+# -*- coding: utf-8 -*-
+
 from datetime import datetime
 from random   import randint
 from getpass  import getpass
