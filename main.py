@@ -3,10 +3,11 @@ from datetime import datetime
 
 def MENU_PRINCIPAL():
 	print("\nMenu Principal")
-	print("\t1. Gestionar mi perfil")
-	print("\t2. Gestionár candidatos")
-	print("\t3. Matcheos")
-	print("\t4. Reportes estadisticos")
+	print("\t1.  Gestionar mi perfil")
+	print("\t2.  Gestionár candidatos")
+	print("\t3.  Matcheos")
+	print("\t4.  Reportes estadisticos")
+	print("\t11. Ruleta de afinidad")
 	print("\t0. Salir \n")
 
 	return int(input("Seleccione la opcion: "))
@@ -154,6 +155,11 @@ while(ingreso_correcto and opcion != 0):
 			print("En construccion")
 		case 4:
 			print("En construccion")
+		case 11:
+			porcentage1: = int(input("Porcentaje de afinidad con la 1er persona: "))
+			porcentage2: = int(input("Porcentaje de afinidad con la 2da persona: "))
+			porcentage3: = int(input("Porcentaje de afinidad con la 3er persona: "))
+
 		case 0:
 			print("Usted salio del programa")
 		case _:
