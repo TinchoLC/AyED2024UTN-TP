@@ -201,7 +201,7 @@ while(ingreso_correcto and opcion != 0):
 		case 11:
 			LIMPIAR_CONSOLA()
 			porcentaje_total = -1 
-			while(porcentaje_total != 100 and porcentaje_total != 0):
+			while(porcentaje_total != 100):
 				porcentaje1 = int(input("Porcentaje de afinidad con la persona A: "))
 				porcentaje2 = int(input("Porcentaje de afinidad con la persona B: "))
 				porcentaje3 = int(input("Porcentaje de afinidad con la persona C: "))
@@ -211,13 +211,13 @@ while(ingreso_correcto and opcion != 0):
 					LIMPIAR_CONSOLA()
 					print("Los porcentajes no suman 100!!! Ingreselos nuevamente. \n")
 			
-			random = randint(0, 100)
+			random = randint(0, 99)
 			
 			LIMPIAR_CONSOLA()
 
 			if(random < porcentaje1):
 				print("Salió la persona A!!!\n")
-			elif(random >= porcentaje1 and random <porcentaje2):
+			elif(random < porcentaje1 + porcentaje2):
 				print("Salió la persona B!!!\n")
 			else: 
 				print("Salió la persona C!!!\n")
