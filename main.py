@@ -2,9 +2,16 @@
 from datetime import datetime
 from random   import randint
 from getpass  import getpass
+import os
+
+def LIMPIAR_CONSOLA():
+    if os.name == 'nt':  # Windows
+        os.system('cls')
+    else:  # macOS y Linux
+        os.system('clear')
 
 def MENU_PRINCIPAL():
-	print("\nMenu Principal")
+	print("Menu Principal")
 	print("\t1.  Gestionar mi perfil")
 	print("\t2.  Gestionár candidatos")
 	print("\t3.  Matcheos")
@@ -52,29 +59,30 @@ def MOSTRAR_DATOS_ESTUDIANTES():
 			estudiante3_edad = estudiante3_edad - 1
 
 	# Mostrar los estudiantes
+	LIMPIAR_CONSOLA()
 	if(sesion != 1):
-		print("\nEstudiante 1")
+		print("Estudiante 1")
 		print("Nombre:", estudiante1_nombre)
 		print("Fecha de Nacimiento:", estudiante1_nacimiento)
 		print("Edad:", estudiante1_edad)
 		print("Biografia:", estudiante1_bio)
-		print("Hobbies:", estudiante1_hobbies)
+		print("Hobbies: {} \n" .format(estudiante1_hobbies))
 
 	if(sesion != 2):
-		print("\nEstudiante 2")
+		print("Estudiante 2")
 		print("Nombre:", estudiante2_nombre)
 		print("Fecha de Nacimiento:", estudiante2_nacimiento)
 		print("Edad:", estudiante2_edad)
 		print("Biografia:", estudiante2_bio)
-		print("Hobbies:", estudiante2_hobbies)
+		print("Hobbies: {} \n" .format(estudiante2_hobbies))
 	
 	if(sesion != 3):
-		print("\nEstudiante 3")
+		print("Estudiante 3")
 		print("Nombre:", estudiante3_nombre)
 		print("Fecha de Nacimiento:", estudiante3_nacimiento)
 		print("Edad:", estudiante3_edad)
 		print("Biografia:", estudiante3_bio)
-		print("Hobbies:", estudiante3_hobbies)
+		print("Hobbies: {} \n" .format(estudiante3_hobbies))
 
 
 estudiante1_email = "a"; estudiante1_contrasena = "1"; estudiante1_nombre = "Juliancito"; estudiante1_nacimiento = "2006-01-07"; estudiante1_hobbies = "pescar, nadar"; estudiante1_bio = ""
@@ -83,33 +91,39 @@ estudiante3_email = "estudiante3@ayed.com"; estudiante3_contrasena = "555666"; e
 
 ingreso_correcto = False
 intentos_restantes = 3
+
+LIMPIAR_CONSOLA()
+
 while(not ingreso_correcto and intentos_restantes > 0):
 	email = input("Ingrese su email: ").lower() # El .lower es para forzar minusculas
 	contrasena = getpass("Ingrese su contraseña: ")
 
+	LIMPIAR_CONSOLA()
+
 	intentos_restantes = intentos_restantes - 1
 
 	if(email == estudiante1_email and contrasena == estudiante1_contrasena):
-		print("\nFelicidades",estudiante1_nombre,"ingresaste!\n")
+		print("Felicidades",estudiante1_nombre,"ingresaste!\n")
 		sesion = 1
 		ingreso_correcto = True
 	elif(email == estudiante2_email and contrasena == estudiante2_contrasena):
-		print("\nFelicidades",estudiante2_nombre,"ingresaste!\n")
+		print("Felicidades",estudiante2_nombre,"ingresaste!\n")
 		sesion = 2
 		ingreso_correcto = True	
 	elif(email == estudiante3_email and contrasena == estudiante3_contrasena):
-		print("\nFelicidades",estudiante3_nombre,"ingresaste!\n")
+		print("Felicidades",estudiante3_nombre,"ingresaste!\n")
 		sesion = 3
 		ingreso_correcto = True
 	else: # No se ingreso correctamente
-		print("\nNo ingresaste correctamente :(\n")
+		print("No ingresaste correctamente :(\n")
 		print("Te quedan ",intentos_restantes,"intentos.")
 
 opcion = -1 # Porque tiene que ser distinto de 0 para entrar al while
 while(ingreso_correcto and opcion != 0):
-	
+
 	MENU_PRINCIPAL()
 	opcion = int(input("Seleccione la opcion: "))
+	LIMPIAR_CONSOLA()
 
 	match opcion:
 		case 1:
@@ -118,20 +132,22 @@ while(ingreso_correcto and opcion != 0):
 			opcion_perfil = int(input("Seleccione una opcion: "))
 			match opcion_perfil:
 				case 1:
+					LIMPIAR_CONSOLA()
 					print("¿ Que desea editar ?")
 					print("\t1. fecha de nacimiento")
 					print("\t2. biografia")
 					print("\t3. hobbies\n")
 					opcion_editar = int(input("Selecciona la opcion: "))
+					LIMPIAR_CONSOLA()
 					match opcion_editar:
 						case 1:
 							match sesion:
 								case 1:
-									estudiante1_nacimiento = input("Ingrese una nueva fecha: ")
+									estudiante1_nacimiento = input("Formato (año-mes-dia) \nxxxx-xx-xx \nIngrese una nueva fecha: ")
 								case 2:
-									estudiante2_nacimiento = input("Ingrese una nueva fecha: ")
+									estudiante2_nacimiento = input("Formato (año-mes-dia) \nxxxx-xx-xx \nIngrese una nueva fecha: ")
 								case 3:
-									estudiante3_nacimiento = input("Ingrese una nueva fecha: ")
+									estudiante3_nacimiento = input("Formato (año-mes-dia) \nxxxx-xx-xx \nIngrese una nueva fecha: ")
 
 						case 2:
 							match sesion:
@@ -149,6 +165,8 @@ while(ingreso_correcto and opcion != 0):
 									estudiante2_hobbies = input("Ingrese un nuevo hobbie: ")
 								case 3:
 									estudiante3_hobbies = input("Ingrese un nuevo hobbie: ")
+					
+					LIMPIAR_CONSOLA()
 		case 2:
 			print("Menu de gestion de candidatos")
 			print("\t1. Ver candidatos\n")
@@ -157,27 +175,31 @@ while(ingreso_correcto and opcion != 0):
 				case 1:
 					MOSTRAR_DATOS_ESTUDIANTES()
 					me_gusta = input("\nIngrese el nombre de la persona con la que le gustaria hacer un matcheo: ").lower()
+					LIMPIAR_CONSOLA()
 					if(me_gusta == estudiante1_nombre.lower() or me_gusta == estudiante2_nombre.lower() or me_gusta == estudiante3_nombre.lower()):	
 						if(sesion==1 and estudiante1_nombre.lower() != me_gusta):
 							me_gusta1 = me_gusta
-							print("\nSeleccionaste a {}, espero te corresponda!".format(me_gusta))
+							print("Seleccionaste a {}, espero te corresponda!\n".format(me_gusta))
 						elif(sesion==2 and estudiante2_nombre.lower() != me_gusta):
 							me_gusta2 = me_gusta
-							print("\nSeleccionaste a {}, espero te corresponda!".format(me_gusta))
+							print("Seleccionaste a {}, espero te corresponda!\n".format(me_gusta))
 						elif(sesion==3 and estudiante3_nombre.lower() != me_gusta):
 							me_gusta3 = me_gusta
-							print("\nSeleccionaste a {}, espero te corresponda!".format(me_gusta))
+							print("Seleccionaste a {}, espero te corresponda!\n".format(me_gusta))
 						else:
-							print("\nNo puedes seleccionarte a ti mismo!")
+							print("No puedes seleccionarte a ti mismo!\n")
 					else:
-						print("\nEl nombre ingresado no es correcto\n")		
+						print("El nombre ingresado no es correcto\n")		
 			
 			
 		case 3:
-			print("En construccion")
+			LIMPIAR_CONSOLA()
+			print("En construcción...\n")
 		case 4:
-			print("En construccion")
+			LIMPIAR_CONSOLA()
+			print("En construcción...\n")
 		case 11:
+			LIMPIAR_CONSOLA()
 			porcentaje_total = -1 
 			while(porcentaje_total != 100 and porcentaje_total != 0):
 				porcentaje1 = int(input("Porcentaje de afinidad con la persona A: "))
@@ -186,19 +208,24 @@ while(ingreso_correcto and opcion != 0):
 				porcentaje_total = porcentaje1 + porcentaje2 + porcentaje3
 				
 				if(porcentaje_total != 100):
-					print("\nLos porcentajes no suman 100!!! Ingreselos nuevamente. ")
+					LIMPIAR_CONSOLA()
+					print("Los porcentajes no suman 100!!! Ingreselos nuevamente. \n")
 			
 			random = randint(0, 100)
 			
+			LIMPIAR_CONSOLA()
+
 			if(random < porcentaje1):
-				print("\nSalió la persona A!!!")
+				print("Salió la persona A!!!\n")
 			elif(random >= porcentaje1 and random <porcentaje2):
-				print("\nSalió la persona B!!!")
+				print("Salió la persona B!!!\n")
 			else: 
-				print("\nSalió la persona C!!!")
+				print("Salió la persona C!!!\n")
 
 		case 0:
+			LIMPIAR_CONSOLA()
 			print("Elden Ring, saliste, del videojuego")
 		case _:
+			LIMPIAR_CONSOLA()
 			print("Opcion incorrecta")	
-print("Programa terminado.")
+print("\nPrograma terminado.")
