@@ -1,5 +1,7 @@
 # Archivo principal
-from datetime import datetime 
+from datetime import datetime
+from random   import randint
+from getpass  import getpass
 
 def MENU_PRINCIPAL():
 	print("\nMenu Principal")
@@ -83,7 +85,7 @@ ingreso_correcto = False
 intentos_restantes = 3
 while(not ingreso_correcto and intentos_restantes > 0):
 	email = input("Ingrese su email: ").lower() # El .lower es para forzar minusculas
-	contrasena = input("Ingrese su contraseña: ")
+	contrasena = getpass("Ingrese su contraseña: ")
 
 	intentos_restantes = intentos_restantes - 1
 
@@ -158,13 +160,13 @@ while(ingreso_correcto and opcion != 0):
 					if(me_gusta == estudiante1_nombre.lower() or me_gusta == estudiante2_nombre.lower() or me_gusta == estudiante3_nombre.lower()):	
 						if(sesion==1 and estudiante1_nombre.lower() != me_gusta):
 							me_gusta1 = me_gusta
-							print("\nSeleccionaste a",me_gusta,"espero te corresponda!")
+							print("\nSeleccionaste a {}, espero te corresponda!".format(me_gusta))
 						elif(sesion==2 and estudiante2_nombre.lower() != me_gusta):
 							me_gusta2 = me_gusta
-							print("\nSeleccionaste a",me_gusta,"espero te corresponda!")
+							print("\nSeleccionaste a {}, espero te corresponda!".format(me_gusta))
 						elif(sesion==3 and estudiante3_nombre.lower() != me_gusta):
 							me_gusta3 = me_gusta
-							print("\nSeleccionaste a",me_gusta,"espero te corresponda!")
+							print("\nSeleccionaste a {}, espero te corresponda!".format(me_gusta))
 						else:
 							print("\nNo puedes seleccionarte a ti mismo!")
 					else:
@@ -176,9 +178,24 @@ while(ingreso_correcto and opcion != 0):
 		case 4:
 			print("En construccion")
 		case 11:
-			porcentaje1 = int(input("Porcentaje de afinidad con la 1er persona: "))
-			porcentaje2 = int(input("Porcentaje de afinidad con la 2da persona: "))
-			porcentaje3 = int(input("Porcentaje de afinidad con la 3er persona: "))
+			porcentaje_total = -1 
+			while(porcentaje_total != 100 and porcentaje_total != 0):
+				porcentaje1 = int(input("Porcentaje de afinidad con la persona A: "))
+				porcentaje2 = int(input("Porcentaje de afinidad con la persona B: "))
+				porcentaje3 = int(input("Porcentaje de afinidad con la persona C: "))
+				porcentaje_total = porcentaje1 + porcentaje2 + porcentaje3
+				
+				if(porcentaje_total != 100):
+					print("\nLos porcentajes no suman 100!!! Ingreselos nuevamente. ")
+			
+			random = randint(0, 100)
+			
+			if(random < porcentaje1):
+				print("\nSalió la persona A!!!")
+			elif(random >= porcentaje1 and random <porcentaje2):
+				print("\nSalió la persona B!!!")
+			else: 
+				print("\nSalió la persona C!!!")
 
 		case 0:
 			print("Elden Ring, saliste, del videojuego")
