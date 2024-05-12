@@ -150,6 +150,8 @@ while(ingreso_correcto and opcion != 0):
 									estudiante2_nacimiento = input("Formato (año-mes-dia) \nxxxx-xx-xx \nIngrese una nueva fecha: ")
 								case 3:
 									estudiante3_nacimiento = input("Formato (año-mes-dia) \nxxxx-xx-xx \nIngrese una nueva fecha: ")
+								
+							LIMPIAR_CONSOLA()
 
 						case 2:
 							match sesion:
@@ -159,6 +161,9 @@ while(ingreso_correcto and opcion != 0):
 									estudiante2_bio = input("Ingrese una nueva biografia: ")
 								case 3:
 									estudiante3_bio = input("Ingrese una nueva biografia: ")
+								
+							LIMPIAR_CONSOLA()
+						
 						case 3:
 							match sesion:
 								case 1:
@@ -167,8 +172,19 @@ while(ingreso_correcto and opcion != 0):
 									estudiante2_hobbies = input("Ingrese un nuevo hobbie: ")
 								case 3:
 									estudiante3_hobbies = input("Ingrese un nuevo hobbie: ")
+							
+							LIMPIAR_CONSOLA()
+
+						case _: 
+							LIMPIAR_CONSOLA()
+							print("Opción incorrecta.\n")
+
 					
+					
+				case _: 
 					LIMPIAR_CONSOLA()
+					print("Opción incorrecta.\n")
+
 		case 2:
 			print("Menu de gestion de candidatos")
 			print("\t1. Ver candidatos\n")
@@ -183,7 +199,7 @@ while(ingreso_correcto and opcion != 0):
 							me_gusta1 = me_gusta
 							print("Seleccionaste a {}, espero te corresponda!\n".format(me_gusta))
 						elif(sesion==2 and estudiante2_nombre.lower() != me_gusta):
-							me_gusta2 = me_gusta
+							me_gusta2 = me_gusta 
 							print("Seleccionaste a {}, espero te corresponda!\n".format(me_gusta))
 						elif(sesion==3 and estudiante3_nombre.lower() != me_gusta):
 							me_gusta3 = me_gusta
@@ -191,7 +207,10 @@ while(ingreso_correcto and opcion != 0):
 						else:
 							print("No puedes seleccionarte a ti mismo!\n")
 					else:
-						print("El nombre ingresado no es correcto\n")		
+						print("El nombre ingresado no es correcto\n")
+				case _: 
+					LIMPIAR_CONSOLA()
+					print("Opción incorrecta.\n")		
 			
 			
 		case 3:
