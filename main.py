@@ -1,19 +1,26 @@
-# Archivo principal:/ Cabrera Martín, Delgado Mauro, Rodriguez Lautaro, Rossi Dariana
+# Archivo principal:/ ISI 1K03 AyED 2024 - Cabrera Martín, Delgado Mauro, Rodriguez Lautaro, Rossi Dariana
 # -*- coding: utf-8 -*-
 """
-estudiante1_email : string			estudiante2_email : string 			estudiante3_email : string 
-estudiante1_contrasena : string 	estudiante2_contrasena : string 	estudiante3_contrasena : string 
-estudiante1_nombre : string 		estudiante2_nombre : string 		estudiante3_nombre : string 
-estudiante1_nacimiento : string 	estudiante2_nacimiento : string 	estudiante3_nacimiento : string 
-estudiante1_hobbies : string 		estudiante2_hobbies : string 		estudiante3_hobbies : string 
-estudiante1_bio : string 			estudiante2_bio : string 			estudiante3_bio : string 
-email, contrasena, me_gusta, me_gusta1, me_gusta2, me_gusta3 : string 
-ingreso_correcto : boolean
-intentos_restantes, sesion, opcion, opcion_perfil, opcion_editar, opcion_candidatos, porcentaje1, porcentaje2, porcentaje3, porcentaje_total, random, ano_actual, mes_actual, dia_actual : integer 
-ano_nacimiento1, mes_nacimiento1, dia_nacimiento1, estudiante1_edad : integer
-ano_nacimiento2, mes_nacimiento2, dia_nacimiento2, estudiante2_edad : integer
-ano_nacimiento3, mes_nacimiento3, dia_nacimiento3, estudiante3_edad : integer
+INT:
+intentos_restantes, sesion,
+opcion, opcion_perfil, opcion_editar, opcion_candidatos,
+porcentaje1, porcentaje2, porcentaje3, porcentaje_total, random,
+ano_actual, mes_actual, dia_actual,
+ano_nacimiento1, mes_nacimiento1, dia_nacimiento1, estudiante1_edad,
+ano_nacimiento2, mes_nacimiento2, dia_nacimiento2, estudiante2_edad,
+ano_nacimiento3, mes_nacimiento3, dia_nacimiento3, estudiante3_edad
+
+STRING:
+estudiante1_email, estudiante2_email, estudiante3_email,
+estudiante1_contrasena, estudiante2_contrasena, estudiante3_contrasena,
+estudiante1_nombre, estudiante2_nombre, estudiante3_nombre,
+estudiante1_nacimiento, estudiante2_nacimiento, estudiante3_nacimiento,
+estudiante1_hobbies, estudiante2_hobbies, estudiante3_hobbies,
+estudiante1_bio, estudiante2_bio, estudiante3_bio,
+email, contrasena,
+me_gusta, me_gusta1, me_gusta2, me_gusta3
 """
+
 from datetime import datetime
 from random   import randint
 from getpass  import getpass
@@ -100,16 +107,17 @@ def MOSTRAR_DATOS_ESTUDIANTES():
 		print("Hobbies: {} \n" .format(estudiante3_hobbies))
 
 
+# Para probar más rápido un mail válido es a y su contraseña es 1
 estudiante1_email = "a"; estudiante1_contrasena = "1"; estudiante1_nombre = "Juliancito"; estudiante1_nacimiento = "2006-01-07"; estudiante1_hobbies = "pescar, nadar"; estudiante1_bio = ""
 estudiante2_email = "estudiante2@ayed.com"; estudiante2_contrasena = "333444"; estudiante2_nombre = "Pedrito"; estudiante2_nacimiento = "2005-04-10"; estudiante2_hobbies = "comer, jugar"; estudiante2_bio = ""
 estudiante3_email = "estudiante3@ayed.com"; estudiante3_contrasena = "555666"; estudiante3_nombre = "Anita"; estudiante3_nacimiento = "2004-10-20"; estudiante3_hobbies = "leer sobre jojos"; estudiante3_bio = ""
 
-ingreso_correcto = False
+sesion = 0
 intentos_restantes = 3
 
 LIMPIAR_CONSOLA()
 
-while(not ingreso_correcto and intentos_restantes > 0):
+while(sesion == 0 and intentos_restantes > 0):
 	email = input("Ingrese su email: ").lower() # El .lower es para forzar minusculas
 	contrasena = getpass("Ingrese su contraseña: ")
 
@@ -120,21 +128,18 @@ while(not ingreso_correcto and intentos_restantes > 0):
 	if(email == estudiante1_email and contrasena == estudiante1_contrasena):
 		print("Felicidades",estudiante1_nombre,"ingresaste!\n")
 		sesion = 1
-		ingreso_correcto = True
 	elif(email == estudiante2_email and contrasena == estudiante2_contrasena):
 		print("Felicidades",estudiante2_nombre,"ingresaste!\n")
-		sesion = 2
-		ingreso_correcto = True	
+		sesion = 2	
 	elif(email == estudiante3_email and contrasena == estudiante3_contrasena):
 		print("Felicidades",estudiante3_nombre,"ingresaste!\n")
 		sesion = 3
-		ingreso_correcto = True
 	else: # No se ingreso correctamente
 		print("No ingresaste correctamente :(\n")
 		print("Te quedan ",intentos_restantes,"intentos.")
 
 opcion = -1 # Porque tiene que ser distinto de 0 para entrar al while
-while(ingreso_correcto and opcion != 0):
+while(sesion > 0 and opcion != 0):
 
 	MENU_PRINCIPAL()
 	opcion = int(input("Seleccione la opcion: "))
