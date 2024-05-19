@@ -1,6 +1,19 @@
 # Archivo principal:/ Cabrera Martín, Delgado Mauro, Rodriguez Lautaro, Rossi Dariana
 # -*- coding: utf-8 -*-
-
+"""
+estudiante1_email : string			estudiante2_email : string 			estudiante3_email : string 
+estudiante1_contrasena : string 	estudiante2_contrasena : string 	estudiante3_contrasena : string 
+estudiante1_nombre : string 		estudiante2_nombre : string 		estudiante3_nombre : string 
+estudiante1_nacimiento : string 	estudiante2_nacimiento : string 	estudiante3_nacimiento : string 
+estudiante1_hobbies : string 		estudiante2_hobbies : string 		estudiante3_hobbies : string 
+estudiante1_bio : string 			estudiante2_bio : string 			estudiante3_bio : string 
+email, contrasena, me_gusta, me_gusta1, me_gusta2, me_gusta3 : string 
+ingreso_correcto : boolean
+intentos_restantes, sesion, opcion, opcion_perfil, opcion_editar, opcion_candidatos, porcentaje1, porcentaje2, porcentaje3, porcentaje_total, random, ano_actual, mes_actual, dia_actual : integer 
+ano_nacimiento1, mes_nacimiento1, dia_nacimiento1, estudiante1_edad : integer
+ano_nacimiento2, mes_nacimiento2, dia_nacimiento2, estudiante2_edad : integer
+ano_nacimiento3, mes_nacimiento3, dia_nacimiento3, estudiante3_edad : integer
+"""
 from datetime import datetime
 from random   import randint
 from getpass  import getpass
@@ -179,8 +192,8 @@ while(ingreso_correcto and opcion != 0):
 							LIMPIAR_CONSOLA()
 							print("Opción incorrecta.\n")
 
-					
-					
+
+
 				case _: 
 					LIMPIAR_CONSOLA()
 					print("Opción incorrecta.\n")
