@@ -1,4 +1,4 @@
-# Archivo principal
+# Archivo principal:/ Cabrera Martín, Delgado Mauro, Rodriguez Lautaro, Rossi Dariana
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
@@ -245,8 +245,7 @@ while(ingreso_correcto and opcion != 0):
 
 		case 0:
 			LIMPIAR_CONSOLA()
-			print("Elden Ring, saliste, del videojuego")
+			print("\nPrograma terminado.")
 		case _:
 			LIMPIAR_CONSOLA()
 			print("Opcion incorrecta")	
-print("\nPrograma terminado.")
