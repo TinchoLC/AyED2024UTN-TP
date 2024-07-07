@@ -26,11 +26,14 @@ from random   import randint
 from getpass  import getpass
 import os
 
+
+
 def LIMPIAR_CONSOLA():
-    if os.name == 'nt':  # Windows
-        os.system('cls')
-    else:  # macOS y Linux
-        os.system('clear')
+	if os.name == 'nt':  # Windows
+		os.system('cls')
+	else:  # macOS y Linux
+		os.system('clear')
+
 
 def MENU_PRINCIPAL():
 	print("Menu Principal")
@@ -106,18 +109,21 @@ def MOSTRAR_DATOS_ESTUDIANTES():
 		print("Biografia:", estudiante3_bio)
 		print("Hobbies: {} \n" .format(estudiante3_hobbies))
 
+estudiantes = [[""]*6 for n in range(8)] # email |contrasena | nombre |nacimiento |hobbies | bio
+admins = [[""]*2 for n in range(4)] # email |contrasena
 
 # Para probar más rápido un mail válido es a y su contraseña es 1
-estudiante1_email = "a"; estudiante1_contrasena = "1"; estudiante1_nombre = "Juliancito"; estudiante1_nacimiento = "2006-01-07"; estudiante1_hobbies = "pescar, nadar"; estudiante1_bio = ""
-estudiante2_email = "estudiante2@ayed.com"; estudiante2_contrasena = "333444"; estudiante2_nombre = "Pedrito"; estudiante2_nacimiento = "2005-04-10"; estudiante2_hobbies = "comer, jugar"; estudiante2_bio = ""
-estudiante3_email = "estudiante3@ayed.com"; estudiante3_contrasena = "555666"; estudiante3_nombre = "Anita"; estudiante3_nacimiento = "2004-10-20"; estudiante3_hobbies = "leer sobre jojos"; estudiante3_bio = ""
+estudiantes[0][0] = "a"; estudiantes[0][1] = "1"; estudiantes[0][2] = "Juliancito"; estudiantes[0][3] = "2006-01-07"; estudiantes[0][4] = "pescar, nadar"; estudiantes[0][5] = ""
+estudiantes[1][0] = "estudiante2@ayed.com"; estudiantes[1][1] = "333444"; estudiantes[1][2] = "Pedrito"; estudiantes[1][3] = "2005-04-10"; estudiantes[1][4] = "comer, jugar"; estudiantes[1][5] = ""
+estudiantes[2][0] = "estudiante3@ayed.com"; estudiantes[2][1] = "555666"; estudiantes[2][2] = "Anita"; estudiantes[2][3] = "2004-10-20"; estudiantes[2][4] = "leer sobre jojos"; estudiantes[2][5] = ""
+cant_estudiantes = 3
 
-sesion = 0
+sesion = -1
 intentos_restantes = 3
 
 LIMPIAR_CONSOLA()
 
-while(sesion == 0 and intentos_restantes > 0):
+while(sesion == -1 and intentos_restantes > 0):
 	email = input("Ingrese su email: ").lower() # El .lower es para forzar minusculas
 	contrasena = getpass("Ingrese su contraseña: ")
 
@@ -125,21 +131,17 @@ while(sesion == 0 and intentos_restantes > 0):
 
 	intentos_restantes = intentos_restantes - 1
 
-	if(email == estudiante1_email and contrasena == estudiante1_contrasena):
-		print("Felicidades",estudiante1_nombre,"ingresaste!\n")
-		sesion = 1
-	elif(email == estudiante2_email and contrasena == estudiante2_contrasena):
-		print("Felicidades",estudiante2_nombre,"ingresaste!\n")
-		sesion = 2	
-	elif(email == estudiante3_email and contrasena == estudiante3_contrasena):
-		print("Felicidades",estudiante3_nombre,"ingresaste!\n")
-		sesion = 3
-	else: # No se ingreso correctamente
+	est = 0
+	while(sesion == -1 and est < cant_estudiantes):
+		if(email == estudiantes[est][0] and contrasena == estudiantes[est][1]):
+			print("Felicidades",estudiantes[est][2],"ingresaste!\n")
+			sesion = est + 1
+	if(sesion == -1):
 		print("No ingresaste correctamente :(\n")
 		print("Te quedan ",intentos_restantes,"intentos.")
 
 opcion = -1 # Porque tiene que ser distinto de 0 para entrar al while
-while(sesion > 0 and opcion != 0):
+while(sesion > -1 and opcion != 0):
 
 	MENU_PRINCIPAL()
 	opcion = int(input("Seleccione la opcion: "))
