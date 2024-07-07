@@ -26,12 +26,19 @@ from random   import randint
 from getpass  import getpass
 import os
 
-
 def LIMPIAR_CONSOLA():
 	if os.name == 'nt':  # Windows
 		os.system('cls')
 	else:  # macOS y Linux
 		os.system('clear')
+
+def MENU_INICIO():
+	print("INICIO")
+	print("\t1. Login")
+	print("\t2. Registrarse")
+	print("\t0. Salir \n")
+
+	return int(input("Seleccione la opcion: "))
 
 def MENU_PRINCIPAL():
 	print("Menu Principal")
@@ -67,6 +74,30 @@ def MENU_MATCHEOS():
 	print("\t0. Volver\n")
 
 	return int(input("Seleccione la opcion: "))
+
+def LOGIN():
+	sesion = -1
+	intentos_restantes = 3
+	LIMPIAR_CONSOLA()
+	while(sesion == -1 and intentos_restantes > 0):
+		email = input("Ingrese su email: ").lower() # El .lower es para forzar minusculas
+		contrasena = getpass("Ingrese su contraseña: ")
+
+		LIMPIAR_CONSOLA()
+
+		intentos_restantes = intentos_restantes - 1
+
+		est = 0
+		while(sesion == -1 and est < cant_estudiantes):
+			if(email == estudiantes[est][0] and contrasena == estudiantes[est][1]):
+				print("Felicidades",estudiantes[est][2],"ingresaste!\n")
+				sesion = est
+			est = est + 1
+		if(sesion == -1):
+			print("No ingresaste correctamente :(\n")
+			print("Te quedan ",intentos_restantes,"intentos.")
+
+	return sesion
 
 def CALCULAR_EDAD(nacimiento):
 	ano_actual = datetime.now().year
@@ -160,70 +191,66 @@ estudiantes[1][0] = "estudiante2@ayed.com"; estudiantes[1][1] = "333444"; estudi
 estudiantes[2][0] = "estudiante3@ayed.com"; estudiantes[2][1] = "555666"; estudiantes[2][2] = "Anita"; estudiantes[2][3] = "2004-10-20"; estudiantes[2][4] = "leer sobre jojos";
 cant_estudiantes = 3
 
-sesion = -1
-intentos_restantes = 3
+opcion_inicio = -1
+while(opcion_inicio != 0):
 
-LIMPIAR_CONSOLA()
+	sesion = -1
+	opcion_inicio = -1
+	while(opcion_inicio != 0 and opcion_inicio != 1):
+		opcion_inicio = MENU_INICIO()
+		match opcion_inicio:
+			case 1:
+				sesion = LOGIN()
+			case 2:
+				print("En construcción...\n")
+			case 0:
+				LIMPIAR_CONSOLA()
+				print("Adios!")
+			case _:
+				print("Opción incorrecta.\n")
 
-while(sesion == -1 and intentos_restantes > 0):
-	email = input("Ingrese su email: ").lower() # El .lower es para forzar minusculas
-	contrasena = getpass("Ingrese su contraseña: ")
 
-	LIMPIAR_CONSOLA()
+	opcion = -1 # Porque tiene que ser distinto de 0 para entrar al while
+	while(sesion > -1 and opcion != 0):
 
-	intentos_restantes = intentos_restantes - 1
+		opcion = MENU_PRINCIPAL()
+		LIMPIAR_CONSOLA()
+		match opcion:
+			case 1:
+				opcion_perfil = MENU_GESTION_PERFIL()
+				match opcion_perfil:
+					case 1:
+						LIMPIAR_CONSOLA()
+						EDITAR_DATOS() 
+					case _: 
+						LIMPIAR_CONSOLA()
+						print("Opción incorrecta.\n")
 
-	est = 0
-	while(sesion == -1 and est < cant_estudiantes):
-		if(email == estudiantes[est][0] and contrasena == estudiantes[est][1]):
-			print("Felicidades",estudiantes[est][2],"ingresaste!\n")
-			sesion = est
-		est = est + 1
-	if(sesion == -1):
-		print("No ingresaste correctamente :(\n")
-		print("Te quedan ",intentos_restantes,"intentos.")
+			case 2:
+				opcion_candidatos = MENU_GESTION_CANDIDATOS()
+				match opcion_candidatos:
+					case 1:
+						LIMPIAR_CONSOLA()
+						MOSTRAR_DATOS_ESTUDIANTES()
+						me_gusta = input("\nIngrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
+						LIMPIAR_CONSOLA()
+						if(NOMBRE_CORRECTO(me_gusta.lower())):	
+							estudiantes[sesion][7] = me_gusta
+							print("Seleccionaste a {}, espero te corresponda!\n".format(me_gusta))
+						else:
+							print("El nombre ingresado no es correcto\n")
+					case _: 
+						LIMPIAR_CONSOLA()
+						print("Opción incorrecta.\n")		
+			case 3:
+				opcion_matcheo = MENU_MATCHEOS()
+				print("En construcción...\n")
+			case 4:
+				print("En construcción...\n")
+			case 11:
+				RULETA_AFINIDAD()
 
-opcion = -1 # Porque tiene que ser distinto de 0 para entrar al while
-while(sesion > -1 and opcion != 0):
-
-	opcion = MENU_PRINCIPAL()
-	LIMPIAR_CONSOLA()
-	match opcion:
-		case 1:
-			opcion_perfil = MENU_GESTION_PERFIL()
-			match opcion_perfil:
-				case 1:
-					LIMPIAR_CONSOLA()
-					EDITAR_DATOS() 
-				case _: 
-					LIMPIAR_CONSOLA()
-					print("Opción incorrecta.\n")
-
-		case 2:
-			opcion_candidatos = MENU_GESTION_CANDIDATOS()
-			match opcion_candidatos:
-				case 1:
-					LIMPIAR_CONSOLA()
-					MOSTRAR_DATOS_ESTUDIANTES()
-					me_gusta = input("\nIngrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
-					LIMPIAR_CONSOLA()
-					if(NOMBRE_CORRECTO(me_gusta.lower())):	
-						estudiantes[sesion][7] = me_gusta
-						print("Seleccionaste a {}, espero te corresponda!\n".format(me_gusta))
-					else:
-						print("El nombre ingresado no es correcto\n")
-				case _: 
-					LIMPIAR_CONSOLA()
-					print("Opción incorrecta.\n")		
-		case 3:
-			opcion_matcheo = MENU_MATCHEOS()
-			print("En construcción...\n")
-		case 4:
-			print("En construcción...\n")
-		case 11:
-			RULETA_AFINIDAD()
-
-		case 0:
-			print("\nPrograma terminado.")
-		case _:
-			print("Opcion incorrecta")	
+			case 0:
+				print("\nPrograma terminado.")
+			case _:
+				print("Opcion incorrecta")	
