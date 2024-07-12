@@ -36,7 +36,6 @@ def LIMPIAR_CONSOLA():
 		os.system('clear')
 
 def MENU_INICIO():
-	LIMPIAR_CONSOLA()
 	print("INICIO")
 	print("\t1. Login")
 	print("\t2. Registrarse")
@@ -45,9 +44,9 @@ def MENU_INICIO():
 	return int(input("Seleccione la opcion: "))
 
 def LOGIN():
+	LIMPIAR_CONSOLA()
 	sesion = -1
 	intentos_restantes = 3
-	LIMPIAR_CONSOLA()
 	while(sesion == -1 and intentos_restantes > 0):
 		email = input("Ingrese su email: ").lower() # El .lower es para forzar minusculas
 		contrasena = getpass("Ingrese su contraseña: ")
@@ -59,10 +58,17 @@ def LOGIN():
 		est = 0
 		while(sesion == -1 and est < cant_estudiantes):
 			if(email == estudiantes[est][0] and contrasena == estudiantes[est][1]):
-				print("Felicidades",estudiantes[est][2],"ingresaste!\n")
-				sesion = est
+				intentos_restantes = 0
+
+				if(estudiantes[est][8]):
+					print("Felicidades",estudiantes[est][2],"ingresaste!\n")
+					sesion = est
+				else: 
+					print("Su cuenta ha sido deshabilitada\n")
+					est = cant_estudiantes
 			est = est + 1
-		if(sesion == -1):
+
+		if(sesion == -1 and intentos_restantes > 0):
 			print("No ingresaste correctamente :(")
 			print("Te quedan ",intentos_restantes,"intentos.\n")
 
@@ -122,7 +128,8 @@ def MENU_MATCHEOS():
 
 	return input("Seleccione la opcion: ")
 
-#def REGISTRO():	
+def REGISTRO():
+	LIMPIAR_CONSOLA()	
 	
 def CALCULAR_EDAD(nacimiento):
 	ano_actual = datetime.now().year
@@ -239,15 +246,17 @@ def ELIMININAR_PERFIL(sesion):
 	match opcion_eliminar:
 		case 1:
 			estudiantes[sesion][8] = 0 
-			MENU_INICIO()
 			return -1
+			
 		case 0:
 			MENU_GESTION_PERFIL()
 			return sesion
 		case _: 
 			LIMPIAR_CONSOLA()
 			print("Opción incorrecta.\n")
+			return sesion
 
+LIMPIAR_CONSOLA()
 
 estudiantes = [[""]*9 for n in range(8)] # email | contrasena | nombre | nacimiento | hobbies | bio | sexo | gusto | estado
 admins = [[""]*2 for n in range(4)] # email | contrasena
@@ -268,6 +277,8 @@ while(opcion_inicio != 0):
 			case 1:
 				sesion = LOGIN()
 			case 2:
+				LIMPIAR_CONSOLA()
+				REGISTRO()
 				print("En construcción...\n")
 			case 0:
 				LIMPIAR_CONSOLA()
@@ -283,17 +294,21 @@ while(opcion_inicio != 0):
 		LIMPIAR_CONSOLA()
 		match opcion:
 			case 1:
-				opcion_perfil = MENU_GESTION_PERFIL()
-				match opcion_perfil:
-					case 'a':
-						LIMPIAR_CONSOLA()
-						EDITAR_DATOS() 
-					case 'b':
-						LIMPIAR_CONSOLA()
-						sesion = ELIMININAR_PERFIL(sesion)
-					case _: 
-						LIMPIAR_CONSOLA()
-						print("Opción incorrecta.\n")
+				opcion_perfil = ''
+				while(opcion_perfil != 'c' and sesion != -1):
+					opcion_perfil = MENU_GESTION_PERFIL()
+					match opcion_perfil:
+						case 'a':
+							LIMPIAR_CONSOLA()
+							EDITAR_DATOS() 
+						case 'b':
+							LIMPIAR_CONSOLA()
+							sesion = ELIMININAR_PERFIL(sesion)
+						case 'c':
+							LIMPIAR_CONSOLA()
+						case _: 
+							LIMPIAR_CONSOLA()
+							print("Opción incorrecta.\n")
 
 			case 2:
 				opcion_candidatos = MENU_GESTION_CANDIDATOS()
