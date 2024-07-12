@@ -1,6 +1,8 @@
 # Archivo principal:/ ISI 1K03 AyED 2024 - Cabrera Martín, Delgado Mauro, Rodriguez Lautaro, Rossi Dariana
 # -*- coding: utf-8 -*-
 """
+arreglar 	LEER GUÍA DE PREGUNTAS (AGREGAR NUEVAS VARIABLES)
+
 INT:
 intentos_restantes, sesion,
 opcion, opcion_perfil, opcion_editar, opcion_candidatos,
@@ -26,6 +28,7 @@ from random   import randint
 from getpass  import getpass
 import os
 
+
 def LIMPIAR_CONSOLA():
 	if os.name == 'nt':  # Windows
 		os.system('cls')
@@ -33,45 +36,11 @@ def LIMPIAR_CONSOLA():
 		os.system('clear')
 
 def MENU_INICIO():
+	LIMPIAR_CONSOLA()
 	print("INICIO")
 	print("\t1. Login")
 	print("\t2. Registrarse")
 	print("\t0. Salir \n")
-
-	return int(input("Seleccione la opcion: "))
-
-def MENU_PRINCIPAL():
-	print("Menu Principal")
-	print("\t1.  Gestionar mi perfil")
-	print("\t2.  Gestionár candidatos")
-	print("\t3.  Matcheos")
-	print("\t4.  Reportes estadisticos")
-	print("\t11. Ruleta de afinidad")
-	print("\t0. Salir \n")
-
-	return int(input("Seleccione la opcion: "))
-
-def MENU_GESTION_PERFIL():
-	print("Menu de Gestion de Perfil")
-	print("\t1. Editar mis datos personales")
-	print("\t2. Eliminar mi perfil")
-	print("\t0. Volver\n")
-
-	return int(input("Seleccione la opcion: "))
-
-def MENU_GESTION_CANDIDATOS():
-	print("Menu de gestion de candidatos")
-	print("\t1. Ver candidatos")
-	print("\t1. Reportar un candidato")
-	print("\t0. Volver\n")
-
-	return int(input("Seleccione la opcion: "))
-
-def MENU_MATCHEOS():
-	print("Menu de gestion de candidatos")
-	print("\t1. Ver matcheos")
-	print("\t2. Eliminar un matcheo")
-	print("\t0. Volver\n")
 
 	return int(input("Seleccione la opcion: "))
 
@@ -94,11 +63,67 @@ def LOGIN():
 				sesion = est
 			est = est + 1
 		if(sesion == -1):
-			print("No ingresaste correctamente :(\n")
-			print("Te quedan ",intentos_restantes,"intentos.")
+			print("No ingresaste correctamente :(")
+			print("Te quedan ",intentos_restantes,"intentos.\n")
 
 	return sesion
 
+def MENU_PRINCIPAL_MODERADOR():
+	print("Menu Principal")
+	print("\t1. Gestionar usuarios")
+	print("\t2. Gestionar Reportes")
+	print("\t3. Reportes Estadísticos\n")
+
+def MENU_GESTION_USUARIOS():
+	print("Menu de Gestion de Usuarios")
+	print("\ta. Desactivar usuario")
+	print("\tb. Volver\n")
+
+	return int(input("Seleccione la opcion: "))
+
+def MENU_GESTION_REPORTES():
+	print("Menu de Gestion de Reportes")
+	print("\ta. Ver reportes")
+	print("\tb. Volver\n")
+
+	return input("Seleccione la opcion: ")
+
+def MENU_PRINCIPAL_ESTUDIANTE():
+	print("Menu Principal")
+	print("\t1.  Gestionar mi perfil")
+	print("\t2.  Gestionár candidatos")
+	print("\t3.  Matcheos")
+	print("\t4.  Reportes estadísticos")
+	print("\t0.  Salir \n")
+
+	return int(input("Seleccione la opcion: "))
+
+def MENU_GESTION_PERFIL():
+	print("Menu de Gestion de Perfil")
+	print("\ta. Editar mis datos personales")
+	print("\tb. Eliminar mi perfil")
+	print("\tc. Volver\n")
+
+	return input("Seleccione la opcion: ")
+
+def MENU_GESTION_CANDIDATOS():
+	print("Menu de gestion de candidatos")
+	print("\ta. Ver candidatos")
+	print("\tb. Reportar un candidato")
+	print("\tc. Volver\n")
+
+	return input("Seleccione la opcion: ")
+
+def MENU_MATCHEOS():
+	print("Menu de gestion de candidatos")
+	print("\ta. Ver matcheos")
+	print("\tb. Eliminar un matcheo")
+	print("\tc. Volver\n")
+
+	return input("Seleccione la opcion: ")
+
+#def REGISTRO():	
+	
 def CALCULAR_EDAD(nacimiento):
 	ano_actual = datetime.now().year
 	mes_actual = datetime.now().month
@@ -164,31 +189,72 @@ def NOMBRE_CORRECTO(nombre):
 
 def EDITAR_DATOS():
 	print("¿ Que desea editar ?")
-	print("\t1. fecha de nacimiento")
-	print("\t2. biografia")
-	print("\t3. hobbies\n")
+	print("\t1. email")
+	print("\t2. contraseña")
+	print("\t3. nombre")
+	print("\t4. fecha de nacimiento")
+	print("\t5. hobbie")
+	print("\t6. biografía")
+	print("\t7. sexo")
+	print("\t8. gusto\n")
+
 	opcion_editar = int(input("Selecciona la opcion: "))
 	LIMPIAR_CONSOLA()
 	match opcion_editar:
 		case 1:
-			estudiantes[sesion][3] = input("Formato (año-mes-dia) \nxxxx-xx-xx \nIngrese una nueva fecha: ")	
+			estudiantes[sesion][0] = input("Ingrese un nuevo email: ")			
 			LIMPIAR_CONSOLA()
 		case 2:
-			estudiantes[sesion][5] = input("Ingrese una nueva biografia: ")
+			estudiantes[sesion][1] = input("Ingrese un nuevo contraseña: ")
 			LIMPIAR_CONSOLA()
 		case 3:
+			estudiantes[sesion][2] = input("Ingrese un nuevo nombre: ")
+			LIMPIAR_CONSOLA()
+		case 4:
+			estudiantes[sesion][3] = input("Formato (año-mes-dia) \nxxxx-xx-xx \nIngrese una nueva fecha: ")	
+			LIMPIAR_CONSOLA()
+		case 5:
 			estudiantes[sesion][4] = input("Ingrese un nuevo hobbie: ")
+			LIMPIAR_CONSOLA()
+		case 6:
+			estudiantes[sesion][5] = input("Ingrese una nueva biografia: ")
+			LIMPIAR_CONSOLA()
+		case 7:
+			estudiantes[sesion][6] = input("Ingrese un nuevo sexo: ")
+			LIMPIAR_CONSOLA()
+		case 8:
+			estudiantes[sesion][7] = input("Ingrese un nuevo gusto: ")
 			LIMPIAR_CONSOLA()
 		case _: 
 			LIMPIAR_CONSOLA()
 			print("Opción incorrecta.\n")
 
+def ELIMININAR_PERFIL(sesion):
+	print("Desea eliminiar su perfil?")
+	print("\t1. Si")
+	print("\t0. No\n")
+	opcion_eliminar = int(input("Selecciona la opción: "))
+	LIMPIAR_CONSOLA()
+
+	match opcion_eliminar:
+		case 1:
+			estudiantes[sesion][8] = 0 
+			MENU_INICIO()
+			return -1
+		case 0:
+			MENU_GESTION_PERFIL()
+			return sesion
+		case _: 
+			LIMPIAR_CONSOLA()
+			print("Opción incorrecta.\n")
+
+
 estudiantes = [[""]*9 for n in range(8)] # email | contrasena | nombre | nacimiento | hobbies | bio | sexo | gusto | estado
 admins = [[""]*2 for n in range(4)] # email | contrasena
 # Para probar más rápido un mail válido es a y su contraseña es 1
-estudiantes[0][0] = "a"; estudiantes[0][1] = "1"; estudiantes[0][2] = "Juliancito"; estudiantes[0][3] = "2006-01-07"; estudiantes[0][4] = "pescar, nadar";
-estudiantes[1][0] = "estudiante2@ayed.com"; estudiantes[1][1] = "333444"; estudiantes[1][2] = "Pedrito"; estudiantes[1][3] = "2005-04-10"; estudiantes[1][4] = "comer, jugar";
-estudiantes[2][0] = "estudiante3@ayed.com"; estudiantes[2][1] = "555666"; estudiantes[2][2] = "Anita"; estudiantes[2][3] = "2004-10-20"; estudiantes[2][4] = "leer sobre jojos";
+estudiantes[0][0] = "a"; estudiantes[0][1] = "1"; estudiantes[0][2] = "Juliancito"; estudiantes[0][3] = "2006-01-07"; estudiantes[0][4] = "pescar, nadar"; estudiantes[0][8] = 1;
+estudiantes[1][0] = "estudiante2@ayed.com"; estudiantes[1][1] = "333444"; estudiantes[1][2] = "Pedrito"; estudiantes[1][3] = "2005-04-10"; estudiantes[1][4] = "comer, jugar";  estudiantes[1][8] = 1;
+estudiantes[2][0] = "estudiante3@ayed.com"; estudiantes[2][1] = "555666"; estudiantes[2][2] = "Anita"; estudiantes[2][3] = "2004-10-20"; estudiantes[2][4] = "leer sobre jojos";  estudiantes[2][8] = 1;
 cant_estudiantes = 3
 
 opcion_inicio = -1
@@ -213,15 +279,18 @@ while(opcion_inicio != 0):
 	opcion = -1 # Porque tiene que ser distinto de 0 para entrar al while
 	while(sesion > -1 and opcion != 0):
 
-		opcion = MENU_PRINCIPAL()
+		opcion = MENU_PRINCIPAL_ESTUDIANTE()
 		LIMPIAR_CONSOLA()
 		match opcion:
 			case 1:
 				opcion_perfil = MENU_GESTION_PERFIL()
 				match opcion_perfil:
-					case 1:
+					case 'a':
 						LIMPIAR_CONSOLA()
 						EDITAR_DATOS() 
+					case 'b':
+						LIMPIAR_CONSOLA()
+						sesion = ELIMININAR_PERFIL(sesion)
 					case _: 
 						LIMPIAR_CONSOLA()
 						print("Opción incorrecta.\n")
@@ -229,7 +298,7 @@ while(opcion_inicio != 0):
 			case 2:
 				opcion_candidatos = MENU_GESTION_CANDIDATOS()
 				match opcion_candidatos:
-					case 1:
+					case 'a':
 						LIMPIAR_CONSOLA()
 						MOSTRAR_DATOS_ESTUDIANTES()
 						me_gusta = input("\nIngrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
@@ -239,16 +308,32 @@ while(opcion_inicio != 0):
 							print("Seleccionaste a {}, espero te corresponda!\n".format(me_gusta))
 						else:
 							print("El nombre ingresado no es correcto\n")
+					case 'b':
+						LIMPIAR_CONSOLA()
+						#REPORTAR CANDIDATO
+					case 'c':
+						LIMPIAR_CONSOLA()
+						MENU_PRINCIPAL_ESTUDIANTE()
 					case _: 
 						LIMPIAR_CONSOLA()
 						print("Opción incorrecta.\n")		
 			case 3:
 				opcion_matcheo = MENU_MATCHEOS()
-				print("En construcción...\n")
+				match opcion_matcheo:
+					case 'a':
+						LIMPIAR_CONSOLA()
+						# VER MATCHEOS
+					case 'b':
+						LIMPIAR_CONSOLA()
+					case 'c':
+						LIMPIAR_CONSOLA()
+						MENU_PRINCIPAL_ESTUDIANTE()
+					case _:
+						LIMPIAR_CONSOLA()
+						print("Opción incorrecta.\n")						
 			case 4:
+				LIMPIAR_CONSOLA()
 				print("En construcción...\n")
-			case 11:
-				RULETA_AFINIDAD()
 
 			case 0:
 				print("\nPrograma terminado.")
