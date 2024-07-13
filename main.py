@@ -143,9 +143,8 @@ def CALCULAR_EDAD(nacimiento):
 	edad = ano_actual - ano_nacimiento
 	if(mes_nacimiento > mes_actual):
 		edad = edad - 1
-	elif(mes_nacimiento == mes_actual):
-		if(dia_nacimiento > dia_actual):
-			edad = edad - 1
+	elif(mes_nacimiento == mes_actual and dia_nacimiento > dia_actual):
+		edad = edad - 1
 	return edad
 
 def MOSTRAR_DATOS_ESTUDIANTES():
