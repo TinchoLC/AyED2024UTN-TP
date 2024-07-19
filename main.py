@@ -48,6 +48,7 @@ def LOGIN():
 	sesion = -1
 	intentos_restantes = 3
 	while(sesion == -1 and intentos_restantes > 0):
+		print("LOGIN\n")
 		email = input("Ingrese su email: ").lower() # El .lower es para forzar minusculas
 		contrasena = getpass("Ingrese su contraseña: ")
 
@@ -73,6 +74,35 @@ def LOGIN():
 			print("Te quedan ",intentos_restantes,"intentos.\n")
 
 	return sesion
+
+def REGISTRO(nueva_sesion):
+	LIMPIAR_CONSOLA()
+	if(nueva_sesion <= 8):
+		print("REGISTRO\n")
+		email = input("Ingrese un email: ")
+		nombre = input("Ingrese un nombre: ")
+		for n in range(cant_estudiantes):
+			if(email == estudiantes[n][0]):
+				email = "novalido"
+			if(nombre.lower() == estudiantes[n][2].lower()):
+				nombre = "novalido"
+
+		if(email == "novalido"):
+			print("\nEl email ya está siendo utilizado o no es válido")
+		elif(nombre == "novalido"):
+			print("\nEl nombre ya está siendo utilizado o no es válido")
+		else:
+			estudiantes[nueva_sesion][0] = email
+			estudiantes[nueva_sesion][2] = nombre
+			estudiantes[nueva_sesion][1] = input("Ingrese la contraseña: ")
+			estudiantes[nueva_sesion][3] = input("Formato (año-mes-dia) \nxxxx-xx-xx \n Ingrese una fecha de nacimiento: ")
+			estudiantes[nueva_sesion][8] = 1
+			nueva_sesion = nueva_sesion + 1
+			print(nombre, "registrado!")
+	else:
+		print("Ya se alcanzó el máximo de estudiantes")
+
+	return nueva_sesion
 
 def MENU_PRINCIPAL_MODERADOR():
 	print("Menu Principal")
@@ -128,9 +158,6 @@ def MENU_MATCHEOS():
 
 	return input("Seleccione la opcion: ")
 
-def REGISTRO():
-	LIMPIAR_CONSOLA()	
-	
 def CALCULAR_EDAD(nacimiento):
 	ano_actual = datetime.now().year
 	mes_actual = datetime.now().month
@@ -235,8 +262,8 @@ def EDITAR_DATOS():
 			LIMPIAR_CONSOLA()
 			print("Opción incorrecta.\n")
 
-def ELIMININAR_PERFIL(sesion):
-	print("Desea eliminiar su perfil?")
+def ELIMINAR_PERFIL(sesion):
+	print("Desea eliminar su perfil?")
 	print("\t1. Si")
 	print("\t0. No\n")
 	opcion_eliminar = int(input("Selecciona la opción: "))
@@ -248,22 +275,23 @@ def ELIMININAR_PERFIL(sesion):
 			return -1
 			
 		case 0:
-			MENU_GESTION_PERFIL()
 			return sesion
 		case _: 
 			LIMPIAR_CONSOLA()
 			print("Opción incorrecta.\n")
 			return sesion
 
-LIMPIAR_CONSOLA()
 
 estudiantes = [[""]*9 for n in range(8)] # email | contrasena | nombre | nacimiento | hobbies | bio | sexo | gusto | estado
-admins = [[""]*2 for n in range(4)] # email | contrasena
-# Para probar más rápido un mail válido es a y su contraseña es 1
-estudiantes[0][0] = "a"; estudiantes[0][1] = "1"; estudiantes[0][2] = "Juliancito"; estudiantes[0][3] = "2006-01-07"; estudiantes[0][4] = "pescar, nadar"; estudiantes[0][8] = 1;
-estudiantes[1][0] = "estudiante2@ayed.com"; estudiantes[1][1] = "333444"; estudiantes[1][2] = "Pedrito"; estudiantes[1][3] = "2005-04-10"; estudiantes[1][4] = "comer, jugar";  estudiantes[1][8] = 1;
-estudiantes[2][0] = "estudiante3@ayed.com"; estudiantes[2][1] = "555666"; estudiantes[2][2] = "Anita"; estudiantes[2][3] = "2004-10-20"; estudiantes[2][4] = "leer sobre jojos";  estudiantes[2][8] = 1;
+estudiantes[0][0] = "a"; estudiantes[0][1] = "1"; estudiantes[0][2] = "Juliancito"; estudiantes[0][3] = "2006-01-07"; estudiantes[0][4] = "pescar, nadar";
+estudiantes[1][0] = "estudiante2@ayed.com"; estudiantes[1][1] = "333444"; estudiantes[1][2] = "Pedrito"; estudiantes[1][3] = "2005-04-10"; estudiantes[1][4] = "comer, jugar";
+estudiantes[2][0] = "estudiante3@ayed.com"; estudiantes[2][1] = "555666"; estudiantes[2][2] = "Anita"; estudiantes[2][3] = "2004-10-20"; estudiantes[2][4] = "leer sobre jojos";
 cant_estudiantes = 3
+# Para probar más rápido un mail válido es a y su contraseña es 1
+
+admins = [[""]*2 for n in range(4)] # email | contrasena
+admins[0][0] = "b"; admins[0][1] = "1"
+cant_admins = 1
 
 opcion_inicio = -1
 while(opcion_inicio != 0):
@@ -274,11 +302,14 @@ while(opcion_inicio != 0):
 		opcion_inicio = MENU_INICIO()
 		match opcion_inicio:
 			case 1:
-				sesion = LOGIN()
+				if(cant_estudiantes < 4):
+					print("No hay la cantidad de estudiantes necesarios para iniciar el programa, se necesitan",4 - cant_estudiantes, "más.")
+				elif(cant_admins < 1):
+					print("No hay la cantidad de administradores necesarios para iniciar el programa, se necesita al menos uno.")
+				else:
+					sesion = LOGIN()
 			case 2:
-				LIMPIAR_CONSOLA()
-				REGISTRO()
-				print("En construcción...\n")
+				cant_estudiantes = REGISTRO(cant_estudiantes)
 			case 0:
 				LIMPIAR_CONSOLA()
 				print("Adios!")
@@ -302,7 +333,7 @@ while(opcion_inicio != 0):
 							EDITAR_DATOS() 
 						case 'b':
 							LIMPIAR_CONSOLA()
-							sesion = ELIMININAR_PERFIL(sesion)
+							sesion = ELIMINAR_PERFIL(sesion)
 						case 'c':
 							LIMPIAR_CONSOLA()
 						case _: 
