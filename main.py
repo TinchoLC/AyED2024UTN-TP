@@ -125,11 +125,11 @@ def REGISTRO(nueva_sesion):
 	return nueva_sesion
 
 # MENUS MODERADOR
-def MENU_PRINCIPAL_MODERADOR():
-	print("Menu Principal")
+def MENU_PRINCIPAL_MODERADOR(id):
+	print("Menu Principal del moderador con id",id)
 	print("\t1. Gestionar usuarios")
 	print("\t2. Gestionar Reportes")
-	print("\t3. Reportes Estadísticos\n")
+	print("\t3. Reportes Estadísticos")
 	print("\t0.  Salir \n")
 
 	return int(input("Seleccione la opcion: "))
@@ -149,8 +149,8 @@ def MENU_GESTION_REPORTES():
 	return input("Seleccione la opcion: ")
 
 # MENUS ESTUDIANTE
-def MENU_PRINCIPAL_ESTUDIANTE():
-	print("Menu Principal")
+def MENU_PRINCIPAL_ESTUDIANTE(id, nombre):
+	print("Menu Principal del estudiante",nombre,"con id",id)
 	print("\t1.  Gestionar mi perfil")
 	print("\t2.  Gestionár candidatos")
 	print("\t3.  Matcheos")
@@ -184,7 +184,7 @@ def MENU_MATCHEOS():
 	print("En construcción...\nNinguna opción es funcional\n")
 	return input("Seleccione la opcion: ")
 
-# 
+# OTRAS FUNCIONES
 def CALCULAR_EDAD(nacimiento):
 	ano_actual = datetime.now().year
 	mes_actual = datetime.now().month
@@ -281,6 +281,15 @@ def ELIMINAR_PERFIL(sesion):
 			print("Opción incorrecta.\n")
 			return sesion
 
+def REPORTAR():
+	# falta hacer
+
+	id_reportante = ""
+	id_reportado = ""
+	motivo= ""
+
+	return [id_reportante,id_reportado,motivo,0]
+
 def REPORTES_ESTADISTICOS():
 	print("En construcción...\n")
 
@@ -315,9 +324,9 @@ def MATCHEOS_COMBINADOS():
 	print("Bonus track todavía no resuelto")
 
 estudiantes = [[""]*8 for n in range(8)] # email | contrasena | nombre | nacimiento | hobbies | bio | sexo | estado
-estudiantes[0][0] = "a"; estudiantes[0][1] = "1"; estudiantes[0][2] = "Juliancito"; estudiantes[0][3] = "2006-01-07"; estudiantes[0][4] = "pescar, nadar";
-estudiantes[1][0] = "estudiante2@ayed.com"; estudiantes[1][1] = "333444"; estudiantes[1][2] = "Pedrito"; estudiantes[1][3] = "2005-04-10"; estudiantes[1][4] = "comer, jugar";
-estudiantes[2][0] = "estudiante3@ayed.com"; estudiantes[2][1] = "555666"; estudiantes[2][2] = "Anita"; estudiantes[2][3] = "2004-10-20"; estudiantes[2][4] = "leer sobre jojos";
+estudiantes[0][0] = "a"; estudiantes[0][1] = "1"; estudiantes[0][2] = "Juliancito"; estudiantes[0][3] = "2006-01-07"; estudiantes[0][4] = "pescar, nadar"; estudiantes[0][7] = 1;
+estudiantes[1][0] = "estudiante2@ayed.com"; estudiantes[1][1] = "333444"; estudiantes[1][2] = "Pedrito"; estudiantes[1][3] = "2005-04-10"; estudiantes[1][4] = "comer, jugar"; estudiantes[1][7] = 1;
+estudiantes[2][0] = "estudiante3@ayed.com"; estudiantes[2][1] = "555666"; estudiantes[2][2] = "Anita"; estudiantes[2][3] = "2004-10-20"; estudiantes[2][4] = "leer sobre jojos"; estudiantes[2][7] = 1;
 cant_estudiantes = 3
 # Para probar más rápido un mail válido es a y su contraseña es 1
 
@@ -326,6 +335,9 @@ admins[0][0] = "b"; admins[0][1] = "1"
 cant_admins = 1
 
 likes = LIKES_AUTO()
+
+reportes = [[""]*4 for n in range(10)] # id_reportante | id_reportado | motivo | estado
+cant_reportes = 0
 
 opcion_inicio = -1
 while(opcion_inicio != 0):
@@ -363,7 +375,7 @@ while(opcion_inicio != 0):
 	opcion = -1 # Porque tiene que ser distinto de 0 para entrar al while
 	while(sesion > -1 and opcion != 0):
 
-		opcion = MENU_PRINCIPAL_ESTUDIANTE()
+		opcion = MENU_PRINCIPAL_ESTUDIANTE(sesion,estudiantes[sesion][2])
 		LIMPIAR_CONSOLA()
 		match opcion:
 			case 1:
@@ -374,11 +386,13 @@ while(opcion_inicio != 0):
 						case 'a':
 							LIMPIAR_CONSOLA()
 							EDITAR_DATOS() 
+
 						case 'b':
 							LIMPIAR_CONSOLA()
 							sesion = ELIMINAR_PERFIL(sesion)
+
 						case 'c':
-							LIMPIAR_CONSOLA()
+							LIMPIAR_CONSOLA() #volver
 						case _: 
 							LIMPIAR_CONSOLA()
 							print("Opción incorrecta.\n")
@@ -402,11 +416,13 @@ while(opcion_inicio != 0):
 								print("El nombre ingresado no es correcto\n")
 
 						case 'b':
-							LIMPIAR_CONSOLA()
-							#REPORTAR CANDIDATO
-						case 'c':
+							# falta hacer
+							reportes[cant_reportes] = REPORTAR()
+							cant_reportes = cant_reportes + 1
 							LIMPIAR_CONSOLA()
 							
+						case 'c':
+							LIMPIAR_CONSOLA() #volver							
 						case _: 
 							LIMPIAR_CONSOLA()
 							print("Opción incorrecta.\n")	
@@ -420,14 +436,14 @@ while(opcion_inicio != 0):
 							LIMPIAR_CONSOLA()
 							# VER MATCHEOS
 						case 'b':
-							LIMPIAR_CONSOLA()
+							LIMPIAR_CONSOLA() 
+
 						case 'c':
-							LIMPIAR_CONSOLA()
-							
+							LIMPIAR_CONSOLA() #volver
 						case _:
 							LIMPIAR_CONSOLA()
 							print("Opción incorrecta.\n")		
-											
+
 			case 4:
 				REPORTES_ESTADISTICOS()
 				
@@ -438,7 +454,7 @@ while(opcion_inicio != 0):
 
 	while(sesion_adm > -1 and opcion != 0):
 
-		opcion = MENU_PRINCIPAL_MODERADOR()
+		opcion = MENU_PRINCIPAL_MODERADOR(sesion_adm)
 		LIMPIAR_CONSOLA()
 		match opcion:
 			case 1:
@@ -448,9 +464,10 @@ while(opcion_inicio != 0):
 					match opcion_gest_usuarios:
 						case 'a':
 							LIMPIAR_CONSOLA()
-							# 
+							# falta hacer
+
 						case 'b':
-							LIMPIAR_CONSOLA()
+							LIMPIAR_CONSOLA() #volver
 						case _:
 							LIMPIAR_CONSOLA()
 							print("Opción incorrecta.\n")
@@ -462,9 +479,10 @@ while(opcion_inicio != 0):
 					match opcion_gest_reportes:
 						case 'a':
 							LIMPIAR_CONSOLA()
-							# 
+							# falta hacer
+
 						case 'b':
-							LIMPIAR_CONSOLA()
+							LIMPIAR_CONSOLA() #volver
 						case _:
 							LIMPIAR_CONSOLA()
 							print("Opción incorrecta.\n")
