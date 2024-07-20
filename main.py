@@ -28,17 +28,28 @@ from random   import randint
 from getpass  import getpass
 import os
 
-
+# BASICO
 def LIMPIAR_CONSOLA():
 	if os.name == 'nt':  # Windows
 		os.system('cls')
 	else:  # macOS y Linux
 		os.system('clear')
 
+def LIKES_AUTO():
+	likes = [[0]*8 for n in range(8)] #Aca se rellena al 100% con 0
+
+	#falta poner 1s aleatorios por toda la matriz
+
+	return likes
+
+# INICIO
 def MENU_INICIO():
 	print("INICIO")
 	print("\t1. Login")
 	print("\t2. Registrarse")
+	print("\t11.Bonus Track 1.1 (Ruleta)")
+	print("\t21.Bonus Track 2.1 (Edades)")
+	print("\t22.Bonus Track 2.2 (Matcheos combinados)")
 	print("\t0. Salir \n")
 
 	return int(input("Seleccione la opcion: "))
@@ -46,6 +57,7 @@ def MENU_INICIO():
 def LOGIN():
 	LIMPIAR_CONSOLA()
 	sesion = -1
+	sesion_adm = -1
 	intentos_restantes = 3
 	while(sesion == -1 and intentos_restantes > 0):
 		print("LOGIN\n")
@@ -56,24 +68,29 @@ def LOGIN():
 
 		intentos_restantes = intentos_restantes - 1
 
-		est = 0
-		while(sesion == -1 and est < cant_estudiantes):
-			if(email == estudiantes[est][0] and contrasena == estudiantes[est][1]):
+		probable = 0
+		while(sesion == -1 and sesion_adm == -1 and probable < cant_estudiantes):
+			if(email == estudiantes[probable][0] and contrasena == estudiantes[probable][1]):
 				intentos_restantes = 0
 
-				if(estudiantes[est][8]):
-					print("Felicidades",estudiantes[est][2],"ingresaste!\n")
-					sesion = est
+				if(estudiantes[probable][7]):
+					print("Felicidades",estudiantes[probable][2],"ingresaste!\n")
+					sesion = probable
 				else: 
 					print("Su cuenta ha sido deshabilitada\n")
-					est = cant_estudiantes
-			est = est + 1
+					probable = cant_estudiantes
+			elif(probable < cant_admins): # no todo dentro del mismo if porque si no busca más allá del array.
+				if(email == admins[probable][0] and contrasena == admins[probable][1]):
+					intentos_restantes = 0
+					sesion_adm = probable
 
-		if(sesion == -1 and intentos_restantes > 0):
+			probable = probable + 1
+
+		if(intentos_restantes > 0):
 			print("No ingresaste correctamente :(")
 			print("Te quedan ",intentos_restantes,"intentos.\n")
 
-	return sesion
+	return sesion, sesion_adm
 
 def REGISTRO(nueva_sesion):
 	LIMPIAR_CONSOLA()
@@ -84,6 +101,9 @@ def REGISTRO(nueva_sesion):
 		for n in range(cant_estudiantes):
 			if(email == estudiantes[n][0]):
 				email = "novalido"
+			elif(n < cant_admins): # no todo dentro del mismo if porque si no busca más allá del array.
+				if(email == admins[n][0]):
+					email = "novalido"
 			if(nombre.lower() == estudiantes[n][2].lower()):
 				nombre = "novalido"
 
@@ -96,7 +116,7 @@ def REGISTRO(nueva_sesion):
 			estudiantes[nueva_sesion][2] = nombre
 			estudiantes[nueva_sesion][1] = input("Ingrese la contraseña: ")
 			estudiantes[nueva_sesion][3] = input("Formato (año-mes-dia) \nxxxx-xx-xx \n Ingrese una fecha de nacimiento: ")
-			estudiantes[nueva_sesion][8] = 1
+			estudiantes[nueva_sesion][7] = 1
 			nueva_sesion = nueva_sesion + 1
 			print(nombre, "registrado!")
 	else:
@@ -104,11 +124,15 @@ def REGISTRO(nueva_sesion):
 
 	return nueva_sesion
 
+# MENUS MODERADOR
 def MENU_PRINCIPAL_MODERADOR():
 	print("Menu Principal")
 	print("\t1. Gestionar usuarios")
 	print("\t2. Gestionar Reportes")
 	print("\t3. Reportes Estadísticos\n")
+	print("\t0.  Salir \n")
+
+	return int(input("Seleccione la opcion: "))
 
 def MENU_GESTION_USUARIOS():
 	print("Menu de Gestion de Usuarios")
@@ -124,6 +148,7 @@ def MENU_GESTION_REPORTES():
 
 	return input("Seleccione la opcion: ")
 
+# MENUS ESTUDIANTE
 def MENU_PRINCIPAL_ESTUDIANTE():
 	print("Menu Principal")
 	print("\t1.  Gestionar mi perfil")
@@ -156,8 +181,10 @@ def MENU_MATCHEOS():
 	print("\tb. Eliminar un matcheo")
 	print("\tc. Volver\n")
 
+	print("En construcción...\nNinguna opción es funcional\n")
 	return input("Seleccione la opcion: ")
 
+# 
 def CALCULAR_EDAD(nacimiento):
 	ano_actual = datetime.now().year
 	mes_actual = datetime.now().month
@@ -184,36 +211,13 @@ def MOSTRAR_DATOS_ESTUDIANTES():
 			print("Biografia:", estudiantes[n][5])
 			print("Hobbies: {} \n" .format(estudiantes[n][4]))
 
-def RULETA_AFINIDAD():
-	porcentaje_total = -1 
-	while(porcentaje_total != 100):
-		porcentaje1 = int(input("Porcentaje de afinidad con la persona A: "))
-		porcentaje2 = int(input("Porcentaje de afinidad con la persona B: "))
-		porcentaje3 = int(input("Porcentaje de afinidad con la persona C: "))
-		porcentaje_total = porcentaje1 + porcentaje2 + porcentaje3
-		
-		if(porcentaje_total != 100):
-			LIMPIAR_CONSOLA()
-			print("Los porcentajes no suman 100!!! Ingreselos nuevamente. \n")
-	
-	random = randint(0, 99)
-	
-	LIMPIAR_CONSOLA()
-
-	if(random < porcentaje1):
-		print("Salió la persona A!!!\n")
-	elif(random < porcentaje1 + porcentaje2):
-		print("Salió la persona B!!!\n")
-	else: 
-		print("Salió la persona C!!!\n")
-
 def NOMBRE_CORRECTO(nombre):
-	correcto = False;
+	correcto = -1;
 	est = 0;
-	while(not correcto and est < cant_estudiantes):
+	while(correcto == -1 and est < cant_estudiantes):
 		if(nombre == estudiantes[est][2].lower()):
 			if(est != sesion):
-				correcto = True
+				correcto = est
 			else:
 				print("No puedes seleccionarte a ti mismo!\n")
 				est = cant_estudiantes
@@ -229,7 +233,6 @@ def EDITAR_DATOS():
 	print("\t5. hobbie")
 	print("\t6. biografía")
 	print("\t7. sexo")
-	print("\t8. gusto\n")
 
 	opcion_editar = int(input("Selecciona la opcion: "))
 	LIMPIAR_CONSOLA()
@@ -255,9 +258,6 @@ def EDITAR_DATOS():
 		case 7:
 			estudiantes[sesion][6] = input("Ingrese un nuevo sexo: ")
 			LIMPIAR_CONSOLA()
-		case 8:
-			estudiantes[sesion][7] = input("Ingrese un nuevo gusto: ")
-			LIMPIAR_CONSOLA()
 		case _: 
 			LIMPIAR_CONSOLA()
 			print("Opción incorrecta.\n")
@@ -271,7 +271,7 @@ def ELIMINAR_PERFIL(sesion):
 
 	match opcion_eliminar:
 		case 1:
-			estudiantes[sesion][8] = 0 
+			estudiantes[sesion][7] = 0 
 			return -1
 			
 		case 0:
@@ -281,8 +281,40 @@ def ELIMINAR_PERFIL(sesion):
 			print("Opción incorrecta.\n")
 			return sesion
 
+def REPORTES_ESTADISTICOS():
+	print("En construcción...\n")
 
-estudiantes = [[""]*9 for n in range(8)] # email | contrasena | nombre | nacimiento | hobbies | bio | sexo | gusto | estado
+# BONUS TRACKS
+def RULETA_AFINIDAD():
+	porcentaje_total = -1 
+	while(porcentaje_total != 100):
+		porcentaje1 = int(input("Porcentaje de afinidad con la persona A: "))
+		porcentaje2 = int(input("Porcentaje de afinidad con la persona B: "))
+		porcentaje3 = int(input("Porcentaje de afinidad con la persona C: "))
+		porcentaje_total = porcentaje1 + porcentaje2 + porcentaje3
+		
+		if(porcentaje_total != 100):
+			LIMPIAR_CONSOLA()
+			print("Los porcentajes no suman 100!!! Ingreselos nuevamente. \n")
+	
+	random = randint(0, 99)
+	
+	LIMPIAR_CONSOLA()
+
+	if(random < porcentaje1):
+		print("Salió la persona A!!!\n")
+	elif(random < porcentaje1 + porcentaje2):
+		print("Salió la persona B!!!\n")
+	else: 
+		print("Salió la persona C!!!\n")
+
+def EDADES():
+	print("Bonus track todavía no resuelto")
+
+def MATCHEOS_COMBINADOS():
+	print("Bonus track todavía no resuelto")
+
+estudiantes = [[""]*8 for n in range(8)] # email | contrasena | nombre | nacimiento | hobbies | bio | sexo | estado
 estudiantes[0][0] = "a"; estudiantes[0][1] = "1"; estudiantes[0][2] = "Juliancito"; estudiantes[0][3] = "2006-01-07"; estudiantes[0][4] = "pescar, nadar";
 estudiantes[1][0] = "estudiante2@ayed.com"; estudiantes[1][1] = "333444"; estudiantes[1][2] = "Pedrito"; estudiantes[1][3] = "2005-04-10"; estudiantes[1][4] = "comer, jugar";
 estudiantes[2][0] = "estudiante3@ayed.com"; estudiantes[2][1] = "555666"; estudiantes[2][2] = "Anita"; estudiantes[2][3] = "2004-10-20"; estudiantes[2][4] = "leer sobre jojos";
@@ -293,10 +325,13 @@ admins = [[""]*2 for n in range(4)] # email | contrasena
 admins[0][0] = "b"; admins[0][1] = "1"
 cant_admins = 1
 
+likes = LIKES_AUTO()
+
 opcion_inicio = -1
 while(opcion_inicio != 0):
 
 	sesion = -1
+	sesion_adm = -1
 	opcion_inicio = -1
 	while(opcion_inicio != 0 and opcion_inicio != 1):
 		opcion_inicio = MENU_INICIO()
@@ -307,9 +342,17 @@ while(opcion_inicio != 0):
 				elif(cant_admins < 1):
 					print("No hay la cantidad de administradores necesarios para iniciar el programa, se necesita al menos uno.")
 				else:
-					sesion = LOGIN()
+					sesion, sesion_adm = LOGIN()
 			case 2:
 				cant_estudiantes = REGISTRO(cant_estudiantes)
+
+			case 11:
+				RULETA_AFINIDAD()
+			case 21:
+				EDADES()
+			case 22:
+				MATCHEOS_COMBINADOS()
+
 			case 0:
 				LIMPIAR_CONSOLA()
 				print("Adios!")
@@ -341,46 +384,96 @@ while(opcion_inicio != 0):
 							print("Opción incorrecta.\n")
 
 			case 2:
-				opcion_candidatos = MENU_GESTION_CANDIDATOS()
-				match opcion_candidatos:
-					case 'a':
-						LIMPIAR_CONSOLA()
-						MOSTRAR_DATOS_ESTUDIANTES()
-						me_gusta = input("\nIngrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
-						LIMPIAR_CONSOLA()
-						if(NOMBRE_CORRECTO(me_gusta.lower())):	
-							estudiantes[sesion][7] = me_gusta
-							print("Seleccionaste a {}, espero te corresponda!\n".format(me_gusta))
-						else:
-							print("El nombre ingresado no es correcto\n")
-					case 'b':
-						LIMPIAR_CONSOLA()
-						#REPORTAR CANDIDATO
-					case 'c':
-						LIMPIAR_CONSOLA()
-						MENU_PRINCIPAL_ESTUDIANTE()
-					case _: 
-						LIMPIAR_CONSOLA()
-						print("Opción incorrecta.\n")		
+				opcion_candidatos = ''
+				while(opcion_candidatos != 'c'):
+					opcion_candidatos = MENU_GESTION_CANDIDATOS()
+					match opcion_candidatos:
+						case 'a':
+							LIMPIAR_CONSOLA()
+							MOSTRAR_DATOS_ESTUDIANTES()
+							me_gusta = input("\nIngrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
+							LIMPIAR_CONSOLA()
+
+							me_gusta_id = NOMBRE_CORRECTO(me_gusta.lower())
+							if(me_gusta_id > -1):	
+								likes[sesion][me_gusta_id] = 1
+								print("Seleccionaste a {}, espero te corresponda!\n".format(me_gusta))
+							else:
+								print("El nombre ingresado no es correcto\n")
+
+						case 'b':
+							LIMPIAR_CONSOLA()
+							#REPORTAR CANDIDATO
+						case 'c':
+							LIMPIAR_CONSOLA()
+							
+						case _: 
+							LIMPIAR_CONSOLA()
+							print("Opción incorrecta.\n")	
+
 			case 3:
-				opcion_matcheo = MENU_MATCHEOS()
-				match opcion_matcheo:
-					case 'a':
-						LIMPIAR_CONSOLA()
-						# VER MATCHEOS
-					case 'b':
-						LIMPIAR_CONSOLA()
-					case 'c':
-						LIMPIAR_CONSOLA()
-						MENU_PRINCIPAL_ESTUDIANTE()
-					case _:
-						LIMPIAR_CONSOLA()
-						print("Opción incorrecta.\n")						
+				opcion_matcheo = ''
+				while(opcion_matcheo != 'c'):	
+					opcion_matcheo = MENU_MATCHEOS()
+					match opcion_matcheo:
+						case 'a':
+							LIMPIAR_CONSOLA()
+							# VER MATCHEOS
+						case 'b':
+							LIMPIAR_CONSOLA()
+						case 'c':
+							LIMPIAR_CONSOLA()
+							
+						case _:
+							LIMPIAR_CONSOLA()
+							print("Opción incorrecta.\n")		
+											
 			case 4:
-				LIMPIAR_CONSOLA()
-				print("En construcción...\n")
+				REPORTES_ESTADISTICOS()
+				
+			case 0:
+				print("\nPrograma terminado.")
+			case _:
+				print("Opcion incorrecta")	
+
+	while(sesion_adm > -1 and opcion != 0):
+
+		opcion = MENU_PRINCIPAL_MODERADOR()
+		LIMPIAR_CONSOLA()
+		match opcion:
+			case 1:
+				opcion_gest_usuarios = ''
+				while(opcion_gest_usuarios != 'b'):
+					opcion_gest_usuarios = MENU_GESTION_USUARIOS()
+					match opcion_gest_usuarios:
+						case 'a':
+							LIMPIAR_CONSOLA()
+							# 
+						case 'b':
+							LIMPIAR_CONSOLA()
+						case _:
+							LIMPIAR_CONSOLA()
+							print("Opción incorrecta.\n")
+
+			case 2:
+				opcion_gest_reportes = ''
+				while(opcion_gest_reportes != 'b'):
+					opcion_gest_reportes = MENU_GESTION_REPORTES()
+					match opcion_gest_reportes:
+						case 'a':
+							LIMPIAR_CONSOLA()
+							# 
+						case 'b':
+							LIMPIAR_CONSOLA()
+						case _:
+							LIMPIAR_CONSOLA()
+							print("Opción incorrecta.\n")
+
+			case 3:
+				REPORTES_ESTADISTICOS()
 
 			case 0:
 				print("\nPrograma terminado.")
 			case _:
 				print("Opcion incorrecta")	
+
