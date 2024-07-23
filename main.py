@@ -303,7 +303,7 @@ def ELIMINAR_PERFIL(sesion_nueva):
 		case _: 
 			LIMPIAR_CONSOLA()
 			print("Opción incorrecta.\n")
-	return sesion
+	return sesion_nueva
 
 def DESACTIVAR_USUARIO():
 	desactivar_usuario = input("Ingrese el nombre de usuario que desea desactivar: ").lower()
