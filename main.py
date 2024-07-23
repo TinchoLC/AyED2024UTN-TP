@@ -95,7 +95,7 @@ def LOGIN():
 
 def REGISTRO(nueva_sesion):
 	LIMPIAR_CONSOLA()
-	if(nueva_sesion <= 8):
+	if(nueva_sesion < 8):
 		print("REGISTRO\n")
 		email = input("Ingrese un email: ")
 		nombre = input("Ingrese un nombre: ")
@@ -116,7 +116,7 @@ def REGISTRO(nueva_sesion):
 			estudiantes[nueva_sesion][0] = email
 			estudiantes[nueva_sesion][2] = nombre
 			estudiantes[nueva_sesion][1] = input("Ingrese la contraseña: ")
-			estudiantes[nueva_sesion][3] = input("Formato (año-mes-dia) \nxxxx-xx-xx \n Ingrese una fecha de nacimiento: ")
+			estudiantes[nueva_sesion][3] = INGRESAR_NACIMIENTO()
 			estudiantes[nueva_sesion][7] = 1
 			nueva_sesion = nueva_sesion + 1
 			print(nombre, "registrado!")
@@ -202,6 +202,17 @@ def CALCULAR_EDAD(nacimiento):
 		edad = edad - 1
 	return edad
 
+def INGRESAR_NACIMIENTO():
+	formato_correcto = False
+	while(not formato_correcto):
+		fecha = input("Formato (año-mes-dia) \nxxxx-xx-xx \nIngrese la fecha de nacimiento: ")
+		if(len(fecha)!=10):
+			print("La longitud de la fecha es incorrecta\n")
+		else:
+			formato_correcto = True
+	return fecha
+
+
 def MOSTRAR_DATOS_ESTUDIANTES():
 	for n in range(cant_estudiantes):
 		if(sesion != n):
@@ -211,6 +222,17 @@ def MOSTRAR_DATOS_ESTUDIANTES():
 			print("Edad:", CALCULAR_EDAD(estudiantes[n][3]))
 			print("Biografia:", estudiantes[n][5])
 			print("Hobbies: {} \n" .format(estudiantes[n][4]))
+
+def AGREGAR_MATCHEO():
+	me_gusta = input("\nIngrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
+	LIMPIAR_CONSOLA()
+
+	me_gusta_id = NOMBRE_CORRECTO(me_gusta.lower())
+	if(me_gusta_id > -1):	
+		likes[sesion][me_gusta_id] = 1
+		print("Seleccionaste a {}, espero te corresponda!\n".format(me_gusta))
+	else:
+		print("El nombre ingresado no es correcto\n")
 
 def NOMBRE_CORRECTO(nombre):
 	correcto = -1;
@@ -248,7 +270,7 @@ def EDITAR_DATOS():
 			estudiantes[sesion][2] = input("Ingrese un nuevo nombre: ")
 			LIMPIAR_CONSOLA()
 		case 4:
-			estudiantes[sesion][3] = input("Formato (año-mes-dia) \nxxxx-xx-xx \nIngrese una nueva fecha: ")	
+			estudiantes[sesion][3] = INGRESAR_NACIMIENTO()	
 			LIMPIAR_CONSOLA()
 		case 5:
 			estudiantes[sesion][4] = input("Ingrese un nuevo hobbie: ")
@@ -263,24 +285,25 @@ def EDITAR_DATOS():
 			LIMPIAR_CONSOLA()
 			print("Opción incorrecta.\n")
 
-def ELIMINAR_PERFIL(sesion):
+def ELIMINAR_PERFIL(sesion_nueva):
 	print("Desea eliminar su perfil?")
 	print("\t1. Si")
 	print("\t0. No\n")
 	opcion_eliminar = int(input("Selecciona la opción: "))
 	LIMPIAR_CONSOLA()
 
+
 	match opcion_eliminar:
 		case 1:
 			estudiantes[sesion][7] = 0 
-			return -1
+			sesion_nueva = -1
 			
 		case 0:
-			return sesion
+			LIMPIAR_CONSOLA()
 		case _: 
 			LIMPIAR_CONSOLA()
 			print("Opción incorrecta.\n")
-			return sesion
+	return sesion
 
 def DESACTIVAR_USUARIO():
 	desactivar_usuario = input("Ingrese el nombre de usuario que desea desactivar: ").lower()
@@ -298,26 +321,25 @@ def DESACTIVAR_USUARIO():
 			match opcion_desactivar:
 				case 1:
 					estudiantes[n][7] = 0 
-					return -1
 			
 				case 0:
-					return 
+					print("")
 				case _: 
 					LIMPIAR_CONSOLA()
 					print("Opción incorrecta.\n")
-					return 
+
 	if not usuario_encontrado:
 		print("No se encontro el nombre del usuario que se queria desactivar")
 
 	
-
 def REPORTAR():
 	# faltaaaaaaaaa
 	id_reportante = ""
 	id_reportado = ""
 	motivo= ""
 
-	return [id_reportante,id_reportado,motivo,0]
+	cant_reportes = cant_reportes + 1
+	reportes[cant_reportes] = [id_reportante,id_reportado,motivo,'0']
 
 def REPORTES_ESTADISTICOS():
 	print("En construcción...\n")
@@ -349,8 +371,15 @@ def RULETA_AFINIDAD():
 def EDADES():
 	print("Bonus track todavía no resuelto")
 
-def MATCHEOS_COMBINADOS():
-	print("Bonus track todavía no resuelto")
+def MATCHEOS_COMBINADOS(cant):
+	""" Forma alternativa sin formula (fuerza bruta)
+	matcheos_posibles = 0
+	for i in range(cant):
+		for n in range(i):
+			matcheos_posibles = matcheos_posibles + 1
+	""" 
+	matcheos_posibles = cant * (cant-1) / 2
+	print("La cantidad de matcheos posibles con la cantidad de estudiantes actuales, es decir",cant,"estudiantes, es de:",int(matcheos_posibles),"\n")
 
 estudiantes = [[""]*8 for n in range(8)] # email | contrasena | nombre | nacimiento | hobbies | bio | sexo | estado
 estudiantes[0][0] = "a"; estudiantes[0][1] = "1"; estudiantes[0][2] = "Juliancito"; estudiantes[0][3] = "2006-01-07"; estudiantes[0][4] = "pescar, nadar"; estudiantes[0][7] = 1;
@@ -392,7 +421,7 @@ while(opcion_inicio != 0):
 			case 21:
 				EDADES()
 			case 22:
-				MATCHEOS_COMBINADOS()
+				MATCHEOS_COMBINADOS(cant_estudiantes)
 
 			case 0:
 				LIMPIAR_CONSOLA()
@@ -434,20 +463,10 @@ while(opcion_inicio != 0):
 						case 'a':
 							LIMPIAR_CONSOLA()
 							MOSTRAR_DATOS_ESTUDIANTES()
-							me_gusta = input("\nIngrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
-							LIMPIAR_CONSOLA()
-
-							me_gusta_id = NOMBRE_CORRECTO(me_gusta.lower())
-							if(me_gusta_id > -1):	
-								likes[sesion][me_gusta_id] = 1
-								print("Seleccionaste a {}, espero te corresponda!\n".format(me_gusta))
-							else:
-								print("El nombre ingresado no es correcto\n")
+							AGREGAR_MATCHEO()
 
 						case 'b':
-							# falta hacer
-							reportes[cant_reportes] = REPORTAR()
-							cant_reportes = cant_reportes + 1
+							REPORTAR()
 							LIMPIAR_CONSOLA()
 							
 						case 'c':
