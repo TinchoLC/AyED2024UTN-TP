@@ -37,8 +37,9 @@ def LIMPIAR_CONSOLA():
 
 def LIKES_AUTO():
 	likes = [[0]*8 for n in range(8)] #Aca se rellena al 100% con 0
-
-	#falta poner 1s aleatorios por toda la matriz
+	for i in range(8):
+		for j in range (8):
+			likes[i][j] = randint(0,1) 
 
 	return likes
 
@@ -139,7 +140,7 @@ def MENU_GESTION_USUARIOS():
 	print("\ta. Desactivar usuario")
 	print("\tb. Volver\n")
 
-	return int(input("Seleccione la opcion: "))
+	return input("Seleccione la opcion: ")
 
 def MENU_GESTION_REPORTES():
 	print("Menu de Gestion de Reportes")
@@ -207,7 +208,7 @@ def MOSTRAR_DATOS_ESTUDIANTES():
 			print("Estudiante",n)
 			print("Nombre:", estudiantes[n][2])
 			print("Fecha de Nacimiento:", estudiantes[n][3])
-			print("Edad:", CALCULAR_EDAD(estudiantes[1][3]))
+			print("Edad:", CALCULAR_EDAD(estudiantes[n][3]))
 			print("Biografia:", estudiantes[n][5])
 			print("Hobbies: {} \n" .format(estudiantes[n][4]))
 
@@ -281,9 +282,37 @@ def ELIMINAR_PERFIL(sesion):
 			print("Opción incorrecta.\n")
 			return sesion
 
-def REPORTAR():
-	# falta hacer
+def DESACTIVAR_USUARIO():
+	desactivar_usuario = input("Ingrese el nombre de usuario que desea desactivar: ").lower()
+	usuario_encontrado = False
 
+	for n in range(cant_estudiantes):
+		if (desactivar_usuario == estudiantes[n][2].lower()):
+			usuario_encontrado = True
+			print("Desea eliminar su perfil?")
+			print("\t1. Si")
+			print("\t0. No\n")
+			opcion_desactivar = int(input("Selecciona la opción: "))
+			LIMPIAR_CONSOLA()
+
+			match opcion_desactivar:
+				case 1:
+					estudiantes[n][7] = 0 
+					return -1
+			
+				case 0:
+					return 
+				case _: 
+					LIMPIAR_CONSOLA()
+					print("Opción incorrecta.\n")
+					return 
+	if not usuario_encontrado:
+		print("No se encontro el nombre del usuario que se queria desactivar")
+
+	
+
+def REPORTAR():
+	# faltaaaaaaaaa
 	id_reportante = ""
 	id_reportado = ""
 	motivo= ""
@@ -464,6 +493,7 @@ while(opcion_inicio != 0):
 					match opcion_gest_usuarios:
 						case 'a':
 							LIMPIAR_CONSOLA()
+							DESACTIVAR_USUARIO()
 							# falta hacer
 
 						case 'b':
