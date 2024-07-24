@@ -331,15 +331,29 @@ def DESACTIVAR_USUARIO():
 	if not usuario_encontrado:
 		print("No se encontro el nombre del usuario que se queria desactivar")
 
-	
 def REPORTAR():
-	# faltaaaaaaaaa
-	id_reportante = ""
-	id_reportado = ""
-	motivo= ""
+	id_reportante = estudiantes[sesion][2]
+	id_reportado = input("ingrese el usuario que desea reportar: ").lower()
+	usuario_encontrado = False
+	cant_reportes = 0
+	print(id_reportante)
+	
+	while (id_reportante == id_reportado):
+		id_reportado = input("No te podes reportar a vos mismo, ingrese otro: ").lower()
 
-	cant_reportes = cant_reportes + 1
-	reportes[cant_reportes] = [id_reportante,id_reportado,motivo,'0']
+	for n in range(cant_estudiantes):
+		if (id_reportado == estudiantes[n][2].lower()):
+			usuario_encontrado = True
+			motivo = input("Ingrese el motivo de su reporte: ")
+			if (cant_reportes < len(reportes)):
+				print("Reporte enviado")
+				cant_reportes = cant_reportes + 1
+				reportes[cant_reportes] = [id_reportante,id_reportado,motivo,'0']
+				print(id_reportante,id_reportado,motivo,'0')
+			else:
+				print("No se puede reportar mas candidatos")
+	if not usuario_encontrado:
+		print("No se encontro el usuario")
 
 def REPORTES_ESTADISTICOS():
 	print("En construcción...\n")
@@ -382,9 +396,9 @@ def MATCHEOS_COMBINADOS(cant):
 	print("La cantidad de matcheos posibles con la cantidad de estudiantes actuales, es decir",cant,"estudiantes, es de:",int(matcheos_posibles),"\n")
 
 estudiantes = [[""]*8 for n in range(8)] # email | contrasena | nombre | nacimiento | hobbies | bio | sexo | estado
-estudiantes[0][0] = "a"; estudiantes[0][1] = "1"; estudiantes[0][2] = "Juliancito"; estudiantes[0][3] = "2006-01-07"; estudiantes[0][4] = "pescar, nadar"; estudiantes[0][7] = 1;
-estudiantes[1][0] = "estudiante2@ayed.com"; estudiantes[1][1] = "333444"; estudiantes[1][2] = "Pedrito"; estudiantes[1][3] = "2005-04-10"; estudiantes[1][4] = "comer, jugar"; estudiantes[1][7] = 1;
-estudiantes[2][0] = "estudiante3@ayed.com"; estudiantes[2][1] = "555666"; estudiantes[2][2] = "Anita"; estudiantes[2][3] = "2004-10-20"; estudiantes[2][4] = "leer sobre jojos"; estudiantes[2][7] = 1;
+estudiantes[0][0] = "a"; estudiantes[0][1] = "1"; estudiantes[0][2] = "Julian"; estudiantes[0][3] = "2006-01-07"; estudiantes[0][4] = "pescar, nadar"; estudiantes[0][7] = 1;
+estudiantes[1][0] = "estudiante2@ayed.com"; estudiantes[1][1] = "333444"; estudiantes[1][2] = "Pedro"; estudiantes[1][3] = "2005-04-10"; estudiantes[1][4] = "comer, jugar"; estudiantes[1][7] = 1;
+estudiantes[2][0] = "estudiante3@ayed.com"; estudiantes[2][1] = "555666"; estudiantes[2][2] = "Ana"; estudiantes[2][3] = "2004-10-20"; estudiantes[2][4] = "leer sobre jojos"; estudiantes[2][7] = 1;
 cant_estudiantes = 3
 # Para probar más rápido un mail válido es a y su contraseña es 1
 
@@ -395,7 +409,6 @@ cant_admins = 1
 likes = LIKES_AUTO()
 
 reportes = [[""]*4 for n in range(10)] # id_reportante | id_reportado | motivo | estado
-cant_reportes = 0
 
 opcion_inicio = -1
 while(opcion_inicio != 0):
@@ -466,8 +479,8 @@ while(opcion_inicio != 0):
 							AGREGAR_MATCHEO()
 
 						case 'b':
-							REPORTAR()
 							LIMPIAR_CONSOLA()
+							REPORTAR()
 							
 						case 'c':
 							LIMPIAR_CONSOLA() #volver							
