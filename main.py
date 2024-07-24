@@ -336,7 +336,6 @@ def REPORTAR():
 	id_reportado = input("ingrese el usuario que desea reportar: ").lower()
 	usuario_encontrado = False
 	cant_reportes = 0
-	print(id_reportante)
 	
 	while (id_reportante == id_reportado):
 		id_reportado = input("No te podes reportar a vos mismo, ingrese otro: ").lower()
@@ -349,14 +348,35 @@ def REPORTAR():
 				print("Reporte enviado")
 				cant_reportes = cant_reportes + 1
 				reportes[cant_reportes] = [id_reportante,id_reportado,motivo,'0']
-				print(id_reportante,id_reportado,motivo,'0')
+
 			else:
 				print("No se puede reportar mas candidatos")
+
 	if not usuario_encontrado:
 		print("No se encontro el usuario")
 
 def REPORTES_ESTADISTICOS():
-	print("En construcción...\n")
+	doble_match = 0
+	likes_dados_no_recibidos = 0
+	likes_recibidos_no_respondidos = 0
+
+	for n in range(cant_estudiantes):
+		if n != estudiantes[sesion]:
+
+			if likes[sesion][n] == 1 and likes[n][sesion] == 1:
+				doble_match = doble_match + 1
+			
+			if likes[sesion][n] == 1 and likes[n][sesion] == 0:
+				likes_dados_no_recibidos = likes_dados_no_recibidos + 1
+			
+			if likes[sesion][n] == 0 and likes[n][sesion] == 1:
+				likes_recibidos_no_respondidos = likes_recibidos_no_respondidos + 1 
+	
+	porcentaje_likes_doble = (doble_match / cant_estudiantes) * 100 
+
+	print(f"Matcheados sobre el % posible:{porcentaje_likes_doble:.2f}%")
+	print("Likes dados y no recibidos:", likes_dados_no_recibidos)
+	print("Likes recibidos y no respondidos:", likes_recibidos_no_respondidos)
 
 # BONUS TRACKS
 def RULETA_AFINIDAD():
