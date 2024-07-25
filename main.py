@@ -125,30 +125,6 @@ def REGISTRO(nueva_sesion):
 
 	return nueva_sesion
 
-# MENUS MODERADOR
-def MENU_PRINCIPAL_MODERADOR(id):
-	print("Menu Principal del moderador con id",id)
-	print("\t1. Gestionar usuarios")
-	print("\t2. Gestionar Reportes")
-	print("\t3. Reportes Estadísticos")
-	print("\t0.  Salir \n")
-
-	return int(input("Seleccione la opcion: "))
-
-def MENU_GESTION_USUARIOS():
-	print("Menu de Gestion de Usuarios")
-	print("\ta. Desactivar usuario")
-	print("\tb. Volver\n")
-
-	return input("Seleccione la opcion: ")
-
-def MENU_GESTION_REPORTES():
-	print("Menu de Gestion de Reportes")
-	print("\ta. Ver reportes")
-	print("\tb. Volver\n")
-
-	return input("Seleccione la opcion: ")
-
 # MENUS ESTUDIANTE
 def MENU_PRINCIPAL_ESTUDIANTE(id, nombre):
 	print("Menu Principal del estudiante",nombre,"con id",id)
@@ -185,23 +161,31 @@ def MENU_MATCHEOS():
 	print("En construcción...\nNinguna opción es funcional\n")
 	return input("Seleccione la opcion: ")
 
-# OTRAS FUNCIONES
-def CALCULAR_EDAD(nacimiento):
-	ano_actual = datetime.now().year
-	mes_actual = datetime.now().month
-	dia_actual = datetime.now().day
+# MENUS MODERADOR
+def MENU_PRINCIPAL_MODERADOR(id):
+	print("Menu Principal del moderador con id",id)
+	print("\t1. Gestionar usuarios")
+	print("\t2. Gestionar Reportes")
+	print("\t3. Reportes Estadísticos")
+	print("\t0.  Salir \n")
 
-	ano_nacimiento = int(nacimiento[:4])
-	mes_nacimiento = int(nacimiento[5:7])
-	dia_nacimiento = int(nacimiento[8:])
+	return int(input("Seleccione la opcion: "))
 
-	edad = ano_actual - ano_nacimiento
-	if(mes_nacimiento > mes_actual):
-		edad = edad - 1
-	elif(mes_nacimiento == mes_actual and dia_nacimiento > dia_actual):
-		edad = edad - 1
-	return edad
+def MENU_GESTION_USUARIOS():
+	print("Menu de Gestion de Usuarios")
+	print("\ta. Desactivar usuario")
+	print("\tb. Volver\n")
 
+	return input("Seleccione la opcion: ")
+
+def MENU_GESTION_REPORTES():
+	print("Menu de Gestion de Reportes")
+	print("\ta. Ver reportes")
+	print("\tb. Volver\n")
+
+	return input("Seleccione la opcion: ")
+
+# FUNCIONES ESTUDIANTE
 def INGRESAR_NACIMIENTO():
 	formato_correcto = False
 	while(not formato_correcto):
@@ -212,7 +196,6 @@ def INGRESAR_NACIMIENTO():
 			formato_correcto = True
 	return fecha
 
-
 def MOSTRAR_DATOS_ESTUDIANTES():
 	for n in range(cant_estudiantes):
 		if(sesion != n):
@@ -222,17 +205,6 @@ def MOSTRAR_DATOS_ESTUDIANTES():
 			print("Edad:", CALCULAR_EDAD(estudiantes[n][3]))
 			print("Biografia:", estudiantes[n][5])
 			print("Hobbies: {} \n" .format(estudiantes[n][4]))
-
-def AGREGAR_MATCHEO():
-	me_gusta = input("\nIngrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
-	LIMPIAR_CONSOLA()
-
-	me_gusta_id = NOMBRE_CORRECTO(me_gusta.lower())
-	if(me_gusta_id > -1):	
-		likes[sesion][me_gusta_id] = 1
-		print("Seleccionaste a {}, espero te corresponda!\n".format(me_gusta))
-	else:
-		print("El nombre ingresado no es correcto\n")
 
 def NOMBRE_CORRECTO(nombre):
 	correcto = -1;
@@ -246,6 +218,16 @@ def NOMBRE_CORRECTO(nombre):
 				est = cant_estudiantes
 		est = est + 1
 	return correcto;
+def AGREGAR_MATCHEO():
+	me_gusta = input("\nIngrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
+	LIMPIAR_CONSOLA()
+
+	me_gusta_id = NOMBRE_CORRECTO(me_gusta.lower())
+	if(me_gusta_id > -1):	
+		likes[sesion][me_gusta_id] = 1
+		print("Seleccionaste a {}, espero te corresponda!\n".format(me_gusta))
+	else:
+		print("El nombre ingresado no es correcto\n")
 
 def EDITAR_DATOS():
 	print("¿ Que desea editar ?")
@@ -305,6 +287,44 @@ def ELIMINAR_PERFIL(sesion_nueva):
 			print("Opción incorrecta.\n")
 	return sesion_nueva
 
+def PEDIR_NOMBRE_O_ID():
+	opcion_reportar = ''
+	while(opcion_reportar != 'a' and opcion_reportar != 'b'):
+		usuario_encontrado = False
+		opcion_reportar = print("Seleccione que ingresara del usuario a reportar\n\ta) Nombre\t\nb) ID")
+		match opcion_reportar:
+			case 'a':
+				id_reportado = input("\nIngrese el nombre del usuario a reportar: ").lower
+				for i in range(cant_estudiantes):
+					if (id_reportado == estudiantes[n][2].lower()):
+						usuario_encontrado = True
+						id_reportado = i
+				if(not usuario_encontrado):
+					id_reportado = 'no_encontrado'
+
+			case 'b':
+				id_reportado = input("\nIngrese la id del usuario a reportar: ")
+
+			case _:
+				print("\nOpcion incorrecta\n\n")
+	return id_reportado
+def REPORTAR():
+	id_reportante = sesion
+	id_reportado = PEDIR_NOMBRE_O_ID()
+	if(id_reportado == 'no_encontrado'):
+		print("Usuario no encontrado")
+	elif(id_reportante == id_reportado):
+		print("No te puedes reportar a ti mismo")
+	else:
+		motivo = input("Ingrese el motivo de su reporte: ")
+		if (cant_reportes < len(reportes)):
+			print("Reporte enviado")
+			reportes[cant_reportes] = [id_reportante,id_reportado,motivo,'0']
+			cant_reportes = cant_reportes + 1
+		else:
+			print("No se puede reportar mas candidatos")
+
+# FUNCIONES MODERADOR
 def DESACTIVAR_USUARIO():
 	desactivar_usuario = input("Ingrese el nombre de usuario que desea desactivar: ").lower()
 	usuario_encontrado = False
@@ -331,29 +351,22 @@ def DESACTIVAR_USUARIO():
 	if not usuario_encontrado:
 		print("No se encontro el nombre del usuario que se queria desactivar")
 
-def REPORTAR():
-	id_reportante = estudiantes[sesion][2]
-	id_reportado = input("ingrese el usuario que desea reportar: ").lower()
-	usuario_encontrado = False
-	cant_reportes = 0
-	
-	while (id_reportante == id_reportado):
-		id_reportado = input("No te podes reportar a vos mismo, ingrese otro: ").lower()
+# OTRAS FUNCIONES
+def CALCULAR_EDAD(nacimiento):
+	ano_actual = datetime.now().year
+	mes_actual = datetime.now().month
+	dia_actual = datetime.now().day
 
-	for n in range(cant_estudiantes):
-		if (id_reportado == estudiantes[n][2].lower()):
-			usuario_encontrado = True
-			motivo = input("Ingrese el motivo de su reporte: ")
-			if (cant_reportes < len(reportes)):
-				print("Reporte enviado")
-				cant_reportes = cant_reportes + 1
-				reportes[cant_reportes] = [id_reportante,id_reportado,motivo,'0']
+	ano_nacimiento = int(nacimiento[:4])
+	mes_nacimiento = int(nacimiento[5:7])
+	dia_nacimiento = int(nacimiento[8:])
 
-			else:
-				print("No se puede reportar mas candidatos")
-
-	if not usuario_encontrado:
-		print("No se encontro el usuario")
+	edad = ano_actual - ano_nacimiento
+	if(mes_nacimiento > mes_actual):
+		edad = edad - 1
+	elif(mes_nacimiento == mes_actual and dia_nacimiento > dia_actual):
+		edad = edad - 1
+	return edad
 
 def REPORTES_ESTADISTICOS():
 	doble_match = 0
@@ -429,6 +442,7 @@ cant_admins = 1
 likes = LIKES_AUTO()
 
 reportes = [[""]*4 for n in range(10)] # id_reportante | id_reportado | motivo | estado
+cant_reportes = 0
 
 opcion_inicio = -1
 while(opcion_inicio != 0):
@@ -561,7 +575,9 @@ while(opcion_inicio != 0):
 					match opcion_gest_reportes:
 						case 'a':
 							LIMPIAR_CONSOLA()
-							# falta hacer
+							for i in range(cant_reportes):
+								print("Reporte",i+1)
+								#print("id_reportante:",reportes[i][0],"// id_reportado:") blablaba
 
 						case 'b':
 							LIMPIAR_CONSOLA() #volver
