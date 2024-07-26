@@ -351,6 +351,12 @@ def DESACTIVAR_USUARIO():
 	if not usuario_encontrado:
 		print("No se encontro el nombre del usuario que se queria desactivar")
 
+def VER_REPORTES():
+	for i in range(cant_reportes):
+		#if(blablabla usuarios activos y reporte estado = 0):
+			print("Reporte",i+1)
+			#print("id_reportante:",reportes[i][0],"// id_reportado:") blablaba
+
 # OTRAS FUNCIONES
 def CALCULAR_EDAD(nacimiento):
 	ano_actual = datetime.now().year
@@ -560,7 +566,6 @@ while(opcion_inicio != 0):
 						case 'a':
 							LIMPIAR_CONSOLA()
 							DESACTIVAR_USUARIO()
-							# falta hacer
 
 						case 'b':
 							LIMPIAR_CONSOLA() #volver
@@ -575,9 +580,7 @@ while(opcion_inicio != 0):
 					match opcion_gest_reportes:
 						case 'a':
 							LIMPIAR_CONSOLA()
-							for i in range(cant_reportes):
-								print("Reporte",i+1)
-								#print("id_reportante:",reportes[i][0],"// id_reportado:") blablaba
+							VER_REPORTES()
 
 						case 'b':
 							LIMPIAR_CONSOLA() #volver
