@@ -186,14 +186,12 @@ def MENU_GESTION_REPORTES():
 
 # FUNCIONES ESTUDIANTE
 def INGRESAR_NACIMIENTO():
-	formato_correcto = False
-	while(not formato_correcto):
-		fecha = input("Formato (año-mes-dia) \nxxxx-xx-xx \nIngrese la fecha de nacimiento: ")
-		if(len(fecha)!=10):
-			print("La longitud de la fecha es incorrecta\n")
-		else:
-			formato_correcto = True
-	return fecha
+    fecha = input("Formato (año-mes-dia)\nxxxx-xx-xx\nIngrese la fecha de nacimiento: ")
+    while len(fecha) != 10:
+        print("La longitud de la fecha es incorrecta\n")
+        fecha = input("Formato (año-mes-dia)\nxxxx-xx-xx\nIngrese la fecha de nacimiento: ")
+    
+    return fecha
 
 def MOSTRAR_DATOS_ESTUDIANTES():
 	for n in range(cant_estudiantes):
