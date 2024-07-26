@@ -166,7 +166,6 @@ def MENU_PRINCIPAL_MODERADOR(id):
 	print("Menu Principal del moderador con id",id)
 	print("\t1. Gestionar usuarios")
 	print("\t2. Gestionar Reportes")
-	print("\t3. Reportes Estadísticos")
 	print("\t0.  Salir \n")
 
 	return int(input("Seleccione la opcion: "))
@@ -291,12 +290,12 @@ def PEDIR_NOMBRE_O_ID():
 	opcion_reportar = ''
 	while(opcion_reportar != 'a' and opcion_reportar != 'b'):
 		usuario_encontrado = False
-		opcion_reportar = print("Seleccione que ingresara del usuario a reportar\n\ta) Nombre\t\nb) ID")
+		opcion_reportar = input("Seleccione que ingresara del usuario a reportar\n\ta) Nombre\n\tb) ID\nOpcion: ")
 		match opcion_reportar:
 			case 'a':
-				id_reportado = input("\nIngrese el nombre del usuario a reportar: ").lower
+				id_reportado = input("\nIngrese el nombre del usuario a reportar: ").lower()
 				for i in range(cant_estudiantes):
-					if (id_reportado == estudiantes[n][2].lower()):
+					if (id_reportado == estudiantes[i][2].lower()):
 						usuario_encontrado = True
 						id_reportado = i
 				if(not usuario_encontrado):
@@ -308,7 +307,7 @@ def PEDIR_NOMBRE_O_ID():
 			case _:
 				print("\nOpcion incorrecta\n\n")
 	return id_reportado
-def REPORTAR():
+def REPORTAR(cant):
 	id_reportante = sesion
 	id_reportado = PEDIR_NOMBRE_O_ID()
 	if(id_reportado == 'no_encontrado'):
@@ -317,12 +316,13 @@ def REPORTAR():
 		print("No te puedes reportar a ti mismo")
 	else:
 		motivo = input("Ingrese el motivo de su reporte: ")
-		if (cant_reportes < len(reportes)):
+		if (cant < len(reportes)):
 			print("Reporte enviado")
-			reportes[cant_reportes] = [id_reportante,id_reportado,motivo,'0']
-			cant_reportes = cant_reportes + 1
+			reportes[cant] = [id_reportante,id_reportado,motivo,'0']
+			cant = cant + 1
 		else:
 			print("No se puede reportar mas candidatos")
+	return cant
 
 # FUNCIONES MODERADOR
 def DESACTIVAR_USUARIO():
@@ -369,27 +369,27 @@ def CALCULAR_EDAD(nacimiento):
 	return edad
 
 def REPORTES_ESTADISTICOS():
-	doble_match = 0
+	match = 0
 	likes_dados_no_recibidos = 0
-	likes_recibidos_no_respondidos = 0
+	likes_recibidos_no_dados = 0
 
 	for n in range(cant_estudiantes):
-		if n != estudiantes[sesion]:
+		if n != sesion:
 
 			if likes[sesion][n] == 1 and likes[n][sesion] == 1:
-				doble_match = doble_match + 1
+				match = match + 1
 			
 			if likes[sesion][n] == 1 and likes[n][sesion] == 0:
 				likes_dados_no_recibidos = likes_dados_no_recibidos + 1
 			
 			if likes[sesion][n] == 0 and likes[n][sesion] == 1:
-				likes_recibidos_no_respondidos = likes_recibidos_no_respondidos + 1 
+				likes_recibidos_no_dados = likes_recibidos_no_dados + 1 
 	
-	porcentaje_likes_doble = (doble_match / cant_estudiantes) * 100 
+	porcentaje_matcheos_posibles = (match / (cant_estudiantes - 1)) * 100 
 
-	print(f"Matcheados sobre el % posible:{porcentaje_likes_doble:.2f}%")
+	print(f"Matcheados sobre el % posible:{porcentaje_matcheos_posibles:.2f}%")
 	print("Likes dados y no recibidos:", likes_dados_no_recibidos)
-	print("Likes recibidos y no respondidos:", likes_recibidos_no_respondidos)
+	print("Likes recibidos y no respondidos:", likes_recibidos_no_dados,"\n")
 
 # BONUS TRACKS
 def RULETA_AFINIDAD():
@@ -514,7 +514,7 @@ while(opcion_inicio != 0):
 
 						case 'b':
 							LIMPIAR_CONSOLA()
-							REPORTAR()
+							cant_reportes = REPORTAR(cant_reportes)
 							
 						case 'c':
 							LIMPIAR_CONSOLA() #volver							
@@ -584,9 +584,6 @@ while(opcion_inicio != 0):
 						case _:
 							LIMPIAR_CONSOLA()
 							print("Opción incorrecta.\n")
-
-			case 3:
-				REPORTES_ESTADISTICOS()
 
 			case 0:
 				print("\nPrograma terminado.")
