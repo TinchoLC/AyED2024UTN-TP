@@ -446,61 +446,63 @@ def HUECOS(array):
 
 	return cant_huecos
 def EDADES():
-	opcion_bonus21 = MENU_BONUS21()
-	LIMPIAR_CONSOLA()
-	match opcion_bonus21:
-		case 1:
-			cant_estudiantes_bonus = int(input("Cantidad de estudiantes que quiere tener: "))
-			estudiantes_bonus = [randint(0, 100) for _ in range(cant_estudiantes_bonus)]
+	opcion_bonus21 = -1
+	while(opcion_bonus21 != 0):
+		opcion_bonus21 = MENU_BONUS21()
+		LIMPIAR_CONSOLA()
+		match opcion_bonus21:
+			case 1:
+				cant_estudiantes_bonus = int(input("Cantidad de estudiantes que quiere tener: "))
+				estudiantes_bonus = [randint(10, 40) for _ in range(cant_estudiantes_bonus)]
+				
+				print("El array de longitud ", cant_estudiantes_bonus, "random es ", estudiantes_bonus,"\n")
+				SORT(estudiantes_bonus)
+				print("El array ordenado sería ", estudiantes_bonus)
+				print("Hay ", HUECOS(estudiantes_bonus)," huecos en total.\n\n")
 			
-			print("El array de longitud ", cant_estudiantes_bonus, "random es ", estudiantes_bonus,"\n")
-			SORT(estudiantes_bonus)
-			print("El array ordenado sería ", estudiantes_bonus)
-			print("Hay ", HUECOS(estudiantes_bonus)," huecos en total.\n\n")
-		
-		case 2:
-			estu_b1 = [11,14,9,5,7,15]
-			estu_b2 = [2,5,3,8,1]
-			estu_b3 = [21, 18, 20, 19, 23, 24] 
+			case 2:
+				estu_b1 = [11,14,9,5,7,15]
+				estu_b2 = [2,5,3,8,1]
+				estu_b3 = [21, 18, 20, 19, 23, 24] 
 
-			print("Ejemplo inventado:\n")
-			print("\tEl array de ejemplo es ",estu_b1, "\n")
-			SORT(estu_b1)
-			print("\tEl array ordenado queda ", estu_b1)
-			print("\tHay ", HUECOS(estu_b1), " huecos en total.\n\n")
+				print("Ejemplo inventado:\n")
+				print("\tEl array de ejemplo es ",estu_b1, "\n")
+				SORT(estu_b1)
+				print("\tEl array ordenado queda ", estu_b1)
+				print("\tHay ", HUECOS(estu_b1), " huecos en total.\n\n")
 
-			print("Ejemplos del TP:\n")
-			print("\tPrimer ejemplo:")
-			print("\t\tEl array de ejemplo es ",estu_b2, "\n")
-			SORT(estu_b2)
-			print("\t\tEl array ordenado queda ", estu_b2)
-			print("\t\tHay ", HUECOS(estu_b2), " huecos en total.\n")
+				print("Ejemplos del TP:\n")
+				print("\tPrimer ejemplo:")
+				print("\t\tEl array de ejemplo es ",estu_b2, "\n")
+				SORT(estu_b2)
+				print("\t\tEl array ordenado queda ", estu_b2)
+				print("\t\tHay ", HUECOS(estu_b2), " huecos en total.\n")
 
-			print("\tSegundo ejemplo:")
-			print("\t\tEl array de ejemplo es ",estu_b3, "\n")
-			SORT(estu_b3)
-			print("\t\tEl array ordenado queda ", estu_b3)
-			print("\t\tHay ", HUECOS(estu_b3), " huecos en total.\n\n")
+				print("\tSegundo ejemplo:")
+				print("\t\tEl array de ejemplo es ",estu_b3, "\n")
+				SORT(estu_b3)
+				print("\t\tEl array ordenado queda ", estu_b3)
+				print("\t\tHay ", HUECOS(estu_b3), " huecos en total.\n\n")
 
-		case 3:
-			cant_estudiantes_bonus = int(input("Cantidad de estudiantes que quiere tener: "))
-			estu_bonus_man = [0]*cant_estudiantes_bonus
-			print("Ingrese los números: ")
-			for i in range(cant_estudiantes_bonus):
-				estu_bonus_man[i] = int(input(""))
+			case 3:
+				cant_estudiantes_bonus = int(input("Cantidad de estudiantes que quiere tener: "))
+				estu_bonus_man = [0]*cant_estudiantes_bonus
+				print("Ingrese los números: ")
+				for i in range(cant_estudiantes_bonus):
+					estu_bonus_man[i] = int(input(""))
 
-			LIMPIAR_CONSOLA()
+				LIMPIAR_CONSOLA()
 
-			print("El array quedaría así ", estu_bonus_man, "\n")
-			SORT(estu_bonus_man)
-			print("El array ordenado queda ", estu_bonus_man)
-			print("Hay ", HUECOS(estu_bonus_man), " huecos en total.\n\n")
-		
-		case 0:
-			LIMPIAR_CONSOLA() #volver
-		
-		case _:
-			print("Opción incorrecta.\n")
+				print("El array quedaría así ", estu_bonus_man, "\n")
+				SORT(estu_bonus_man)
+				print("El array ordenado queda ", estu_bonus_man)
+				print("Hay ", HUECOS(estu_bonus_man), " huecos en total.\n\n")
+			
+			case 0:
+				LIMPIAR_CONSOLA() #volver
+			
+			case _:
+				print("Opción incorrecta.\n")
 
 def MATCHEOS_COMBINADOS(cant):
 	""" Forma alternativa sin formula (fuerza bruta)
