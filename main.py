@@ -144,7 +144,7 @@ def MENU_PRINCIPAL_MODERADOR(id):
 	print("Menu Principal del moderador con id",id)
 	print("\t1. Gestionar usuarios")
 	print("\t2. Gestionar Reportes")
-	print("\t0.  Salir \n")
+	print("\t0. Salir \n")
 
 	return int(input("Seleccione la opcion: "))
 
@@ -265,7 +265,7 @@ def ELIMINAR_PERFIL(sesion_nueva):
 def PEDIR_NOMBRE_O_ID():
 	opcion_reportar = ''
 	while(opcion_reportar != 'a' and opcion_reportar != 'b'):
-		id_reportado = 'no_encontrado'
+		id_reportado = -1
 		opcion_reportar = input("Seleccione que ingresara del usuario a reportar\n\ta) Nombre\n\tb) ID\nOpcion: ")
 		match opcion_reportar:
 			case 'a':
@@ -275,8 +275,8 @@ def PEDIR_NOMBRE_O_ID():
 						id_reportado = i
 
 			case 'b':
-				id_posible_reportado = input("\nIngrese la id del usuario a reportar: ")
-				if int(id_posible_reportado) >= 0 and int(id_posible_reportado) < cant_estudiantes:
+				id_posible_reportado = int(input("\nIngrese la id del usuario a reportar: "))
+				if id_posible_reportado >= 0 and id_posible_reportado < cant_estudiantes:
 					id_reportado = id_posible_reportado
 
 			case _:
@@ -285,19 +285,21 @@ def PEDIR_NOMBRE_O_ID():
 def REPORTAR(cant):
 	id_reportante = sesion
 	id_reportado = PEDIR_NOMBRE_O_ID()
-	if(id_reportado == 'no_encontrado'):
-		print("Usuario no encontrado")
+	if(id_reportado == -1):
+		LIMPIAR_CONSOLA()
+		print("Usuario no encontrado\n")
 	elif(id_reportante == id_reportado):
+		LIMPIAR_CONSOLA()
 		print("No te puedes reportar a ti mismo\n")
 	else:
 		motivo = input("Ingrese el motivo de su reporte: ")
+		LIMPIAR_CONSOLA()
 		if (cant < len(reportes)):
 			print("Reporte enviado\n")
 			reportes[cant] = [id_reportante,id_reportado,motivo,'0']
 			cant = cant + 1
 		else:
 			print("No se puede reportar mas candidatos\n")
-	LIMPIAR_CONSOLA()
 	return cant
 
 # FUNCIONES MODERADOR
@@ -316,7 +318,7 @@ def DESACTIVAR_USUARIO():
 			match opcion_desactivar:
 				case 1:
 					estudiantes[n][7] = 0
-					cartel = "El usuario " + estudiantes[n][2] + " de id " + str(n) + " fue correctamente desactivado."
+					cartel = "El usuario " + estudiantes[n][2] + " de id " + str(n) + " fue correctamente desactivado.\n"
 			
 				case 0:
 					cartel = ""
@@ -335,20 +337,20 @@ def VER_REPORTES():
 		if (estudiantes[id_reportante][7] == 1 and estudiantes[id_reportado][7] == 1 and reportes[i][3] == '0'):
 			sin_nuevos_reportes = False
 			print("Reporte",i+1)
-			print("Reportante:",estudiantes[id_reportante][2],"ID:",reportes[i][0])
-			print("Reportado:",estudiantes[id_reportado][2],"ID:",reportes[i][1])
-			print("Motivo:", reportes[i][2])
+			print("\tReportante:",estudiantes[id_reportante][2],"ID:",reportes[i][0])
+			print("\tReportado:",estudiantes[id_reportado][2],"ID:",reportes[i][1])
+			print("\tMotivo:", reportes[i][2], "\n")
 			
 			opcion_reporte = input("Seleccione como se quiere proceder:\n\ta) Ignorar reporte\n\tb) Bloquear al reportado\nOpcion: ")
 			match opcion_reporte:
 				case 'a':
 					reportes[i][3] = '2'
-					print("Se ignoro el reporte.\n")
+					print("\nSe ignoro el reporte.\n\n")
 
 				case 'b':
 					reportes[i][3] = '1'
 					estudiantes[id_reportado][7] = 0
-					print("Se bloqueo al reportado.\n")
+					print("\nSe bloqueo al reportado.\n\n")
 
 				case _:
 					print("Opción incorrecta.\n")
@@ -421,7 +423,7 @@ def RULETA_AFINIDAD():
 		print("Salió la persona C!!!\n")
 
 def MENU_BONUS21():
-	print("BONUS 2-1")
+	print("MENU BONUS 2-1")
 	print("Probar con...")
 	print("\t1. Array random de longitud definida")
 	print("\t2. Arrays de ejemplo")
@@ -453,7 +455,7 @@ def EDADES():
 		match opcion_bonus21:
 			case 1:
 				cant_estudiantes_bonus = int(input("Cantidad de estudiantes que quiere tener: "))
-				estudiantes_bonus = [randint(10, 40) for _ in range(cant_estudiantes_bonus)]
+				estudiantes_bonus = [randint(10, 40) for _ in range(cant_estudiantes_bonus)] # Edades entre los 10 y 40 años
 				
 				print("El array de longitud ", cant_estudiantes_bonus, "random es ", estudiantes_bonus,"\n")
 				SORT(estudiantes_bonus)
