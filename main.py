@@ -195,7 +195,7 @@ def INGRESAR_NACIMIENTO():
 
 def MOSTRAR_DATOS_ESTUDIANTES():
 	for n in range(cant_estudiantes):
-		if(sesion != n):
+		if(sesion != n and estudiantes[n][7] == 1):
 			print("Estudiante",n)
 			print("Nombre:", estudiantes[n][2])
 			print("Fecha de Nacimiento:", estudiantes[n][3])
@@ -287,20 +287,19 @@ def ELIMINAR_PERFIL(sesion_nueva):
 def PEDIR_NOMBRE_O_ID():
 	opcion_reportar = ''
 	while(opcion_reportar != 'a' and opcion_reportar != 'b'):
-		usuario_encontrado = False
+		id_reportado = 'no_encontrado'
 		opcion_reportar = input("Seleccione que ingresara del usuario a reportar\n\ta) Nombre\n\tb) ID\nOpcion: ")
 		match opcion_reportar:
 			case 'a':
-				id_reportado = input("\nIngrese el nombre del usuario a reportar: ").lower()
+				nombre_reportado = input("\nIngrese el nombre del usuario a reportar: ").lower()
 				for i in range(cant_estudiantes):
-					if (id_reportado == estudiantes[i][2].lower()):
-						usuario_encontrado = True
+					if (nombre_reportado == estudiantes[i][2].lower()):
 						id_reportado = i
-				if(not usuario_encontrado):
-					id_reportado = 'no_encontrado'
 
 			case 'b':
-				id_reportado = input("\nIngrese la id del usuario a reportar: ")
+				id_posible_reportado = input("\nIngrese la id del usuario a reportar: ")
+				if int(id_posible_reportado) >= 0 and int(id_posible_reportado) < cant_estudiantes:
+					id_reportado = id_posible_reportado
 
 			case _:
 				print("\nOpcion incorrecta\n\n")
@@ -325,11 +324,10 @@ def REPORTAR(cant):
 # FUNCIONES MODERADOR
 def DESACTIVAR_USUARIO():
 	desactivar_usuario = input("Ingrese el nombre de usuario que desea desactivar: ").lower()
-	usuario_encontrado = False
+	cartel = "No se encontro el nombre del usuario que se queria desactivar\n"
 
 	for n in range(cant_estudiantes):
 		if (desactivar_usuario == estudiantes[n][2].lower()):
-			usuario_encontrado = True
 			print("Desea eliminar su perfil?")
 			print("\t1. Si")
 			print("\t0. No\n")
@@ -338,22 +336,46 @@ def DESACTIVAR_USUARIO():
 
 			match opcion_desactivar:
 				case 1:
-					estudiantes[n][7] = 0 
+					estudiantes[n][7] = 0
+					cartel = "El usuario " + estudiantes[n][2] + " de id " + str(n) + " fue correctamente desactivado."
 			
 				case 0:
-					print("")
+					cartel = ""
 				case _: 
 					LIMPIAR_CONSOLA()
 					print("Opción incorrecta.\n")
 
-	if not usuario_encontrado:
-		print("No se encontro el nombre del usuario que se queria desactivar")
+	print(cartel)
 
 def VER_REPORTES():
+	sin_nuevos_reportes = True
 	for i in range(cant_reportes):
-		#if(blablabla usuarios activos y reporte estado = 0):
+		id_reportante = int(reportes[i][0])
+		id_reportado = int(reportes[i][1])
+
+		if (estudiantes[id_reportante][7] == 1 and estudiantes[id_reportado][7] == 1 and reportes[i][3] == '0'):
+			sin_nuevos_reportes = False
 			print("Reporte",i+1)
-			#print("id_reportante:",reportes[i][0],"// id_reportado:") blablaba
+			print("Reportante:",estudiantes[id_reportante][2],"ID:",reportes[i][0])
+			print("Reportado:",estudiantes[id_reportado][2],"ID:",reportes[i][1])
+			print("Motivo:", reportes[i][2])
+			
+			opcion_reporte = input("Seleccione como se quiere proceder:\n\ta) Ignorar reporte\n\tb) Bloquear al reportado\nOpcion: ")
+			match opcion_reporte:
+				case 'a':
+					reportes[i][3] = '2'
+					print("Se ignoro el reporte.\n")
+
+				case 'b':
+					reportes[i][3] = '1'
+					estudiantes[id_reportado][7] = 0
+					print("Se bloqueo al reportado.\n")
+
+				case _:
+					print("Opción incorrecta.\n")
+
+	if sin_nuevos_reportes:
+		print("No hay reportes por mostrar.\n")
 
 # OTRAS FUNCIONES
 def CALCULAR_EDAD(nacimiento):
