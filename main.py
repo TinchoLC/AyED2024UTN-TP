@@ -510,7 +510,7 @@ def MATCHEOS_COMBINADOS(cant):
 			matcheos_posibles = matcheos_posibles + 1
 	""" 
 	matcheos_posibles = cant * (cant-1) / 2
-	print("La cantidad de matcheos posibles con la cantidad de estudiantes actuales, es decir",cant,"estudiantes, es de:",int(matcheos_posibles),"\n")
+	print("La cantidad de matcheos posibles con la cantidad actual de estudiantes ({}) es de:".format(cant), int(matcheos_posibles),"\n")
 
 estudiantes = [[""]*8 for n in range(8)] # email | contrasena | nombre | nacimiento | hobbies | bio | sexo | estado
 estudiantes[0][0] = "a"; estudiantes[0][1] = "1"; estudiantes[0][2] = "Julian"; estudiantes[0][3] = "2006-01-07"; estudiantes[0][4] = "pescar, nadar"; estudiantes[0][7] = 1;
@@ -542,7 +542,7 @@ while(opcion_inicio != 0):
 		match opcion_inicio:
 			case 1:
 				if(cant_estudiantes < 4):
-					print("No hay la cantidad de estudiantes necesarios para iniciar el programa, se necesitan",4 - cant_estudiantes, "más.\n")
+					print("No hay la cantidad de estudiantes necesarios para iniciar el programa, se necesitan", 4 - cant_estudiantes, "más.\n")
 				elif(cant_admins < 1):
 					print("No hay la cantidad de administradores necesarios para iniciar el programa, se necesita al menos uno.\n")
 				else:
