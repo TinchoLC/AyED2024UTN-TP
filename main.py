@@ -237,7 +237,6 @@ def EDITAR_DATOS():
 	if opcion_editar >= 1 and opcion_editar <= 7:
 		LIMPIAR_CONSOLA()	
 
-
 def ELIMINAR_PERFIL(sesion_nueva):
 	print("Desea eliminar su perfil?")
 	print("\t1. Si")
