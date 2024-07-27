@@ -1,27 +1,5 @@
 # Archivo principal:/ ISI 1K03 AyED 2024 - Cabrera Martín, Delgado Mauro, Rodriguez Lautaro, Rossi Dariana
 # -*- coding: utf-8 -*-
-"""
-arreglar 	LEER GUÍA DE PREGUNTAS (AGREGAR NUEVAS VARIABLES)
-
-INT:
-intentos_restantes, sesion,
-opcion, opcion_perfil, opcion_editar, opcion_candidatos,
-porcentaje1, porcentaje2, porcentaje3, porcentaje_total, random,
-ano_actual, mes_actual, dia_actual,
-ano_nacimiento1, mes_nacimiento1, dia_nacimiento1, estudiante1_edad,
-ano_nacimiento2, mes_nacimiento2, dia_nacimiento2, estudiante2_edad,
-ano_nacimiento3, mes_nacimiento3, dia_nacimiento3, estudiante3_edad
-
-STRING:
-estudiante1_email, estudiante2_email, estudiante3_email,
-estudiante1_contrasena, estudiante2_contrasena, estudiante3_contrasena,
-estudiante1_nombre, estudiante2_nombre, estudiante3_nombre,
-estudiante1_nacimiento, estudiante2_nacimiento, estudiante3_nacimiento,
-estudiante1_hobbies, estudiante2_hobbies, estudiante3_hobbies,
-estudiante1_bio, estudiante2_bio, estudiante3_bio,
-email, contrasena,
-me_gusta, me_gusta1, me_gusta2, me_gusta3
-"""
 
 from datetime import datetime
 from random   import randint
