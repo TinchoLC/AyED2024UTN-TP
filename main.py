@@ -484,10 +484,12 @@ def EDADES():
 
 		case 3:
 			cant_estudiantes_bonus = int(input("Cantidad de estudiantes que quiere tener: "))
-			estu_bonus_man = [None]*cant_estudiantes_bonus
+			estu_bonus_man = [0]*cant_estudiantes_bonus
 			print("Ingrese los números: ")
 			for i in range(cant_estudiantes_bonus):
 				estu_bonus_man[i] = int(input(""))
+
+			LIMPIAR_CONSOLA()
 
 			print("El array quedaría así ", estu_bonus_man, "\n")
 			SORT(estu_bonus_man)
