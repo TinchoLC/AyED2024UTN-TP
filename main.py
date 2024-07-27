@@ -97,15 +97,15 @@ def REGISTRO(nueva_sesion):
 			estudiantes[nueva_sesion][3] = INGRESAR_NACIMIENTO()
 			estudiantes[nueva_sesion][7] = 1
 			nueva_sesion = nueva_sesion + 1
-			print(nombre, "registrado!")
+			print(nombre, "registrado!\n")
 	else:
-		print("Ya se alcanzó el máximo de estudiantes")
+		print("Ya se alcanzó el máximo de estudiantes\n")
 
 	return nueva_sesion
 
 # MENUS ESTUDIANTE
 def MENU_PRINCIPAL_ESTUDIANTE(id, nombre):
-	print("Menu Principal del estudiante",nombre,"con id",id)
+	print("Menu Principal del estudiante",nombre,"- con id",id)
 	print("\t1.  Gestionar mi perfil")
 	print("\t2.  Gestionár candidatos")
 	print("\t3.  Matcheos")
@@ -168,7 +168,7 @@ def INGRESAR_NACIMIENTO():
     while len(fecha) != 10:
         print("La longitud de la fecha es incorrecta\n")
         fecha = input("Formato (año-mes-dia)\nxxxx-xx-xx\nIngrese la fecha de nacimiento: ")
-    
+    LIMPIAR_CONSOLA()
     return fecha
 
 def MOSTRAR_DATOS_ESTUDIANTES():
@@ -281,22 +281,23 @@ def PEDIR_NOMBRE_O_ID():
 
 			case _:
 				print("\nOpcion incorrecta\n\n")
-	return id_reportado
+	return int(id_reportado)
 def REPORTAR(cant):
 	id_reportante = sesion
 	id_reportado = PEDIR_NOMBRE_O_ID()
 	if(id_reportado == 'no_encontrado'):
 		print("Usuario no encontrado")
 	elif(id_reportante == id_reportado):
-		print("No te puedes reportar a ti mismo")
+		print("No te puedes reportar a ti mismo\n")
 	else:
 		motivo = input("Ingrese el motivo de su reporte: ")
 		if (cant < len(reportes)):
-			print("Reporte enviado")
+			print("Reporte enviado\n")
 			reportes[cant] = [id_reportante,id_reportado,motivo,'0']
 			cant = cant + 1
 		else:
-			print("No se puede reportar mas candidatos")
+			print("No se puede reportar mas candidatos\n")
+	LIMPIAR_CONSOLA()
 	return cant
 
 # FUNCIONES MODERADOR
@@ -393,7 +394,7 @@ def REPORTES_ESTADISTICOS():
 
 	print(f"Matcheados sobre el % posible:{porcentaje_matcheos_posibles:.2f}%")
 	print("Likes dados y no recibidos:", likes_dados_no_recibidos)
-	print("Likes recibidos y no respondidos:", likes_recibidos_no_dados,"\n")
+	print("Likes recibidos y no dados:", likes_recibidos_no_dados,"\n")
 
 # BONUS TRACKS
 def RULETA_AFINIDAD():
@@ -420,6 +421,7 @@ def RULETA_AFINIDAD():
 		print("Salió la persona C!!!\n")
 
 def EDADES():
+	
 	print("Bonus track todavía no resuelto")
 
 def MATCHEOS_COMBINADOS(cant):
@@ -449,6 +451,7 @@ reportes = [[""]*4 for n in range(10)] # id_reportante | id_reportado | motivo |
 cant_reportes = 0
 
 opcion_inicio = -1
+LIMPIAR_CONSOLA()
 while(opcion_inicio != 0):
 
 	sesion = -1
@@ -456,12 +459,13 @@ while(opcion_inicio != 0):
 	opcion_inicio = -1
 	while(opcion_inicio != 0 and opcion_inicio != 1):
 		opcion_inicio = MENU_INICIO()
+		LIMPIAR_CONSOLA()
 		match opcion_inicio:
 			case 1:
 				if(cant_estudiantes < 4):
-					print("No hay la cantidad de estudiantes necesarios para iniciar el programa, se necesitan",4 - cant_estudiantes, "más.")
+					print("No hay la cantidad de estudiantes necesarios para iniciar el programa, se necesitan",4 - cant_estudiantes, "más.\n")
 				elif(cant_admins < 1):
-					print("No hay la cantidad de administradores necesarios para iniciar el programa, se necesita al menos uno.")
+					print("No hay la cantidad de administradores necesarios para iniciar el programa, se necesita al menos uno.\n")
 				else:
 					sesion, sesion_adm = LOGIN()
 			case 2:
@@ -475,7 +479,6 @@ while(opcion_inicio != 0):
 				MATCHEOS_COMBINADOS(cant_estudiantes)
 
 			case 0:
-				LIMPIAR_CONSOLA()
 				print("Adios!")
 			case _:
 				print("Opción incorrecta.\n")
@@ -491,63 +494,57 @@ while(opcion_inicio != 0):
 				opcion_perfil = ''
 				while(opcion_perfil != 'c' and sesion != -1):
 					opcion_perfil = MENU_GESTION_PERFIL()
+					LIMPIAR_CONSOLA()
 					match opcion_perfil:
 						case 'a':
-							LIMPIAR_CONSOLA()
 							EDITAR_DATOS() 
 
 						case 'b':
-							LIMPIAR_CONSOLA()
 							sesion = ELIMINAR_PERFIL(sesion)
 
 						case 'c':
 							LIMPIAR_CONSOLA() #volver
 						case _: 
-							LIMPIAR_CONSOLA()
 							print("Opción incorrecta.\n")
 
 			case 2:
 				opcion_candidatos = ''
 				while(opcion_candidatos != 'c'):
 					opcion_candidatos = MENU_GESTION_CANDIDATOS()
+					LIMPIAR_CONSOLA()
 					match opcion_candidatos:
 						case 'a':
-							LIMPIAR_CONSOLA()
 							MOSTRAR_DATOS_ESTUDIANTES()
 							AGREGAR_MATCHEO()
 
 						case 'b':
-							LIMPIAR_CONSOLA()
 							cant_reportes = REPORTAR(cant_reportes)
 							
 						case 'c':
 							LIMPIAR_CONSOLA() #volver							
 						case _: 
-							LIMPIAR_CONSOLA()
 							print("Opción incorrecta.\n")	
 
 			case 3:
 				opcion_matcheo = ''
 				while(opcion_matcheo != 'c'):	
 					opcion_matcheo = MENU_MATCHEOS()
+					LIMPIAR_CONSOLA()
 					match opcion_matcheo:
 						case 'a':
-							LIMPIAR_CONSOLA()
-							# VER MATCHEOS
+							print("Ver Matcheos aún no realizado.\n") # VER MATCHEOS
 						case 'b':
-							LIMPIAR_CONSOLA() 
-
+							print("Eliminar un Matcheo aún no realizado.\n") # ELIMINAR UN MATCHEO
 						case 'c':
 							LIMPIAR_CONSOLA() #volver
 						case _:
-							LIMPIAR_CONSOLA()
 							print("Opción incorrecta.\n")		
 
 			case 4:
 				REPORTES_ESTADISTICOS()
 				
 			case 0:
-				print("\nPrograma terminado.")
+				print("\nSesión finalizada.\n")
 			case _:
 				print("Opcion incorrecta")	
 
@@ -560,34 +557,31 @@ while(opcion_inicio != 0):
 				opcion_gest_usuarios = ''
 				while(opcion_gest_usuarios != 'b'):
 					opcion_gest_usuarios = MENU_GESTION_USUARIOS()
+					LIMPIAR_CONSOLA()
 					match opcion_gest_usuarios:
 						case 'a':
-							LIMPIAR_CONSOLA()
 							DESACTIVAR_USUARIO()
 
 						case 'b':
 							LIMPIAR_CONSOLA() #volver
 						case _:
-							LIMPIAR_CONSOLA()
 							print("Opción incorrecta.\n")
 
 			case 2:
 				opcion_gest_reportes = ''
 				while(opcion_gest_reportes != 'b'):
 					opcion_gest_reportes = MENU_GESTION_REPORTES()
+					LIMPIAR_CONSOLA()
 					match opcion_gest_reportes:
 						case 'a':
-							LIMPIAR_CONSOLA()
 							VER_REPORTES()
 
 						case 'b':
 							LIMPIAR_CONSOLA() #volver
 						case _:
-							LIMPIAR_CONSOLA()
 							print("Opción incorrecta.\n")
 
 			case 0:
-				print("\nPrograma terminado.")
+				print("\nSesión finalizada.\n")
 			case _:
 				print("Opcion incorrecta")	
-
