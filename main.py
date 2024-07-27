@@ -219,28 +219,24 @@ def EDITAR_DATOS():
 	match opcion_editar:
 		case 1:
 			estudiantes[sesion][0] = input("Ingrese un nuevo email: ")			
-			LIMPIAR_CONSOLA()
 		case 2:
 			estudiantes[sesion][1] = input("Ingrese un nuevo contraseña: ")
-			LIMPIAR_CONSOLA()
 		case 3:
 			estudiantes[sesion][2] = input("Ingrese un nuevo nombre: ")
-			LIMPIAR_CONSOLA()
 		case 4:
 			estudiantes[sesion][3] = INGRESAR_NACIMIENTO()	
-			LIMPIAR_CONSOLA()
 		case 5:
 			estudiantes[sesion][4] = input("Ingrese un nuevo hobbie: ")
-			LIMPIAR_CONSOLA()
 		case 6:
 			estudiantes[sesion][5] = input("Ingrese una nueva biografia: ")
-			LIMPIAR_CONSOLA()
 		case 7:
 			estudiantes[sesion][6] = input("Ingrese un nuevo sexo: ")
-			LIMPIAR_CONSOLA()
 		case _: 
 			LIMPIAR_CONSOLA()
 			print("Opción incorrecta.\n")
+	if opcion_editar >= 1 and opcion_editar <= 7:
+		LIMPIAR_CONSOLA()	
+
 
 def ELIMINAR_PERFIL(sesion_nueva):
 	print("Desea eliminar su perfil?")
