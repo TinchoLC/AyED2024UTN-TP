@@ -420,9 +420,85 @@ def RULETA_AFINIDAD():
 	else: 
 		print("Salió la persona C!!!\n")
 
+def MENU_BONUS21():
+	print("BONUS 2-1")
+	print("Probar con...")
+	print("\t1. Array random de longitud definida")
+	print("\t2. Arrays de ejemplo")
+	print("\t3. Array que ingrese")
+	print("\t0. Salir \n")
+
+	return int(input("Seleccione la opcion: "))
+def SORT(array):
+	for i in range(len(array)):
+		min_idx = i
+		for j in range(i+1, len(array)):
+			if(array[j] < array[min_idx]):
+				min_idx = j
+		
+		array[i], array[min_idx] = array[min_idx], array[i]
+def HUECOS(array):
+	cant_huecos = 0
+
+	for i in range(len(array)-1):
+		if(array[i]+2 == array[i+1]):
+			cant_huecos += 1
+
+	return cant_huecos
 def EDADES():
-	
-	print("Bonus track todavía no resuelto")
+	opcion_bonus21 = MENU_BONUS21()
+	LIMPIAR_CONSOLA()
+	match opcion_bonus21:
+		case 1:
+			cant_estudiantes_bonus = int(input("Cantidad de estudiantes que quiere tener: "))
+			estudiantes_bonus = [randint(0, 100) for _ in range(cant_estudiantes_bonus)]
+			
+			print("El array de longitud ", cant_estudiantes_bonus, "random es ", estudiantes_bonus,"\n")
+			SORT(estudiantes_bonus)
+			print("El array ordenado sería ", estudiantes_bonus)
+			print("Hay ", HUECOS(estudiantes_bonus)," huecos en total.\n\n")
+		
+		case 2:
+			estu_b1 = [11,14,9,5,7,15]
+			estu_b2 = [2,5,3,8,1]
+			estu_b3 = [21, 18, 20, 19, 23, 24] 
+
+			print("Ejemplo inventado:\n")
+			print("\tEl array de ejemplo es ",estu_b1, "\n")
+			SORT(estu_b1)
+			print("\tEl array ordenado queda ", estu_b1)
+			print("\tHay ", HUECOS(estu_b1), " huecos en total.\n\n")
+
+			print("Ejemplos del TP:\n")
+			print("\tPrimer ejemplo:")
+			print("\t\tEl array de ejemplo es ",estu_b2, "\n")
+			SORT(estu_b2)
+			print("\t\tEl array ordenado queda ", estu_b2)
+			print("\t\tHay ", HUECOS(estu_b2), " huecos en total.\n")
+
+			print("\tSegundo ejemplo:")
+			print("\t\tEl array de ejemplo es ",estu_b3, "\n")
+			SORT(estu_b3)
+			print("\t\tEl array ordenado queda ", estu_b3)
+			print("\t\tHay ", HUECOS(estu_b3), " huecos en total.\n\n")
+
+		case 3:
+			cant_estudiantes_bonus = int(input("Cantidad de estudiantes que quiere tener: "))
+			estu_bonus_man = [None]*cant_estudiantes_bonus
+			print("Ingrese los números: ")
+			for i in range(cant_estudiantes_bonus):
+				estu_bonus_man[i] = int(input(""))
+
+			print("El array quedaría así ", estu_bonus_man, "\n")
+			SORT(estu_bonus_man)
+			print("El array ordenado queda ", estu_bonus_man)
+			print("Hay ", HUECOS(estu_bonus_man), " huecos en total.\n\n")
+		
+		case 0:
+			LIMPIAR_CONSOLA() #volver
+		
+		case _:
+			print("Opción incorrecta.\n")
 
 def MATCHEOS_COMBINADOS(cant):
 	""" Forma alternativa sin formula (fuerza bruta)
@@ -439,11 +515,12 @@ estudiantes[0][0] = "a"; estudiantes[0][1] = "1"; estudiantes[0][2] = "Julian"; 
 estudiantes[1][0] = "estudiante2@ayed.com"; estudiantes[1][1] = "333444"; estudiantes[1][2] = "Pedro"; estudiantes[1][3] = "2005-04-10"; estudiantes[1][4] = "comer, jugar"; estudiantes[1][7] = 1;
 estudiantes[2][0] = "estudiante3@ayed.com"; estudiantes[2][1] = "555666"; estudiantes[2][2] = "Ana"; estudiantes[2][3] = "2004-10-20"; estudiantes[2][4] = "leer sobre jojos"; estudiantes[2][7] = 1;
 cant_estudiantes = 3
-# Para probar más rápido un mail válido es a y su contraseña es 1
+# Para probar más rápido un mail de estudiante válido es a y su contraseña es 1
 
 admins = [[""]*2 for n in range(4)] # email | contrasena
 admins[0][0] = "b"; admins[0][1] = "1"
 cant_admins = 1
+# Para probar más rápido un mail válido de moderador es b y su contraseña 1
 
 likes = LIKES_AUTO()
 
