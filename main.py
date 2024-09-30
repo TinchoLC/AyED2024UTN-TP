@@ -24,19 +24,7 @@ class estudiante:
 		self.sexo = ""
 		self.estado = 1
 
-
 reg = estudiante()
-
-def crearArchivos():
-	if not os.path.exists(arcest_fisico):
-		temporal = open(arcest_fisico, "w+b")
-		temporal.close()
-	if not os.path.exists(arcmod_fisico):
-		temporal = open(arcmod_fisico, "w+b")
-		temporal.close()
-	if not os.path.exists(arcadm_fisico):
-		temporal = open(arcadm_fisico, "w+b")
-		temporal.close()
 
 '''
 def cargarArchivo(xx):
@@ -63,6 +51,17 @@ def leerArchivo():
 '''
 
 # BASICO
+def crearArchivos():
+	if not os.path.exists(arcest_fisico):
+		temporal = open(arcest_fisico, "w+b")
+		temporal.close()
+	if not os.path.exists(arcmod_fisico):
+		temporal = open(arcmod_fisico, "w+b")
+		temporal.close()
+	if not os.path.exists(arcadm_fisico):
+		temporal = open(arcadm_fisico, "w+b")
+		temporal.close()
+
 def limpiarConsola():
 	if os.name == 'nt':  # Windows
 		os.system('cls')
@@ -93,7 +92,7 @@ def menuInicio():
 def login():
 	limpiarConsola()
 	sesion = -1
-	sesion_adm = -1
+	sesion_mod = -1
 	intentos_restantes = 3
 	while(sesion == -1 and intentos_restantes > 0):
 		print("LOGIN\n")
@@ -105,7 +104,7 @@ def login():
 		intentos_restantes = intentos_restantes - 1
 
 		probable = 0
-		while(sesion == -1 and sesion_adm == -1 and probable < cant_estudiantes):
+		while(sesion == -1 and sesion_mod == -1 and probable < cant_estudiantes):
 			if(email == estudiantes[probable][0] and contrasena == estudiantes[probable][1]):
 				intentos_restantes = 0
 
@@ -115,10 +114,10 @@ def login():
 				else: 
 					print("Su cuenta ha sido deshabilitada\n")
 					probable = cant_estudiantes
-			elif(probable < cant_admins): # no todo dentro del mismo if porque si no busca más allá del array.
-				if(email == admins[probable][0] and contrasena == admins[probable][1]):
+			elif(probable < cant_mods): # no todo dentro del mismo if porque si no busca más allá del array.
+				if(email == mods[probable][0] and contrasena == mods[probable][1]):
 					intentos_restantes = 0
-					sesion_adm = probable
+					sesion_mod = probable
 
 			probable = probable + 1
 
@@ -126,7 +125,7 @@ def login():
 			print("No ingresaste correctamente :(")
 			print("Te quedan ",intentos_restantes,"intentos.\n")
 
-	return sesion, sesion_adm
+	return sesion, sesion_mod
 
 def registro(nueva_sesion):
 	limpiarConsola()
@@ -137,8 +136,8 @@ def registro(nueva_sesion):
 		for n in range(cant_estudiantes):
 			if(email == estudiantes[n][0]):
 				email = "novalido"
-			elif(n < cant_admins): # no todo dentro del mismo if porque si no busca más allá del array.
-				if(email == admins[n][0]):
+			elif(n < cant_mods): # no todo dentro del mismo if porque si no busca más allá del array.
+				if(email == mods[n][0]):
 					email = "novalido"
 			if(nombre.lower() == estudiantes[n][2].lower()):
 				nombre = "novalido"
@@ -588,11 +587,9 @@ estudiantes[2][0] = "estudiante3@ayed.com"; estudiantes[2][1] = "555666"; estudi
 cant_estudiantes = 3
 # Para probar más rápido un mail de estudiante válido es a y su contraseña es 1
 
-leerArchivo()
-
-admins = [[""]*2 for n in range(4)] # email | contrasena
-admins[0][0] = "b"; admins[0][1] = "1"
-cant_admins = 1
+mods = [[""]*2 for n in range(4)] # email | contrasena
+mods[0][0] = "b"; mods[0][1] = "1"
+cant_mods = 1
 # Para probar más rápido un mail válido de moderador es b y su contraseña 1
 
 likes = likesAuto()
@@ -605,7 +602,7 @@ limpiarConsola()
 while(opcion_inicio != 0):
 
 	sesion = -1
-	sesion_adm = -1
+	sesion_mod = -1
 	opcion_inicio = -1
 	while(opcion_inicio != 0 and opcion_inicio != 1):
 		opcion_inicio = menuInicio()
@@ -614,10 +611,10 @@ while(opcion_inicio != 0):
 			case 1:
 				if(cant_estudiantes < 4):
 					print("No hay la cantidad de estudiantes necesarios para iniciar el programa, se necesitan", 4 - cant_estudiantes, "más.\n")
-				elif(cant_admins < 1):
-					print("No hay la cantidad de administradores necesarios para iniciar el programa, se necesita al menos uno.\n")
+				elif(cant_mods < 1):
+					print("No hay la cantidad de moderadores necesarios para iniciar el programa, se necesita al menos uno.\n")
 				else:
-					sesion, sesion_adm = login()
+					sesion, sesion_mod = login()
 			case 2:
 				cant_estudiantes = registro(cant_estudiantes)
 
@@ -698,9 +695,9 @@ while(opcion_inicio != 0):
 			case _:
 				print("Opcion incorrecta")	
 
-	while(sesion_adm > -1 and opcion != 0):
+	while(sesion_mod > -1 and opcion != 0):
 
-		opcion = menuPrincipalModerador(sesion_adm)
+		opcion = menuPrincipalModerador(sesion_mod)
 		limpiarConsola()
 		match opcion:
 			case 1:
