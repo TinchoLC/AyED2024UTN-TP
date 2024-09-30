@@ -12,6 +12,21 @@ arcest_fisico = "estudiantes.dat"
 arcmod_fisico = "moderadores.dat"
 arcadm_fisico = "administradores.dat"
 
+estudiantes = [[""]*8 for n in range(8)] # email | contrasena | nombre | nacimiento | hobbies | bio | sexo | estado
+estudiantes[0][0] = "a"; estudiantes[0][1] = "1"; estudiantes[0][2] = "Julian"; estudiantes[0][3] = "2006-01-07"; estudiantes[0][4] = "pescar, nadar"; estudiantes[0][7] = 1;
+estudiantes[1][0] = "estudiante2@ayed.com"; estudiantes[1][1] = "333444"; estudiantes[1][2] = "Pedro"; estudiantes[1][3] = "2005-04-10"; estudiantes[1][4] = "comer, jugar"; estudiantes[1][7] = 1;
+estudiantes[2][0] = "estudiante3@ayed.com"; estudiantes[2][1] = "555666"; estudiantes[2][2] = "Ana"; estudiantes[2][3] = "2004-10-20"; estudiantes[2][4] = "leer sobre jojos"; estudiantes[2][7] = 1;
+cant_estudiantes = 3
+# Para probar más rápido un mail de estudiante válido es a y su contraseña es 1
+
+mods = [[""]*2 for n in range(4)] # email | contrasena
+mods[0][0] = "b"; mods[0][1] = "1"
+cant_mods = 1
+# Para probar más rápido un mail válido de moderador es b y su contraseña 1
+
+reportes = [[""]*4 for n in range(10)] # id_reportante | id_reportado | motivo | estado
+cant_reportes = 0
+
 class estudiante:
 	def __init__(self):
 		self.id = 0
@@ -211,7 +226,7 @@ def menuPrincipalModerador(id):
 	op = int(input("Seleccione la opcion: "))
 	return op
 
-def menuGestionUsuarios():
+def menuModGestionUsuarios():
 	print("Menu de Gestion de Usuarios")
 	print("\ta. Desactivar usuario")
 	print("\tb. Volver\n")
@@ -219,7 +234,7 @@ def menuGestionUsuarios():
 	op = int(input("Seleccione la opcion: "))
 	return op
 
-def menuGestionReportes():
+def menuModGestionReportes():
 	print("Menu de Gestion de Reportes")
 	print("\ta. Ver reportes")
 	print("\tb. Volver\n")
@@ -227,6 +242,34 @@ def menuGestionReportes():
 	op = int(input("Seleccione la opcion: "))
 	return op
 	
+# MENUS ADMINISTRADOR
+def menuPrincipalModerador(id):
+	print("Menu Principal del administrador con id",id)
+	print("\t1. Gestionar usuarios")
+	print("\t2. Gestionar Reportes")
+	print("\t0. Salir \n")
+
+	op = int(input("Seleccione la opcion: "))
+	return op
+
+def menuAdmGestionUsuarios():
+	print("Menu de Gestion de Usuarios")
+	print("\ta. Eliminar un usuario (incluyendo moderadores)")
+	print("\tb. Dar de alta un moderador")
+	print("\tc. Desactivar usuario")
+	print("\td. Volver\n")
+
+	op = int(input("Seleccione la opcion: "))
+	return op
+
+def menuAdmGestionReportes():
+	print("Menu de Gestion de Reportes")
+	print("\ta. Ver reportes")
+	print("\tb. Volver\n")
+
+	op = int(input("Seleccione la opcion: "))
+	return op
+
 # FUNCIONES ESTUDIANTE
 def ingresarNacimiento():
     fecha = input("Formato (año-mes-dia)\nxxxx-xx-xx\nIngrese la fecha de nacimiento: ")
@@ -578,24 +621,9 @@ def matcheosCombinados(cant):
 	matcheos_posibles = cant * (cant-1) / 2
 	print("La cantidad de matcheos posibles con la cantidad actual de estudiantes ({}) es de:".format(cant), int(matcheos_posibles),"\n")
 
-crearArchivos()
+##############################################################
 
-estudiantes = [[""]*8 for n in range(8)] # email | contrasena | nombre | nacimiento | hobbies | bio | sexo | estado
-estudiantes[0][0] = "a"; estudiantes[0][1] = "1"; estudiantes[0][2] = "Julian"; estudiantes[0][3] = "2006-01-07"; estudiantes[0][4] = "pescar, nadar"; estudiantes[0][7] = 1;
-estudiantes[1][0] = "estudiante2@ayed.com"; estudiantes[1][1] = "333444"; estudiantes[1][2] = "Pedro"; estudiantes[1][3] = "2005-04-10"; estudiantes[1][4] = "comer, jugar"; estudiantes[1][7] = 1;
-estudiantes[2][0] = "estudiante3@ayed.com"; estudiantes[2][1] = "555666"; estudiantes[2][2] = "Ana"; estudiantes[2][3] = "2004-10-20"; estudiantes[2][4] = "leer sobre jojos"; estudiantes[2][7] = 1;
-cant_estudiantes = 3
-# Para probar más rápido un mail de estudiante válido es a y su contraseña es 1
-
-mods = [[""]*2 for n in range(4)] # email | contrasena
-mods[0][0] = "b"; mods[0][1] = "1"
-cant_mods = 1
-# Para probar más rápido un mail válido de moderador es b y su contraseña 1
-
-likes = likesAuto()
-
-reportes = [[""]*4 for n in range(10)] # id_reportante | id_reportado | motivo | estado
-cant_reportes = 0
+crearArchivos(); likes = likesAuto()
 
 opcion_inicio = -1
 limpiarConsola()
@@ -703,7 +731,7 @@ while(opcion_inicio != 0):
 			case 1:
 				opcion_gest_usuarios = ''
 				while(opcion_gest_usuarios != 'b'):
-					opcion_gest_usuarios = menuGestionUsuarios()
+					opcion_gest_usuarios = menuModGestionUsuarios()
 					limpiarConsola()
 					match opcion_gest_usuarios:
 						case 'a':
@@ -717,7 +745,7 @@ while(opcion_inicio != 0):
 			case 2:
 				opcion_gest_reportes = ''
 				while(opcion_gest_reportes != 'b'):
-					opcion_gest_reportes = menuGestionReportes()
+					opcion_gest_reportes = menuModGestionReportes()
 					limpiarConsola()
 					match opcion_gest_reportes:
 						case 'a':
