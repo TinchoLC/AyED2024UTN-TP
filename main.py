@@ -87,8 +87,10 @@ def REGISTRO(nueva_sesion):
 				nombre = "novalido"
 
 		if(email == "novalido"):
+			LIMPIAR_CONSOLA()
 			print("\nEl email ya está siendo utilizado o no es válido")
 		elif(nombre == "novalido"):
+			LIMPIAR_CONSOLA()
 			print("\nEl nombre ya está siendo utilizado o no es válido")
 		else:
 			estudiantes[nueva_sesion][0] = email
