@@ -16,7 +16,7 @@ estudiantes = [[""]*8 for n in range(8)] # email | contrasena | nombre | nacimie
 estudiantes[0][0] = "a"; estudiantes[0][1] = "1"; estudiantes[0][2] = "Julian"; estudiantes[0][3] = "2006-01-07"; estudiantes[0][4] = "pescar, nadar"; estudiantes[0][7] = 1;
 estudiantes[1][0] = "estudiante2@ayed.com"; estudiantes[1][1] = "333444"; estudiantes[1][2] = "Pedro"; estudiantes[1][3] = "2005-04-10"; estudiantes[1][4] = "comer, jugar"; estudiantes[1][7] = 1;
 estudiantes[2][0] = "estudiante3@ayed.com"; estudiantes[2][1] = "555666"; estudiantes[2][2] = "Ana"; estudiantes[2][3] = "2004-10-20"; estudiantes[2][4] = "leer sobre jojos"; estudiantes[2][7] = 1;
-cant_estudiantes = 3
+cant_estudiantes = 4 # Ya cargado en archivo 
 # Para probar más rápido un mail de estudiante válido es a y su contraseña es 1
 
 mods = [[""]*2 for n in range(4)] # email | contrasena
@@ -29,7 +29,7 @@ cant_reportes = 0
 
 class estudiante:
 	def __init__(self):
-		self.id = 0
+		self.id = -1
 		self.email = ""
 		self.contrasena = ""
 		self.nombre = ""
@@ -39,18 +39,29 @@ class estudiante:
 		self.sexo = ""
 		self.estado = 1
 
-reg = estudiante()
+class moderador:
+	def __init__(self):
+		self.id = 0
+		self.email = ""
+		self.contrasena = ""
 
-'''
-def cargarArchivo(xx):
-	reg.id = xx
-	reg.email = "a"
-	reg.contrasena = "1"
-	reg.nombre = "Julian"
-	reg.nacimiento = "2006-01-07"
-	reg.hobbies = "pescar, nadar"
+class administrador:
+	def __init__(self):
+		self.id = 0
+		self.email = ""
+		self.contrasena = ""
+
+regE_temp = estudiante()
+def cargarE(idd, em,co,nom,nac,hob):
+	regE_temp.id = idd
+	regE_temp.email = em
+	regE_temp.contrasena = co
+	regE_temp.nombre = nom
+	regE_temp.nacimiento = nac
+	regE_temp.hobbies = hob
 	arcest_logico = open(arcest_fisico, "r+b")
-	pickle.dump(reg, arcest_logico)
+	arcest_logico.seek(0, os.SEEK_END) 
+	pickle.dump(regE_temp, arcest_logico)
 	arcest_logico.flush()
 	arcest_logico.close()
 
@@ -58,12 +69,38 @@ def leerArchivo():
 	arcest_logico = open(arcest_fisico, "r+b")
 	X = os.path.getsize(arcest_fisico) 
 	while (arcest_logico.tell() < X):
-		reg = pickle.load(arcest_logico)
-		print (reg.id)
-		print (reg.email)
-		print (reg.contrasena)
+		regE_temp = pickle.load(arcest_logico)
+		print (regE_temp.email)
+		print (regE_temp.contrasena)
 	arcest_logico.close()
-'''
+
+def cargaEstudiantes():
+	for i in range(3):
+		cargarE(i,estudiantes[i][0],estudiantes[i][1],estudiantes[i][2],estudiantes[i][3],estudiantes[i][4])
+
+def abrirPorTipo(tipo):
+	match tipo:
+		case 1:
+			fisico = arcest_fisico
+		case 2:
+			fisico = arcmod_fisico
+		case 3:
+			fisico = arcadm_fisico
+			
+	logico = open(fisico, "r+b")
+	return fisico, logico
+
+def loadPorTipo(tipo, logico):
+	match tipo:
+		case 1:
+			reg = estudiante()
+		case 2:
+			reg = moderador()
+		case 3:
+			reg = administrador()
+	
+	reg = pickle.load(logico)
+	return reg
 
 # BASICO
 def crearArchivos():
@@ -104,43 +141,71 @@ def menuInicio():
 	op = int(input("Seleccione la opcion: "))
 	return op
 
-def login():
-	limpiarConsola()
-	sesion = -1
-	sesion_mod = -1
+def menuLogin():
+	print("Loguearse como:")
+	print("\t\t1. Usuario")
+	print("\t\t2. Moderador")
+	print("\t\t3. Administrador")
+
+	op = int(input("Seleccione la opcion: "))
+	return op
+
+def auxLogin(tipo,cant):
 	intentos_restantes = 3
-	while(sesion == -1 and intentos_restantes > 0):
-		print("LOGIN\n")
+
+	while(intentos_restantes > 0):
+		intentos_restantes = intentos_restantes - 1
 		email = input("Ingrese su email: ").lower() # El .lower es para forzar minusculas
 		contrasena = getpass("Ingrese su contraseña: ")
 
 		limpiarConsola()
 
-		intentos_restantes = intentos_restantes - 1
+		ar_fisico, ar_logico = abrirPorTipo(tipo)
+		X = os.path.getsize(ar_fisico) 
+		while(ar_logico.tell() < X):
+			reg = loadPorTipo(tipo,ar_logico)
 
-		probable = 0
-		while(sesion == -1 and sesion_mod == -1 and probable < cant_estudiantes):
-			if(email == estudiantes[probable][0] and contrasena == estudiantes[probable][1]):
+			if(email == reg.email and contrasena == reg.contrasena):
 				intentos_restantes = 0
-
-				if(estudiantes[probable][7]):
-					print("Felicidades",estudiantes[probable][2],"ingresaste!\n")
-					sesion = probable
-				else: 
+				if(tipo != 1):
+					print("Felicidades",tipo,reg.id,"ingresaste!\n")
+				elif(not reg.estado): 
 					print("Su cuenta ha sido deshabilitada\n")
-					probable = cant_estudiantes
-			elif(probable < cant_mods): # no todo dentro del mismo if porque si no busca más allá del array.
-				if(email == mods[probable][0] and contrasena == mods[probable][1]):
-					intentos_restantes = 0
-					sesion_mod = probable
-
-			probable = probable + 1
+				else:
+					print("Felicidades",reg.nombre,"ingresaste!\n")
+			else:
+				reg.id = -1
 
 		if(intentos_restantes > 0):
 			print("No ingresaste correctamente :(")
 			print("Te quedan ",intentos_restantes,"intentos.\n")
 
-	return sesion, sesion_mod
+	ar_logico.close()
+	return reg
+def login():
+	limpiarConsola()
+	tipo_sesion = 0
+	sesion = -1
+	sesion_mod = -1
+	
+	opcion_login = menuLogin()
+	match opcion_login:
+		case 1:
+			reg_act = auxLogin(1,cant_estudiantes)
+			if(reg_act.id > -1):
+				tipo_sesion = 1
+				sesion = reg_act.id
+			else:
+				input("Te quedaste sin intentos! Presiona Enter para continuar")
+		case 2:
+			auxLogin(2,cant_mods)
+		case 3:
+			print("falta")
+		case _:
+			print("pipe peluo")
+
+
+	return sesion, sesion_mod, tipo_sesion, reg_act
 
 def registro(nueva_sesion):
 	limpiarConsola()
@@ -247,6 +312,7 @@ def menuPrincipalModerador(id):
 	print("Menu Principal del administrador con id",id)
 	print("\t1. Gestionar usuarios")
 	print("\t2. Gestionar Reportes")
+	print("\t3. Reportes estadisticos")
 	print("\t0. Salir \n")
 
 	op = int(input("Seleccione la opcion: "))
@@ -412,7 +478,7 @@ def desactivarUsuario():
 
 	for n in range(cant_estudiantes):
 		if (desactivar_usuario_v == estudiantes[n][2].lower()):
-			print("Desea eliminar su perfil?")
+			print("Desea desactivar este usuario?")
 			print("\t1. Si")
 			print("\t0. No\n")
 			opcion_desactivar = int(input("Selecciona la opción: "))
@@ -422,7 +488,9 @@ def desactivarUsuario():
 				case 1:
 					estudiantes[n][7] = 0
 					cartel = "El usuario " + estudiantes[n][2] + " de id " + str(n) + " fue correctamente desactivado.\n"
-			
+					for i in range(cant_estudiantes):
+						likes[n][i] = 0
+						likes[i][n] = 0
 				case 0:
 					cartel = ""
 				case _: 
@@ -623,12 +691,14 @@ def matcheosCombinados(cant):
 
 ##############################################################
 
-crearArchivos(); likes = likesAuto()
+crearArchivos()
+#cargaEstudiantes();leerArchivo();input()
 
 opcion_inicio = -1
 limpiarConsola()
 while(opcion_inicio != 0):
 
+	tipo_sesion = 0 # 0 ninguna # 1 estudiante # 2 moderador # 3 administrador
 	sesion = -1
 	sesion_mod = -1
 	opcion_inicio = -1
@@ -642,7 +712,8 @@ while(opcion_inicio != 0):
 				elif(cant_mods < 1):
 					print("No hay la cantidad de moderadores necesarios para iniciar el programa, se necesita al menos uno.\n")
 				else:
-					sesion, sesion_mod = login()
+					sesion, sesion_mod, tipo_sesion, reg_act = login()
+
 			case 2:
 				cant_estudiantes = registro(cant_estudiantes)
 
@@ -660,7 +731,7 @@ while(opcion_inicio != 0):
 
 
 	opcion = -1 # Porque tiene que ser distinto de 0 para entrar al while
-	while(sesion > -1 and opcion != 0):
+	while(sesion > -1 and opcion != 0 and tipo_sesion == 1):
 
 		opcion = menuPrincipalEstudiante(sesion,estudiantes[sesion][2])
 		limpiarConsola()
@@ -723,7 +794,7 @@ while(opcion_inicio != 0):
 			case _:
 				print("Opcion incorrecta")	
 
-	while(sesion_mod > -1 and opcion != 0):
+	while(sesion_mod > -1 and opcion != 0 and tipo_sesion == 2):
 
 		opcion = menuPrincipalModerador(sesion_mod)
 		limpiarConsola()
