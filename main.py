@@ -7,13 +7,13 @@ from getpass  import getpass
 import os
 
 # BASICO
-def LIMPIAR_CONSOLA():
+def limpiar_consola():
 	if os.name == 'nt':  # Windows
 		os.system('cls')
 	else:  # macOS y Linux
 		os.system('clear')
 
-def LIKES_AUTO():
+def likes_auto():
 	likes = [[0]*8 for n in range(8)] #Aca se rellena al 100% con 0
 	for i in range(8):
 		for j in range (8):
@@ -22,7 +22,7 @@ def LIKES_AUTO():
 	return likes
 
 # INICIO
-def MENU_INICIO():
+def menu_inicio():
 	print("INICIO")
 	print("\t1. Login")
 	print("\t2. Registrarse")
@@ -33,8 +33,8 @@ def MENU_INICIO():
 
 	return int(input("Seleccione la opcion: "))
 
-def LOGIN():
-	LIMPIAR_CONSOLA()
+def login():
+	limpiar_consola()
 	sesion = -1
 	sesion_adm = -1
 	intentos_restantes = 3
@@ -43,7 +43,7 @@ def LOGIN():
 		email = input("Ingrese su email: ").lower() # El .lower es para forzar minusculas
 		contrasena = getpass("Ingrese su contraseña: ")
 
-		LIMPIAR_CONSOLA()
+		limpiar_consola()
 
 		intentos_restantes = intentos_restantes - 1
 
@@ -71,8 +71,8 @@ def LOGIN():
 
 	return sesion, sesion_adm
 
-def REGISTRO(nueva_sesion):
-	LIMPIAR_CONSOLA()
+def registro(nueva_sesion):
+	limpiar_consola()
 	if(nueva_sesion < 8):
 		print("REGISTRO\n")
 		email = input("Ingrese un email: ")
@@ -87,16 +87,16 @@ def REGISTRO(nueva_sesion):
 				nombre = "novalido"
 
 		if(email == "novalido"):
-			LIMPIAR_CONSOLA()
-			print("\nEl email ya está siendo utilizado o no es válido")
+			limpiar_consola()
+			print("El email ya está siendo utilizado o no es válido\n")
 		elif(nombre == "novalido"):
-			LIMPIAR_CONSOLA()
-			print("\nEl nombre ya está siendo utilizado o no es válido")
+			limpiar_consola()
+			print("El nombre ya está siendo utilizado o no es válido\n")
 		else:
 			estudiantes[nueva_sesion][0] = email
 			estudiantes[nueva_sesion][2] = nombre
 			estudiantes[nueva_sesion][1] = input("Ingrese la contraseña: ")
-			estudiantes[nueva_sesion][3] = INGRESAR_NACIMIENTO()
+			estudiantes[nueva_sesion][3] = ingresar_nacimiento()
 			estudiantes[nueva_sesion][7] = 1
 			nueva_sesion = nueva_sesion + 1
 			print(nombre, "registrado!\n")
@@ -106,7 +106,7 @@ def REGISTRO(nueva_sesion):
 	return nueva_sesion
 
 # MENUS ESTUDIANTE
-def MENU_PRINCIPAL_ESTUDIANTE(id, nombre):
+def menu_principal_estudiante(id, nombre):
 	print("Menu Principal del estudiante",nombre,"- con id",id)
 	print("\t1.  Gestionar mi perfil")
 	print("\t2.  Gestionár candidatos")
@@ -116,7 +116,7 @@ def MENU_PRINCIPAL_ESTUDIANTE(id, nombre):
 
 	return int(input("Seleccione la opcion: "))
 
-def MENU_GESTION_PERFIL():
+def menu_gestion_perfil():
 	print("Menu de Gestion de Perfil")
 	print("\ta. Editar mis datos personales")
 	print("\tb. Eliminar mi perfil")
@@ -124,7 +124,7 @@ def MENU_GESTION_PERFIL():
 
 	return input("Seleccione la opcion: ")
 
-def MENU_GESTION_CANDIDATOS():
+def menu_gestion_candidatos():
 	print("Menu de gestion de candidatos")
 	print("\ta. Ver candidatos")
 	print("\tb. Reportar un candidato")
@@ -132,7 +132,7 @@ def MENU_GESTION_CANDIDATOS():
 
 	return input("Seleccione la opcion: ")
 
-def MENU_MATCHEOS():
+def menu_matcheos():
 	print("Menu de gestion de candidatos")
 	print("\ta. Ver matcheos")
 	print("\tb. Eliminar un matcheo")
@@ -142,7 +142,7 @@ def MENU_MATCHEOS():
 	return input("Seleccione la opcion: ")
 
 # MENUS MODERADOR
-def MENU_PRINCIPAL_MODERADOR(id):
+def menu_principal_moderador(id):
 	print("Menu Principal del moderador con id",id)
 	print("\t1. Gestionar usuarios")
 	print("\t2. Gestionar Reportes")
@@ -150,14 +150,14 @@ def MENU_PRINCIPAL_MODERADOR(id):
 
 	return int(input("Seleccione la opcion: "))
 
-def MENU_GESTION_USUARIOS():
+def menu_gestion_usuarios():
 	print("Menu de Gestion de Usuarios")
 	print("\ta. Desactivar usuario")
 	print("\tb. Volver\n")
 
 	return input("Seleccione la opcion: ")
 
-def MENU_GESTION_REPORTES():
+def menu_gestion_reportes():
 	print("Menu de Gestion de Reportes")
 	print("\ta. Ver reportes")
 	print("\tb. Volver\n")
@@ -165,25 +165,25 @@ def MENU_GESTION_REPORTES():
 	return input("Seleccione la opcion: ")
 
 # FUNCIONES ESTUDIANTE
-def INGRESAR_NACIMIENTO():
+def ingresar_nacimiento():
     fecha = input("Formato (año-mes-dia)\nxxxx-xx-xx\nIngrese la fecha de nacimiento: ")
     while len(fecha) != 10:
         print("La longitud de la fecha es incorrecta\n")
         fecha = input("Formato (año-mes-dia)\nxxxx-xx-xx\nIngrese la fecha de nacimiento: ")
-    LIMPIAR_CONSOLA()
+    limpiar_consola()
     return fecha
 
-def MOSTRAR_DATOS_ESTUDIANTES():
+def mostrar_datos_estudiantes():
 	for n in range(cant_estudiantes):
 		if(sesion != n and estudiantes[n][7] == 1):
 			print("Estudiante",n)
 			print("Nombre:", estudiantes[n][2])
 			print("Fecha de Nacimiento:", estudiantes[n][3])
-			print("Edad:", CALCULAR_EDAD(estudiantes[n][3]))
+			print("Edad:", calcular_edad(estudiantes[n][3]))
 			print("Biografia:", estudiantes[n][5])
 			print("Hobbies: {} \n" .format(estudiantes[n][4]))
 
-def NOMBRE_CORRECTO(nombre):
+def nombre_correcto(nombre):
 	correcto = -1;
 	est = 0;
 	while(correcto == -1 and est < cant_estudiantes):
@@ -195,18 +195,18 @@ def NOMBRE_CORRECTO(nombre):
 				est = cant_estudiantes
 		est = est + 1
 	return correcto;
-def AGREGAR_MATCHEO():
+def agregar_matcheo():
 	me_gusta = input("\nIngrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
-	LIMPIAR_CONSOLA()
+	limpiar_consola()
 
-	me_gusta_id = NOMBRE_CORRECTO(me_gusta.lower())
+	me_gusta_id = nombre_correcto(me_gusta.lower())
 	if(me_gusta_id > -1):	
 		likes[sesion][me_gusta_id] = 1
 		print("Seleccionaste a {}, espero te corresponda!\n".format(me_gusta))
 	else:
 		print("El nombre ingresado no es correcto\n")
 
-def EDITAR_DATOS():
+def editar_datos():
 	print("¿ Que desea editar ?")
 	print("\t1. email")
 	print("\t2. contraseña")
@@ -217,7 +217,7 @@ def EDITAR_DATOS():
 	print("\t7. sexo")
 
 	opcion_editar = int(input("Selecciona la opcion: "))
-	LIMPIAR_CONSOLA()
+	limpiar_consola()
 	match opcion_editar:
 		case 1:
 			estudiantes[sesion][0] = input("Ingrese un nuevo email: ")			
@@ -226,7 +226,7 @@ def EDITAR_DATOS():
 		case 3:
 			estudiantes[sesion][2] = input("Ingrese un nuevo nombre: ")
 		case 4:
-			estudiantes[sesion][3] = INGRESAR_NACIMIENTO()	
+			estudiantes[sesion][3] = ingresar_nacimiento()	
 		case 5:
 			estudiantes[sesion][4] = input("Ingrese un nuevo hobbie: ")
 		case 6:
@@ -234,17 +234,17 @@ def EDITAR_DATOS():
 		case 7:
 			estudiantes[sesion][6] = input("Ingrese un nuevo sexo: ")
 		case _: 
-			LIMPIAR_CONSOLA()
+			limpiar_consola()
 			print("Opción incorrecta.\n")
 	if opcion_editar >= 1 and opcion_editar <= 7:
-		LIMPIAR_CONSOLA()	
+		limpiar_consola()	
 
-def ELIMINAR_PERFIL(sesion_nueva):
+def eliminar_perfil(sesion_nueva):
 	print("Desea eliminar su perfil?")
 	print("\t1. Si")
 	print("\t0. No\n")
 	opcion_eliminar = int(input("Selecciona la opción: "))
-	LIMPIAR_CONSOLA()
+	limpiar_consola()
 
 
 	match opcion_eliminar:
@@ -253,13 +253,13 @@ def ELIMINAR_PERFIL(sesion_nueva):
 			sesion_nueva = -1
 			
 		case 0:
-			LIMPIAR_CONSOLA()
+			limpiar_consola()
 		case _: 
-			LIMPIAR_CONSOLA()
+			limpiar_consola()
 			print("Opción incorrecta.\n")
 	return sesion_nueva
 
-def PEDIR_NOMBRE_O_ID():
+def pedir_nombre_o_id():
 	opcion_reportar = ''
 	while(opcion_reportar != 'a' and opcion_reportar != 'b'):
 		id_reportado = -1
@@ -279,18 +279,18 @@ def PEDIR_NOMBRE_O_ID():
 			case _:
 				print("\nOpcion incorrecta\n\n")
 	return int(id_reportado)
-def REPORTAR(cant):
+def reportar(cant):
 	id_reportante = sesion
-	id_reportado = PEDIR_NOMBRE_O_ID()
+	id_reportado = pedir_nombre_o_id()
 	if(id_reportado == -1):
-		LIMPIAR_CONSOLA()
+		limpiar_consola()
 		print("Usuario no encontrado\n")
 	elif(id_reportante == id_reportado):
-		LIMPIAR_CONSOLA()
+		limpiar_consola()
 		print("No te puedes reportar a ti mismo\n")
 	else:
 		motivo = input("Ingrese el motivo de su reporte: ")
-		LIMPIAR_CONSOLA()
+		limpiar_consola()
 		if (cant < len(reportes)):
 			print("Reporte enviado\n")
 			reportes[cant] = [id_reportante,id_reportado,motivo,'0']
@@ -300,17 +300,17 @@ def REPORTAR(cant):
 	return cant
 
 # FUNCIONES MODERADOR
-def DESACTIVAR_USUARIO():
-	desactivar_usuario = input("Ingrese el nombre de usuario que desea desactivar: ").lower()
+def desactivar_usuario():
+	desactivar_usuario_v = input("Ingrese el nombre de usuario que desea desactivar: ").lower()
 	cartel = "No se encontro el nombre del usuario que se queria desactivar\n"
 
 	for n in range(cant_estudiantes):
-		if (desactivar_usuario == estudiantes[n][2].lower()):
+		if (desactivar_usuario_v == estudiantes[n][2].lower()):
 			print("Desea eliminar su perfil?")
 			print("\t1. Si")
 			print("\t0. No\n")
 			opcion_desactivar = int(input("Selecciona la opción: "))
-			LIMPIAR_CONSOLA()
+			limpiar_consola()
 
 			match opcion_desactivar:
 				case 1:
@@ -320,12 +320,12 @@ def DESACTIVAR_USUARIO():
 				case 0:
 					cartel = ""
 				case _: 
-					LIMPIAR_CONSOLA()
+					limpiar_consola()
 					print("Opción incorrecta.\n")
 
 	print(cartel)
 
-def VER_REPORTES():
+def ver_reportes():
 	sin_nuevos_reportes = True
 	for i in range(cant_reportes):
 		id_reportante = int(reportes[i][0])
@@ -356,7 +356,7 @@ def VER_REPORTES():
 		print("No hay reportes por mostrar.\n")
 
 # OTRAS FUNCIONES
-def CALCULAR_EDAD(nacimiento):
+def calcular_edad(nacimiento):
 	ano_actual = datetime.now().year
 	mes_actual = datetime.now().month
 	dia_actual = datetime.now().day
@@ -372,7 +372,7 @@ def CALCULAR_EDAD(nacimiento):
 		edad = edad - 1
 	return edad
 
-def REPORTES_ESTADISTICOS():
+def reportes_estadisticos():
 	match = 0
 	likes_dados_no_recibidos = 0
 	likes_recibidos_no_dados = 0
@@ -396,7 +396,7 @@ def REPORTES_ESTADISTICOS():
 	print("Likes recibidos y no dados:", likes_recibidos_no_dados,"\n")
 
 # BONUS TRACKS
-def RULETA_AFINIDAD():
+def ruleta_afinidad():
 	porcentaje_total = -1 
 	while(porcentaje_total != 100):
 		porcentaje1 = int(input("Porcentaje de afinidad con la persona A: "))
@@ -405,12 +405,12 @@ def RULETA_AFINIDAD():
 		porcentaje_total = porcentaje1 + porcentaje2 + porcentaje3
 		
 		if(porcentaje_total != 100):
-			LIMPIAR_CONSOLA()
+			limpiar_consola()
 			print("Los porcentajes no suman 100!!! Ingreselos nuevamente. \n")
 	
 	random = randint(0, 99)
 	
-	LIMPIAR_CONSOLA()
+	limpiar_consola()
 
 	if(random < porcentaje1):
 		print("Salió la persona A!!!\n")
@@ -419,7 +419,7 @@ def RULETA_AFINIDAD():
 	else: 
 		print("Salió la persona C!!!\n")
 
-def MENU_BONUS21():
+def menu_bonus21():
 	print("MENU BONUS 2-1")
 	print("Probar con...")
 	print("\t1. Array random de longitud definida")
@@ -428,7 +428,7 @@ def MENU_BONUS21():
 	print("\t0. Salir \n")
 
 	return int(input("Seleccione la opcion: "))
-def SORT(array):
+def sort(array):
 	for i in range(len(array)):
 		min_idx = i
 		for j in range(i+1, len(array)):
@@ -436,7 +436,7 @@ def SORT(array):
 				min_idx = j
 		
 		array[i], array[min_idx] = array[min_idx], array[i]
-def HUECOS(array):
+def huecos(array):
 	cant_huecos = 0
 
 	for i in range(len(array)-1):
@@ -444,20 +444,20 @@ def HUECOS(array):
 			cant_huecos += 1
 
 	return cant_huecos
-def EDADES():
+def edades():
 	opcion_bonus21 = -1
 	while(opcion_bonus21 != 0):
-		opcion_bonus21 = MENU_BONUS21()
-		LIMPIAR_CONSOLA()
+		opcion_bonus21 = menu_bonus21()
+		limpiar_consola()
 		match opcion_bonus21:
 			case 1:
 				cant_estudiantes_bonus = int(input("Cantidad de estudiantes que quiere tener: "))
 				estudiantes_bonus = [randint(10, 40) for _ in range(cant_estudiantes_bonus)] # Edades entre los 10 y 40 años
 				
 				print("El array de longitud ", cant_estudiantes_bonus, "random es ", estudiantes_bonus,"\n")
-				SORT(estudiantes_bonus)
+				sort(estudiantes_bonus)
 				print("El array ordenado sería ", estudiantes_bonus)
-				print("Hay ", HUECOS(estudiantes_bonus)," huecos en total.\n\n")
+				print("Hay ", huecos(estudiantes_bonus)," huecos en total.\n\n")
 			
 			case 2:
 				estu_b1 = [11,14,9,5,7,15]
@@ -466,22 +466,22 @@ def EDADES():
 
 				print("Ejemplo inventado:\n")
 				print("\tEl array de ejemplo es ",estu_b1, "\n")
-				SORT(estu_b1)
+				sort(estu_b1)
 				print("\tEl array ordenado queda ", estu_b1)
-				print("\tHay ", HUECOS(estu_b1), " huecos en total.\n\n")
+				print("\tHay ", huecos(estu_b1), " huecos en total.\n\n")
 
 				print("Ejemplos del TP:\n")
 				print("\tPrimer ejemplo:")
 				print("\t\tEl array de ejemplo es ",estu_b2, "\n")
-				SORT(estu_b2)
+				sort(estu_b2)
 				print("\t\tEl array ordenado queda ", estu_b2)
-				print("\t\tHay ", HUECOS(estu_b2), " huecos en total.\n")
+				print("\t\tHay ", huecos(estu_b2), " huecos en total.\n")
 
 				print("\tSegundo ejemplo:")
 				print("\t\tEl array de ejemplo es ",estu_b3, "\n")
-				SORT(estu_b3)
+				sort(estu_b3)
 				print("\t\tEl array ordenado queda ", estu_b3)
-				print("\t\tHay ", HUECOS(estu_b3), " huecos en total.\n\n")
+				print("\t\tHay ", huecos(estu_b3), " huecos en total.\n\n")
 
 			case 3:
 				cant_estudiantes_bonus = int(input("Cantidad de estudiantes que quiere tener: "))
@@ -490,20 +490,20 @@ def EDADES():
 				for i in range(cant_estudiantes_bonus):
 					estu_bonus_man[i] = int(input(""))
 
-				LIMPIAR_CONSOLA()
+				limpiar_consola()
 
 				print("El array quedaría así ", estu_bonus_man, "\n")
-				SORT(estu_bonus_man)
+				sort(estu_bonus_man)
 				print("El array ordenado queda ", estu_bonus_man)
-				print("Hay ", HUECOS(estu_bonus_man), " huecos en total.\n\n")
+				print("Hay ", huecos(estu_bonus_man), " huecos en total.\n\n")
 			
 			case 0:
-				LIMPIAR_CONSOLA() #volver
+				limpiar_consola() #volver
 			
 			case _:
 				print("Opción incorrecta.\n")
 
-def MATCHEOS_COMBINADOS(cant):
+def matcheos_combinados(cant):
 	""" Forma alternativa sin formula (fuerza bruta)
 	matcheos_posibles = 0
 	for i in range(cant):
@@ -525,21 +525,21 @@ admins[0][0] = "b"; admins[0][1] = "1"
 cant_admins = 1
 # Para probar más rápido un mail válido de moderador es b y su contraseña 1
 
-likes = LIKES_AUTO()
+likes = likes_auto()
 
 reportes = [[""]*4 for n in range(10)] # id_reportante | id_reportado | motivo | estado
 cant_reportes = 0
 
 opcion_inicio = -1
-LIMPIAR_CONSOLA()
+limpiar_consola()
 while(opcion_inicio != 0):
 
 	sesion = -1
 	sesion_adm = -1
 	opcion_inicio = -1
 	while(opcion_inicio != 0 and opcion_inicio != 1):
-		opcion_inicio = MENU_INICIO()
-		LIMPIAR_CONSOLA()
+		opcion_inicio = menu_inicio()
+		limpiar_consola()
 		match opcion_inicio:
 			case 1:
 				if(cant_estudiantes < 4):
@@ -547,16 +547,16 @@ while(opcion_inicio != 0):
 				elif(cant_admins < 1):
 					print("No hay la cantidad de administradores necesarios para iniciar el programa, se necesita al menos uno.\n")
 				else:
-					sesion, sesion_adm = LOGIN()
+					sesion, sesion_adm = login()
 			case 2:
-				cant_estudiantes = REGISTRO(cant_estudiantes)
+				cant_estudiantes = registro(cant_estudiantes)
 
 			case 11:
-				RULETA_AFINIDAD()
+				ruleta_afinidad()
 			case 21:
-				EDADES()
+				edades()
 			case 22:
-				MATCHEOS_COMBINADOS(cant_estudiantes)
+				matcheos_combinados(cant_estudiantes)
 
 			case 0:
 				print("Adios!")
@@ -567,61 +567,61 @@ while(opcion_inicio != 0):
 	opcion = -1 # Porque tiene que ser distinto de 0 para entrar al while
 	while(sesion > -1 and opcion != 0):
 
-		opcion = MENU_PRINCIPAL_ESTUDIANTE(sesion,estudiantes[sesion][2])
-		LIMPIAR_CONSOLA()
+		opcion = menu_principal_estudiante(sesion,estudiantes[sesion][2])
+		limpiar_consola()
 		match opcion:
 			case 1:
 				opcion_perfil = ''
 				while(opcion_perfil != 'c' and sesion != -1):
-					opcion_perfil = MENU_GESTION_PERFIL()
-					LIMPIAR_CONSOLA()
+					opcion_perfil = menu_gestion_perfil()
+					limpiar_consola()
 					match opcion_perfil:
 						case 'a':
-							EDITAR_DATOS() 
+							editar_datos() 
 
 						case 'b':
-							sesion = ELIMINAR_PERFIL(sesion)
+							sesion = eliminar_perfil(sesion)
 
 						case 'c':
-							LIMPIAR_CONSOLA() #volver
+							limpiar_consola() #volver
 						case _: 
 							print("Opción incorrecta.\n")
 
 			case 2:
 				opcion_candidatos = ''
 				while(opcion_candidatos != 'c'):
-					opcion_candidatos = MENU_GESTION_CANDIDATOS()
-					LIMPIAR_CONSOLA()
+					opcion_candidatos = menu_gestion_candidatos()
+					limpiar_consola()
 					match opcion_candidatos:
 						case 'a':
-							MOSTRAR_DATOS_ESTUDIANTES()
-							AGREGAR_MATCHEO()
+							mostrar_datos_estudiantes()
+							agregar_matcheo()
 
 						case 'b':
-							cant_reportes = REPORTAR(cant_reportes)
+							cant_reportes = reportar(cant_reportes)
 							
 						case 'c':
-							LIMPIAR_CONSOLA() #volver							
+							limpiar_consola() #volver							
 						case _: 
 							print("Opción incorrecta.\n")	
 
 			case 3:
 				opcion_matcheo = ''
 				while(opcion_matcheo != 'c'):	
-					opcion_matcheo = MENU_MATCHEOS()
-					LIMPIAR_CONSOLA()
+					opcion_matcheo = menu_matcheos()
+					limpiar_consola()
 					match opcion_matcheo:
 						case 'a':
 							print("Ver Matcheos aún no realizado.\n") # VER MATCHEOS
 						case 'b':
 							print("Eliminar un Matcheo aún no realizado.\n") # ELIMINAR UN MATCHEO
 						case 'c':
-							LIMPIAR_CONSOLA() #volver
+							limpiar_consola() #volver
 						case _:
 							print("Opción incorrecta.\n")		
 
 			case 4:
-				REPORTES_ESTADISTICOS()
+				reportes_estadisticos()
 				
 			case 0:
 				print("\nSesión finalizada.\n")
@@ -630,34 +630,34 @@ while(opcion_inicio != 0):
 
 	while(sesion_adm > -1 and opcion != 0):
 
-		opcion = MENU_PRINCIPAL_MODERADOR(sesion_adm)
-		LIMPIAR_CONSOLA()
+		opcion = menu_principal_moderador(sesion_adm)
+		limpiar_consola()
 		match opcion:
 			case 1:
 				opcion_gest_usuarios = ''
 				while(opcion_gest_usuarios != 'b'):
-					opcion_gest_usuarios = MENU_GESTION_USUARIOS()
-					LIMPIAR_CONSOLA()
+					opcion_gest_usuarios = menu_gestion_usuarios()
+					limpiar_consola()
 					match opcion_gest_usuarios:
 						case 'a':
-							DESACTIVAR_USUARIO()
+							desactivar_usuario()
 
 						case 'b':
-							LIMPIAR_CONSOLA() #volver
+							limpiar_consola() #volver
 						case _:
 							print("Opción incorrecta.\n")
 
 			case 2:
 				opcion_gest_reportes = ''
 				while(opcion_gest_reportes != 'b'):
-					opcion_gest_reportes = MENU_GESTION_REPORTES()
-					LIMPIAR_CONSOLA()
+					opcion_gest_reportes = menu_gestion_reportes()
+					limpiar_consola()
 					match opcion_gest_reportes:
 						case 'a':
-							VER_REPORTES()
+							ver_reportes()
 
 						case 'b':
-							LIMPIAR_CONSOLA() #volver
+							limpiar_consola() #volver
 						case _:
 							print("Opción incorrecta.\n")
 
