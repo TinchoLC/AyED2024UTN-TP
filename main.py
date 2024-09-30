@@ -31,7 +31,8 @@ def menuInicio():
 	print("\t22.Bonus Track 2.2 (Matcheos combinados)")
 	print("\t0. Salir \n")
 
-	return int(input("Seleccione la opcion: "))
+	op = int(input("Seleccione la opcion: "))
+	return op
 
 def login():
 	limpiarConsola()
@@ -114,7 +115,8 @@ def menuPrincipalEstudiante(id, nombre):
 	print("\t4.  Reportes estadísticos")
 	print("\t0.  Salir \n")
 
-	return int(input("Seleccione la opcion: "))
+	op = int(input("Seleccione la opcion: "))
+	return op
 
 def menuGestionPerfil():
 	print("Menu de Gestion de Perfil")
@@ -122,7 +124,8 @@ def menuGestionPerfil():
 	print("\tb. Eliminar mi perfil")
 	print("\tc. Volver\n")
 
-	return input("Seleccione la opcion: ")
+	op = int(input("Seleccione la opcion: "))
+	return op
 
 def menuGestionCandidatos():
 	print("Menu de gestion de candidatos")
@@ -130,7 +133,8 @@ def menuGestionCandidatos():
 	print("\tb. Reportar un candidato")
 	print("\tc. Volver\n")
 
-	return input("Seleccione la opcion: ")
+	op = int(input("Seleccione la opcion: "))
+	return op
 
 def menuMatcheos():
 	print("Menu de gestion de candidatos")
@@ -139,7 +143,8 @@ def menuMatcheos():
 	print("\tc. Volver\n")
 
 	print("En construcción...\nNinguna opción es funcional\n")
-	return input("Seleccione la opcion: ")
+	op = int(input("Seleccione la opcion: "))
+	return op
 
 # MENUS MODERADOR
 def menuPrincipalModerador(id):
@@ -148,22 +153,25 @@ def menuPrincipalModerador(id):
 	print("\t2. Gestionar Reportes")
 	print("\t0. Salir \n")
 
-	return int(input("Seleccione la opcion: "))
+	op = int(input("Seleccione la opcion: "))
+	return op
 
 def menuGestionUsuarios():
 	print("Menu de Gestion de Usuarios")
 	print("\ta. Desactivar usuario")
 	print("\tb. Volver\n")
 
-	return input("Seleccione la opcion: ")
+	op = int(input("Seleccione la opcion: "))
+	return op
 
 def menuGestionReportes():
 	print("Menu de Gestion de Reportes")
 	print("\ta. Ver reportes")
 	print("\tb. Volver\n")
 
-	return input("Seleccione la opcion: ")
-
+	op = int(input("Seleccione la opcion: "))
+	return op
+	
 # FUNCIONES ESTUDIANTE
 def ingresarNacimiento():
     fecha = input("Formato (año-mes-dia)\nxxxx-xx-xx\nIngrese la fecha de nacimiento: ")
@@ -427,7 +435,9 @@ def menuBonus21():
 	print("\t3. Array que ingrese")
 	print("\t0. Salir \n")
 
-	return int(input("Seleccione la opcion: "))
+	op = int(input("Seleccione la opcion: "))
+	return op
+	
 def sort(array):
 	for i in range(len(array)):
 		min_idx = i
