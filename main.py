@@ -5,6 +5,62 @@ from datetime import datetime
 from random   import randint
 from getpass  import getpass
 import os
+import os.path
+import pickle
+import io
+arcest_fisico = "estudiantes.dat"
+arcmod_fisico = "moderadores.dat"
+arcadm_fisico = "administradores.dat"
+
+class estudiante:
+	def __init__(self):
+		self.id = 0
+		self.email = ""
+		self.contrasena = ""
+		self.nombre = ""
+		self.nacimiento = ""
+		self.hobbies = ""
+		self.bio = ""
+		self.sexo = ""
+		self.estado = 1
+
+
+reg = estudiante()
+
+def crearArchivos():
+	if not os.path.exists(arcest_fisico):
+		temporal = open(arcest_fisico, "w+b")
+		temporal.close()
+	if not os.path.exists(arcmod_fisico):
+		temporal = open(arcmod_fisico, "w+b")
+		temporal.close()
+	if not os.path.exists(arcadm_fisico):
+		temporal = open(arcadm_fisico, "w+b")
+		temporal.close()
+
+'''
+def cargarArchivo(xx):
+	reg.id = xx
+	reg.email = "a"
+	reg.contrasena = "1"
+	reg.nombre = "Julian"
+	reg.nacimiento = "2006-01-07"
+	reg.hobbies = "pescar, nadar"
+	arcest_logico = open(arcest_fisico, "r+b")
+	pickle.dump(reg, arcest_logico)
+	arcest_logico.flush()
+	arcest_logico.close()
+
+def leerArchivo():
+	arcest_logico = open(arcest_fisico, "r+b")
+	X = os.path.getsize(arcest_fisico) 
+	while (arcest_logico.tell() < X):
+		reg = pickle.load(arcest_logico)
+		print (reg.id)
+		print (reg.email)
+		print (reg.contrasena)
+	arcest_logico.close()
+'''
 
 # BASICO
 def limpiarConsola():
@@ -523,12 +579,16 @@ def matcheosCombinados(cant):
 	matcheos_posibles = cant * (cant-1) / 2
 	print("La cantidad de matcheos posibles con la cantidad actual de estudiantes ({}) es de:".format(cant), int(matcheos_posibles),"\n")
 
+crearArchivos()
+
 estudiantes = [[""]*8 for n in range(8)] # email | contrasena | nombre | nacimiento | hobbies | bio | sexo | estado
 estudiantes[0][0] = "a"; estudiantes[0][1] = "1"; estudiantes[0][2] = "Julian"; estudiantes[0][3] = "2006-01-07"; estudiantes[0][4] = "pescar, nadar"; estudiantes[0][7] = 1;
 estudiantes[1][0] = "estudiante2@ayed.com"; estudiantes[1][1] = "333444"; estudiantes[1][2] = "Pedro"; estudiantes[1][3] = "2005-04-10"; estudiantes[1][4] = "comer, jugar"; estudiantes[1][7] = 1;
 estudiantes[2][0] = "estudiante3@ayed.com"; estudiantes[2][1] = "555666"; estudiantes[2][2] = "Ana"; estudiantes[2][3] = "2004-10-20"; estudiantes[2][4] = "leer sobre jojos"; estudiantes[2][7] = 1;
 cant_estudiantes = 3
 # Para probar más rápido un mail de estudiante válido es a y su contraseña es 1
+
+leerArchivo()
 
 admins = [[""]*2 for n in range(4)] # email | contrasena
 admins[0][0] = "b"; admins[0][1] = "1"
