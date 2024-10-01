@@ -40,13 +40,13 @@ class estudiante:
 
 class moderador:
 	def __init__(self):
-		self.id = 0
+		self.id = -1
 		self.email = ""
 		self.contrasena = ""
 
 class administrador:
 	def __init__(self):
-		self.id = 0
+		self.id = -1
 		self.email = ""
 		self.contrasena = ""
 
@@ -158,6 +158,11 @@ def likesAuto():
 
 	return likes
 
+def mostrarDato(string):
+	while string[len(string)-1] == " ":
+		string = string[:len(string)-1]
+	return string
+
 # INICIO
 def menuInicio():
 	print("INICIO")
@@ -185,25 +190,26 @@ def auxLogin(tipo):
 
 	while(intentos_restantes > 0):
 		intentos_restantes = intentos_restantes - 1
-		email = input("Ingrese su email: ").lower() # El .lower es para forzar minusculas
-		contrasena = getpass("Ingrese su contraseña: ")
+		email = input("Ingrese su email: ").lower().ljust(45) # El .lower es para forzar minusculas
+		contrasena = getpass("Ingrese su contraseña: ").ljust(30)
 
 		limpiarConsola()
 
 		ar_fisico, ar_logico = abrirPorTipo(tipo)
 		longitud_archivo = os.path.getsize(ar_fisico) 
-		while(ar_logico.tell() < longitud_archivo):
-			reg = pickle.load(logico)
-
+		encontrado = False
+		while(ar_logico.tell() < longitud_archivo and not encontrado):
+			reg = pickle.load(ar_logico)
 			if(email == reg.email and contrasena == reg.contrasena):
 				intentos_restantes = 0
+				encontrado = True
 				if(tipo != 1):
 					print("Felicidades",reg.id,"ingresaste!\n")
 				elif(not reg.estado): 
 					print("Su cuenta ha sido deshabilitada\n")
 					reg.id = -1
 				else:
-					print("Felicidades",reg.nombre,"ingresaste!\n")
+					print("Felicidades",mostrarDato(reg.nombre),"ingresaste!\n")
 			else:
 				reg.id = -1
 
@@ -236,10 +242,10 @@ def login():
 def registro(tipo): # tipo 1 estudiante # tipo 2 moderador (usar en menu de admin) #
 	limpiarConsola()
 	print("REGISTRO\n")
-	email = input("Ingrese un email: ")
+	email = input("Ingrese un email: ").ljust(45)
 	nombre = ""
 	if(tipo == 1):
-		nombre = input("Ingrese un nombre: ")
+		nombre = input("Ingrese un nombre: ").ljust(30)
 
 	limpiarConsola()
 	ar_fisico, ar_logico = abrirPorTipo(tipo)
@@ -259,13 +265,13 @@ def registro(tipo): # tipo 1 estudiante # tipo 2 moderador (usar en menu de admi
 		print("El nombre ya está siendo utilizado o no es válido\n")
 	else:
 		reg.id = reg.id + 1
-		reg.email = email.ljust(45)
+		reg.email = email
 		reg.contrasena = input("Ingrese la contraseña: ").ljust(30)
 		if(tipo == 1):
-			reg.nombre = nombre.ljust(30)
+			reg.nombre = nombre
 			reg.nacimiento = ingresarNacimiento().ljust(10)
 			reg.estado = 1
-			print(nombre, "registrado!\n")
+			print(mostrarDato(nombre), "registrado!\n")
 		else:
 			print("Moderador de id:",reg.id,"registrado!\n")
 
@@ -275,8 +281,8 @@ def registro(tipo): # tipo 1 estudiante # tipo 2 moderador (usar en menu de admi
 	ar_logico.close()
 
 # MENUS ESTUDIANTE
-def menuPrincipalEstudiante(id, nombre):
-	print("Menu Principal del estudiante",nombre,"- con id",id)
+def menuPrincipalEstudiante(regE):
+	print("Menu Principal del estudiante",mostrarDato(regE.nombre),"- con id",regE.id)
 	print("\t1.  Gestionar mi perfil")
 	print("\t2.  Gestionár candidatos")
 	print("\t3.  Matcheos")
@@ -292,7 +298,7 @@ def menuGestionPerfil():
 	print("\tb. Eliminar mi perfil")
 	print("\tc. Volver\n")
 
-	op = int(input("Seleccione la opcion: "))
+	op = input("Seleccione la opcion: ")
 	return op
 
 def menuGestionCandidatos():
@@ -425,44 +431,44 @@ def editarDatos():
 	limpiarConsola()
 	match opcion_editar:
 		case 1:
-			estudiantes[sesion][0] = input("Ingrese un nuevo email: ")			
+			reg.email = input("Ingrese un nuevo email: ")			
 		case 2:
-			estudiantes[sesion][1] = input("Ingrese un nuevo contraseña: ")
+			reg.contrasena = input("Ingrese un nuevo contraseña: ")
 		case 3:
-			estudiantes[sesion][2] = input("Ingrese un nuevo nombre: ")
+			reg.nombre = input("Ingrese un nuevo nombre: ")
 		case 4:
-			estudiantes[sesion][3] = ingresarNacimiento()	
+			reg.nacimiento = ingresarNacimiento()	
 		case 5:
-			estudiantes[sesion][4] = input("Ingrese un nuevo hobbie: ")
+			reg.hobbies = input("Ingrese un nuevo hobbie: ")
 		case 6:
-			estudiantes[sesion][5] = input("Ingrese una nueva biografia: ")
+			reg.bio = input("Ingrese una nueva biografia: ")
 		case 7:
-			estudiantes[sesion][6] = input("Ingrese un nuevo sexo: ")
+			reg.sexo = input("Ingrese un nuevo sexo: ")
 		case _: 
 			limpiarConsola()
 			print("Opción incorrecta.\n")
 	if opcion_editar >= 1 and opcion_editar <= 7:
 		limpiarConsola()	
 
-def eliminarPerfil(sesion_nueva):
+def eliminarPerfil():
+	ses = 1
 	print("Desea eliminar su perfil?")
 	print("\t1. Si")
 	print("\t0. No\n")
 	opcion_eliminar = int(input("Selecciona la opción: "))
 	limpiarConsola()
 
-
 	match opcion_eliminar:
 		case 1:
-			estudiantes[sesion][7] = 0 
-			sesion_nueva = -1
+			reg.estado = 0 
+			ses = 0
 			
 		case 0:
 			limpiarConsola()
 		case _: 
 			limpiarConsola()
 			print("Opción incorrecta.\n")
-	return sesion_nueva
+	return ses
 
 def pedirNombreID():
 	opcion_reportar = ''
@@ -743,7 +749,7 @@ while(opcion_inicio != 0):
 	opcion_inicio = -1
 	while(opcion_inicio != 0 and opcion_inicio != 1):
 		cant_estudiantes = cantRegistros(1)
-		input();print(cant_estudiantes);input();leerArchivo(1);input()
+
 		opcion_inicio = menuInicio()
 		limpiarConsola()
 		match opcion_inicio:
@@ -752,8 +758,10 @@ while(opcion_inicio != 0):
 					print("No hay la cantidad de estudiantes necesarios para iniciar el programa, se necesitan", 4 - cant_estudiantes, "más.\n")
 				elif(cant_mods < 1):
 					print("No hay la cantidad de moderadores necesarios para iniciar el programa, se necesita al menos uno.\n")
+				elif(cant_adm < 1):
+					print("No hay la cantidad de administradores necesarios para iniciar el programa, se necesita al menos uno.\n")	
 				else:
-					sesion, sesion_mod, tipo_sesion, reg_act = login()
+					sesion, sesion_mod, tipo_sesion, reg = login()
 
 			case 2:
 				registro(1)
@@ -774,12 +782,12 @@ while(opcion_inicio != 0):
 	opcion = -1 # Porque tiene que ser distinto de 0 para entrar al while
 	while(sesion > -1 and opcion != 0 and tipo_sesion == 1):
 
-		opcion = menuPrincipalEstudiante(sesion,estudiantes[sesion][2])
+		opcion = menuPrincipalEstudiante(reg)
 		limpiarConsola()
 		match opcion:
 			case 1:
 				opcion_perfil = ''
-				while(opcion_perfil != 'c' and sesion != -1):
+				while(opcion_perfil != 'c' and tipo_sesion == 1):
 					opcion_perfil = menuGestionPerfil()
 					limpiarConsola()
 					match opcion_perfil:
@@ -787,7 +795,7 @@ while(opcion_inicio != 0):
 							editarDatos() 
 
 						case 'b':
-							sesion = eliminarPerfil(sesion)
+							tipo_sesion = eliminarPerfil()
 
 						case 'c':
 							limpiarConsola() #volver
@@ -834,6 +842,8 @@ while(opcion_inicio != 0):
 				print("\nSesión finalizada.\n")
 			case _:
 				print("Opcion incorrecta")	
+
+	## ACA DUMPEAR
 
 	while(sesion_mod > -1 and opcion != 0 and tipo_sesion == 2):
 
