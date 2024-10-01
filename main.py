@@ -11,107 +11,47 @@ import io
 arcest_fisico = "estudiantes.dat"
 arcmod_fisico = "moderadores.dat"
 arcadm_fisico = "administradores.dat"
-
-estudiantes = [[""]*8 for n in range(8)] # email | contrasena | nombre | nacimiento | hobbies | bio | sexo | estado
-estudiantes[0][0] = "a"; estudiantes[0][1] = "1"; estudiantes[0][2] = "Julian"; estudiantes[0][3] = "2006-01-07"; estudiantes[0][4] = "pescar, nadar"; estudiantes[0][7] = 1;
-estudiantes[1][0] = "estudiante2@ayed.com"; estudiantes[1][1] = "333444"; estudiantes[1][2] = "Pedro"; estudiantes[1][3] = "2005-04-10"; estudiantes[1][4] = "comer, jugar"; estudiantes[1][7] = 1;
-estudiantes[2][0] = "estudiante3@ayed.com"; estudiantes[2][1] = "555666"; estudiantes[2][2] = "Ana"; estudiantes[2][3] = "2004-10-20"; estudiantes[2][4] = "leer sobre jojos"; estudiantes[2][7] = 1;
-# Para probar más rápido un mail de estudiante válido es a y su contraseña es 1
-
-mods = [[""]*2 for n in range(4)] # email | contrasena
-mods[0][0] = "b"; mods[0][1] = "1"
-# Para probar más rápido un mail válido de moderador es b y su contraseña 1
-
-
-reportes = [[""]*4 for n in range(10)] # id_reportante | id_reportado | motivo | estado
-cant_reportes = 0
+arclik_fisico = "likes.dat"
+arcrep_fisico = "reportes.dat"
 
 class estudiante:
 	def __init__(self):
 		self.id = -1
-		self.email = ""
-		self.contrasena = ""
-		self.nombre = ""
-		self.nacimiento = ""
-		self.hobbies = ""
-		self.bio = ""
-		self.sexo = ""
+		self.email = "".ljust(45)
+		self.contrasena = "".ljust(30)
+		self.nombre = "".ljust(30)
+		self.nacimiento = "".ljust(10)
+		self.hobbies = "".ljust(150)
+		self.bio = "".ljust(150)
+		self.sexo = "".ljust(10)
 		self.estado = 1
 
 class moderador:
 	def __init__(self):
 		self.id = -1
-		self.email = ""
-		self.contrasena = ""
+		self.email = "".ljust(45)
+		self.contrasena = "".ljust(30)
 
 class administrador:
 	def __init__(self):
 		self.id = -1
-		self.email = ""
-		self.contrasena = ""
+		self.email = "".ljust(45)
+		self.contrasena = "".ljust(30)
 
+class like:
+	def __init__(self):
+		self.id_remitente = -1
+		self.id_destinatario = -1
 
-if (True):	
-	regE_temp = estudiante()
-	def cargarE(idd, em,co,nom,nac,hob):
-		reg_temp = estudiante()
-		reg_temp.id = idd
-		reg_temp.email = em.ljust(45)
-		reg_temp.contrasena = co.ljust(30)
-		reg_temp.nombre = nom.ljust(30)
-		reg_temp.nacimiento = nac.ljust(10)
-		reg_temp.hobbies = hob.ljust(150)
-		ar_fisico = arcest_fisico
-		ar_logico = open(ar_fisico, "r+b")
-		longitud_archivo = os.path.getsize(ar_fisico)
-		ar_logico.seek(longitud_archivo, 0) 
-		pickle.dump(reg_temp, ar_logico)
-		ar_logico.flush()
-		ar_logico.close()
+class reporte:
+	def __init__(self):
+		self.id_reportante = -1
+		self.id_reportado = -1
+		self.motivo = "".ljust(150)
+		self.estado = 0
 
-	def cargarMo(idd, em,co):
-		reg_temp = moderador()
-		reg_temp.id = idd
-		reg_temp.email = em.ljust(45)
-		reg_temp.contrasena = co.ljust(30)
-		ar_fisico = arcmod_fisico
-		ar_logico = open(ar_fisico, "w+b")
-		longitud_archivo = os.path.getsize(ar_fisico)
-		ar_logico.seek(longitud_archivo, 0) 
-		pickle.dump(reg_temp, ar_logico)
-		ar_logico.flush()
-		ar_logico.close()
-
-	def cargarAd(idd, em,co):
-		reg_temp = administrador()
-		reg_temp.id = idd
-		reg_temp.email = em.ljust(45)
-		reg_temp.contrasena = co.ljust(30)
-		ar_fisico = arcadm_fisico
-		ar_logico = open(ar_fisico, "w+b")
-		longitud_archivo = os.path.getsize(ar_fisico)
-		ar_logico.seek(longitud_archivo, 0) 
-		pickle.dump(reg_temp, ar_logico)
-		ar_logico.flush()
-		ar_logico.close()
-
-	def leerArchivo(tipo):
-		ar_fisico, ar_logico = abrirPorTipo(tipo)
-		longitud_archivo = os.path.getsize(ar_fisico) 
-		while (ar_logico.tell() < longitud_archivo):
-			reg_temp = pickle.load(ar_logico)
-			print (reg_temp.id)
-			print (reg_temp.email)
-			print (reg_temp.contrasena)
-		ar_logico.close()
-
-	def cargaEstudiantes():
-		temporal = open(arcest_fisico, "w+b")
-		temporal.close()
-		for i in range(3):
-			cargarE(i,estudiantes[i][0],estudiantes[i][1],estudiantes[i][2],estudiantes[i][3],estudiantes[i][4])
-
-def abrirPorTipo(tipo):
+# BASICO-ARCHIVOS
+def abrirPorTipo(tipo): # 1 estudiante # 2 moderador # 3 administrador # 4 like # 5 reporte #
 	match tipo:
 		case 1:
 			fisico = arcest_fisico
@@ -119,6 +59,10 @@ def abrirPorTipo(tipo):
 			fisico = arcmod_fisico
 		case 3:
 			fisico = arcadm_fisico
+		case 4:
+			fisico = arclik_fisico
+		case 5:
+			fisico = arcrep_fisico
 			
 	logico = open(fisico, "r+b")
 	return fisico, logico
@@ -132,36 +76,120 @@ def cantRegistros(tipo):
 	cant_registros = longitud_archivo/longitud_registro
 	return int(cant_registros)
 
-# BASICO
+def likesAuto():
+	arclik_logico = open(arclik_fisico, "w+b")
+	
+	cant_estudiantes = cantRegistros(1)
+	for i in range(cant_estudiantes):
+		for j in range(cant_estudiantes):
+			if (i != j and randint(0, 99) < 60):
+				reg_like = like()
+				reg_like.id_remitente = i; reg_like.id_destinatario = j
+				pickle.dump(reg_like, arclik_logico)
+				arclik_logico.flush()
+
+	arclik_logico.close()
+
 def crearArchivos():
 	if not os.path.exists(arcest_fisico):
-		temporal = open(arcest_fisico, "w+b")
-		temporal.close()
+		ar_temporal = open(arcest_fisico, "w+b")
+		reg_temp = estudiante()
+
+		reg_temp.id = 0; reg_temp.email = "a".ljust(45); reg_temp.contrasena = "1".ljust(30)
+		reg_temp.nombre = "Julian".ljust(30); reg_temp.nacimiento = "2006-01-07".ljust(10)
+		reg_temp.hobbies = "pescar, nadar, papiroflexia".ljust(150)
+		pickle.dump(reg_temp, ar_temporal)
+		ar_temporal.flush()
+
+		reg_temp.id = 1; reg_temp.email = "estudiante2@ayed.com".ljust(45); reg_temp.contrasena = "333444".ljust(30)
+		reg_temp.nombre = "Pedro".ljust(30); reg_temp.nacimiento = "2005-04-10".ljust(10)
+		reg_temp.hobbies = "comer, jugar, ver jojos".ljust(150)
+		pickle.dump(reg_temp, ar_temporal)
+		ar_temporal.flush()
+
+		reg_temp.id = 2; reg_temp.email = "estudiante3@ayed.com".ljust(45); reg_temp.contrasena = "555666".ljust(30)
+		reg_temp.nombre = "Ana".ljust(30); reg_temp.nacimiento = "2004-10-20".ljust(10)
+		reg_temp.hobbies = "sonic, cocinar comida típica irlandesa".ljust(150)
+		pickle.dump(reg_temp, ar_temporal)
+		ar_temporal.flush()
+
+		ar_temporal.close()
 	if not os.path.exists(arcmod_fisico):
-		temporal = open(arcmod_fisico, "w+b")
-		temporal.close()
+		ar_temporal = open(arcmod_fisico, "w+b")
+
+		reg_temp.id = 0; reg_temp.email = "b".ljust(45); reg_temp.contrasena = "1".ljust(30)
+		pickle.dump(reg_temp, ar_temporal)
+		ar_temporal.flush()
+
+		ar_temporal.close()
 	if not os.path.exists(arcadm_fisico):
-		temporal = open(arcadm_fisico, "w+b")
+		ar_temporal = open(arcadm_fisico, "w+b")
+		
+		reg_temp.id = 0; reg_temp.email = "c".ljust(45); reg_temp.contrasena = "1".ljust(30)
+		pickle.dump(reg_temp, ar_temporal)
+		ar_temporal.flush()
+
+		ar_temporal.close()
+	if not os.path.exists(arclik_fisico):
+		likesAuto()
+	if not os.path.exists(arcrep_fisico):
+		temporal = open(arcrep_fisico, "w+b")
 		temporal.close()
 
+def actualizarRegistro(regA,tipo):
+	ar_fisico, ar_logico = abrirPorTipo(tipo)
+	longitud_archivo = os.path.getsize(ar_fisico)
+
+	reg_temp = pickle.load(ar_logico)
+	longitud_registro = ar_logico.tell()
+	while (ar_logico.tell() < longitud_archivo and reg_temp.id != regA.id):
+		reg_temp = pickle.load(ar_logico)
+	ar_logico.seek(ar_logico.tell()-longitud_registro, 0) 
+	pickle.dump(regA, ar_logico)
+	ar_logico.flush()
+	ar_logico.close()
+	
+def mostrarDato(string):
+	while string[len(string)-1] == " ":
+		string = string[:len(string)-1]
+	return string
+
+# BASICO
 def limpiarConsola():
 	if os.name == 'nt':  # Windows
 		os.system('cls')
 	else:  # macOS y Linux
 		os.system('clear')
 
-def likesAuto():
-	likes = [[0]*8 for n in range(8)] #Aca se rellena al 100% con 0
-	for i in range(8):
-		for j in range (8):
-			likes[i][j] = randint(0,1) 
+def pedirNombreID():
+	opcion_usu = ''
+	while(opcion_usu != 'a' and opcion_usu != 'b'):
+		id_usuario = -1
+		opcion_usu = input("Seleccione que ingresara del usuario\n\ta) Nombre\n\tb) ID\nOpcion: ")
+		ar_fisico, ar_logico = abrirPorTipo(1)
+		longitud_archivo = os.path.getsize(ar_fisico) 
 
-	return likes
+		match opcion_usu:
+			case 'a':
+				nombre_usuario = input("\nIngrese el nombre del usuario: ").lower().ljust(30)
+				
+				while (ar_logico.tell() < longitud_archivo):
+					reg_temp = pickle.load(ar_logico)
+					if(nombre_usuario == reg_temp.nombre.lower()):
+						id_usuario = reg_temp.id
 
-def mostrarDato(string):
-	while string[len(string)-1] == " ":
-		string = string[:len(string)-1]
-	return string
+			case 'b':
+				id_posible_usuario = int(input("\nIngrese la id del usuario: "))
+				
+				while (ar_logico.tell() < longitud_archivo):
+					reg_temp = pickle.load(ar_logico)
+					if(id_posible_usuario == reg_temp.id):
+						id_usuario = reg_temp.id
+
+			case _:
+				print("\nOpcion incorrecta\n\n")
+	ar_logico.close()
+	return int(id_usuario)
 
 # INICIO
 def menuInicio():
@@ -176,16 +204,9 @@ def menuInicio():
 	op = int(input("Seleccione la opcion: "))
 	return op
 
-def menuLogin():
-	print("Loguearse como:")
-	print("\t\t1. Usuario")
-	print("\t\t2. Moderador")
-	print("\t\t3. Administrador")
-
-	op = int(input("Seleccione la opcion: "))
-	return op
-
-def auxLogin(tipo):
+def login():
+	limpiarConsola() 
+	
 	intentos_restantes = 3
 
 	while(intentos_restantes > 0):
@@ -195,50 +216,51 @@ def auxLogin(tipo):
 
 		limpiarConsola()
 
-		ar_fisico, ar_logico = abrirPorTipo(tipo)
-		longitud_archivo = os.path.getsize(ar_fisico) 
+		tipo_sesion = 0
 		encontrado = False
-		while(ar_logico.tell() < longitud_archivo and not encontrado):
-			reg = pickle.load(ar_logico)
-			if(email == reg.email and contrasena == reg.contrasena):
-				intentos_restantes = 0
-				encontrado = True
-				if(tipo != 1):
-					print("Felicidades",reg.id,"ingresaste!\n")
-				elif(not reg.estado): 
-					print("Su cuenta ha sido deshabilitada\n")
-					reg.id = -1
+		while(tipo_sesion < 3 and encontrado == False):
+			tipo_sesion = tipo_sesion + 1
+			ar_fisico, ar_logico = abrirPorTipo(tipo_sesion)
+			longitud_archivo = os.path.getsize(ar_fisico) 
+			
+			while(ar_logico.tell() < longitud_archivo and not encontrado):
+				reg = pickle.load(ar_logico)
+				if(email == reg.email and contrasena == reg.contrasena):
+					intentos_restantes = 0
+					encontrado = True
+					if(tipo_sesion != 1):
+						print("Felicidades",reg.id,"ingresaste!\n")
+					elif(reg.estado == 0): 
+						print("Su cuenta ha sido deshabilitada\n")
+						tipo_sesion = 0
+					else:
+						print("Felicidades",mostrarDato(reg.nombre),"ingresaste!\n")
 				else:
-					print("Felicidades",mostrarDato(reg.nombre),"ingresaste!\n")
-			else:
-				reg.id = -1
+					reg.id = -1
 
 		if(intentos_restantes > 0):
 			print("No ingresaste correctamente :(")
 			print("Te quedan ",intentos_restantes,"intentos.\n")
 
 	ar_logico.close()
-	return reg
-def login():
-	limpiarConsola() 
-	tipo_sesion = 0
-	sesion = -1
-	sesion_mod = -1
-	
-	opcion_login = menuLogin()
-	if(opcion_login == 1 or opcion_login == 2 or opcion_login == 3):
-		reg_act = auxLogin(opcion_login)
-		if(reg_act.id > -1):
-			tipo_sesion = opcion_login
-			if(opcion_login == 1):  # eliminar este
-				sesion = reg_act.id
-			elif(opcion_login == 2):
-				sesion_mod = reg_act.id
-		else:
-			input("Te quedaste sin intentos! Presiona Enter para continuar")
 
-	return sesion, sesion_mod, tipo_sesion, reg_act
+	if(reg.id == -1):
+		tipo_sesion = 0
+		input("Te quedaste sin intentos! Presiona Enter para continuar")
+		
+	return tipo_sesion, reg
 
+def emailRepetido(mail,arc):
+	art_fisico, art_logico = abrirPorTipo(arc)
+	longitudt_archivo = os.path.getsize(art_fisico) 
+
+	while(art_logico.tell() < longitudt_archivo):
+		regt = pickle.load(art_logico)
+		if(mail == regt.email):
+			mail = "novalido"
+
+	art_logico.close()
+	return mail
 def registro(tipo): # tipo 1 estudiante # tipo 2 moderador (usar en menu de admin) #
 	limpiarConsola()
 	print("REGISTRO\n")
@@ -248,8 +270,16 @@ def registro(tipo): # tipo 1 estudiante # tipo 2 moderador (usar en menu de admi
 		nombre = input("Ingrese un nombre: ").ljust(30)
 
 	limpiarConsola()
+
+	email = emailRepetido(email,3)
+	if(tipo == 1):
+		email = emailRepetido(email,2)
+	elif(tipo == 2):
+		email = emailRepetido(email,1)
+
 	ar_fisico, ar_logico = abrirPorTipo(tipo)
 	longitud_archivo = os.path.getsize(ar_fisico) 
+
 	while(ar_logico.tell() < longitud_archivo):
 		reg = pickle.load(ar_logico)
 		if(email == reg.email):
@@ -265,24 +295,27 @@ def registro(tipo): # tipo 1 estudiante # tipo 2 moderador (usar en menu de admi
 		print("El nombre ya está siendo utilizado o no es válido\n")
 	else:
 		reg.id = reg.id + 1
-		reg.email = email
+		reg.email = email.ljust(45)
 		reg.contrasena = input("Ingrese la contraseña: ").ljust(30)
 		if(tipo == 1):
-			reg.nombre = nombre
+			reg.nombre = nombre.ljust(30)
 			reg.nacimiento = ingresarNacimiento().ljust(10)
+			reg.hobbies = "".ljust(150)
+			reg.bio = "".ljust(150)
+			reg.sexo = "".ljust(10)
 			reg.estado = 1
 			print(mostrarDato(nombre), "registrado!\n")
 		else:
 			print("Moderador de id:",reg.id,"registrado!\n")
 
-	ar_logico.seek(longitud_archivo, 0) 
-	pickle.dump(reg, ar_logico)
-	ar_logico.flush()
-	ar_logico.close()
+		ar_logico.seek(longitud_archivo, 0) 
+		pickle.dump(reg, ar_logico)
+		ar_logico.flush()
+		ar_logico.close()
 
 # MENUS ESTUDIANTE
-def menuPrincipalEstudiante(regE):
-	print("Menu Principal del estudiante",mostrarDato(regE.nombre),"- con id",regE.id)
+def menuPrincipalEstudiante():
+	print("Menu Principal del estudiante",mostrarDato(reg.nombre),"- con id",reg.id)
 	print("\t1.  Gestionar mi perfil")
 	print("\t2.  Gestionár candidatos")
 	print("\t3.  Matcheos")
@@ -307,7 +340,7 @@ def menuGestionCandidatos():
 	print("\tb. Reportar un candidato")
 	print("\tc. Volver\n")
 
-	op = int(input("Seleccione la opcion: "))
+	op = input("Seleccione la opcion: ")
 	return op
 
 def menuMatcheos():
@@ -321,8 +354,8 @@ def menuMatcheos():
 	return op
 
 # MENUS MODERADOR
-def menuPrincipalModerador(id):
-	print("Menu Principal del moderador con id",id)
+def menuPrincipalModerador():
+	print("Menu Principal del moderador con id",reg.id)
 	print("\t1. Gestionar usuarios")
 	print("\t2. Gestionar Reportes")
 	print("\t0. Salir \n")
@@ -335,7 +368,7 @@ def menuModGestionUsuarios():
 	print("\ta. Desactivar usuario")
 	print("\tb. Volver\n")
 
-	op = int(input("Seleccione la opcion: "))
+	op = input("Seleccione la opcion: ")
 	return op
 
 def menuModGestionReportes():
@@ -343,12 +376,12 @@ def menuModGestionReportes():
 	print("\ta. Ver reportes")
 	print("\tb. Volver\n")
 
-	op = int(input("Seleccione la opcion: "))
+	op = input("Seleccione la opcion: ")
 	return op
 	
 # MENUS ADMINISTRADOR
-def menuPrincipalModerador(id):
-	print("Menu Principal del administrador con id",id)
+def menuPrincipalAdministrador():
+	print("Menu Principal del administrador con id",reg.id)
 	print("\t1. Gestionar usuarios")
 	print("\t2. Gestionar Reportes")
 	print("\t3. Reportes estadisticos")
@@ -385,37 +418,64 @@ def ingresarNacimiento():
     return fecha
 
 def mostrarDatosEstudiantes():
-	for n in range(cant_estudiantes):
-		if(sesion != n and estudiantes[n][7] == 1):
-			print("Estudiante",n)
-			print("Nombre:", estudiantes[n][2])
-			print("Fecha de Nacimiento:", estudiantes[n][3])
-			print("Edad:", calcularEdad(estudiantes[n][3]))
-			print("Biografia:", estudiantes[n][5])
-			print("Hobbies: {} \n" .format(estudiantes[n][4]))
-
+	ar_fisico, ar_logico = abrirPorTipo(1)
+	longitud_archivo = os.path.getsize(ar_fisico) 
+	while (ar_logico.tell() < longitud_archivo):
+		reg_temp = pickle.load(ar_logico)
+		if(reg_temp.id != reg.id):
+			print("ID de estudiante: ",reg_temp.id)
+			print("Nombre:", reg_temp.nombre)
+			print("Fecha de Nacimiento:", reg_temp.nacimiento)
+			print("Edad:", calcularEdad(reg_temp.nacimiento))
+			print("Biografia:", reg_temp.bio)
+			print("Hobbies: {} \n" .format(reg_temp.hobbies))
+	ar_logico.close()
+			
 def nombreCorrecto(nombre):
-	correcto = -1;
-	est = 0;
-	while(correcto == -1 and est < cant_estudiantes):
-		if(nombre == estudiantes[est][2].lower()):
-			if(est != sesion):
-				correcto = est
-			else:
-				print("No puedes seleccionarte a ti mismo!\n")
-				est = cant_estudiantes
-		est = est + 1
-	return correcto;
-def agregarMatcheo():
-	me_gusta = input("\nIngrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
-	limpiarConsola()
+	id_nombre_buscado = -1;
 
-	me_gusta_id = nombreCorrecto(me_gusta.lower())
-	if(me_gusta_id > -1):	
-		likes[sesion][me_gusta_id] = 1
-		print("Seleccionaste a {}, espero te corresponda!\n".format(me_gusta))
+	ar_fisico, ar_logico = abrirPorTipo(1)
+	longitud_archivo = os.path.getsize(ar_fisico) 
+	while (ar_logico.tell() < longitud_archivo):
+		reg_temp = pickle.load(ar_logico)
+		if(nombre == reg_temp.nombre.lower()):
+			if(reg.id == reg_temp.id):
+				print("No puedes seleccionarte a ti mismo!\n")
+			else:
+				id_nombre_buscado = reg_temp.id
+	
+	ar_logico.close()
+	return id_nombre_buscado
+def agregarMatcheo():
+	print("Desea dar like a un usuario?\n\t1. Si\n\t0. No\n")
+	opcion_like = int(input("Selecciona la opción: "))
+	
+	if(opcion_like==1):
+		me_gusta = input("\nIngrese el nombre de la persona con la que le gustaria hacer un matcheo: ")
+		limpiarConsola()
+
+		me_gusta_id = nombreCorrecto(me_gusta.lower().ljust(30))
+		if(me_gusta_id > -1):	
+			ar_fisico, ar_logico = abrirPorTipo(4)
+			longitud_archivo = os.path.getsize(ar_fisico) 
+			like_repetido = False
+
+			while (ar_logico.tell() < longitud_archivo and not like_repetido):
+				like_temp = pickle.load(ar_logico)
+				if(like_temp.id_remitente == reg.id and like_temp.id_destinatario == me_gusta_id):
+					print("Ya le has dado like a", me_gusta)
+					like_repetido = True
+			if not like_repetido:
+				like_n = like(); like_n.id_remitente = reg.id; like_n.id_destinatario = me_gusta_id
+				ar_logico.seek(longitud_archivo, 0)
+				pickle.dump(like_n, ar_logico)
+				ar_logico.flush()
+				ar_logico.close()
+				print("Seleccionaste a {}, espero te corresponda!\n".format(me_gusta))	
+		else:
+			print("El nombre ingresado no es correcto\n")
 	else:
-		print("El nombre ingresado no es correcto\n")
+		limpiarConsola()
 
 def editarDatos():
 	print("¿ Que desea editar ?")
@@ -431,27 +491,28 @@ def editarDatos():
 	limpiarConsola()
 	match opcion_editar:
 		case 1:
-			reg.email = input("Ingrese un nuevo email: ")			
+			reg.email = input("Ingrese un nuevo email: ").ljust(45)			
 		case 2:
-			reg.contrasena = input("Ingrese un nuevo contraseña: ")
+			reg.contrasena = input("Ingrese un nuevo contraseña: ").ljust(30)
 		case 3:
-			reg.nombre = input("Ingrese un nuevo nombre: ")
+			reg.nombre = input("Ingrese un nuevo nombre: ").ljust(30)
 		case 4:
-			reg.nacimiento = ingresarNacimiento()	
+			reg.nacimiento = ingresarNacimiento().ljust(10)
 		case 5:
-			reg.hobbies = input("Ingrese un nuevo hobbie: ")
+			reg.hobbies = input("Ingrese un nuevo hobbie: ").ljust(150)
 		case 6:
-			reg.bio = input("Ingrese una nueva biografia: ")
+			reg.bio = input("Ingrese una nueva biografia: ").ljust(150)
 		case 7:
-			reg.sexo = input("Ingrese un nuevo sexo: ")
+			reg.sexo = input("Ingrese un nuevo sexo: ").ljust(10)
 		case _: 
 			limpiarConsola()
 			print("Opción incorrecta.\n")
 	if opcion_editar >= 1 and opcion_editar <= 7:
 		limpiarConsola()	
+	actualizarRegistro(reg,1)
 
-def eliminarPerfil():
-	ses = 1
+def eliminarMiPerfil():
+	tipo_ses = 1
 	print("Desea eliminar su perfil?")
 	print("\t1. Si")
 	print("\t0. No\n")
@@ -461,109 +522,107 @@ def eliminarPerfil():
 	match opcion_eliminar:
 		case 1:
 			reg.estado = 0 
-			ses = 0
+			tipo_ses = 0
+
+			# SE DEBERIAN ELIMINAR LOS LIKES?
+
+			actualizarRegistro(reg,1)
 			
 		case 0:
 			limpiarConsola()
 		case _: 
 			limpiarConsola()
 			print("Opción incorrecta.\n")
-	return ses
+	return tipo_ses
 
-def pedirNombreID():
-	opcion_reportar = ''
-	while(opcion_reportar != 'a' and opcion_reportar != 'b'):
-		id_reportado = -1
-		opcion_reportar = input("Seleccione que ingresara del usuario a reportar\n\ta) Nombre\n\tb) ID\nOpcion: ")
-		match opcion_reportar:
-			case 'a':
-				nombre_reportado = input("\nIngrese el nombre del usuario a reportar: ").lower()
-				for i in range(cant_estudiantes):
-					if (nombre_reportado == estudiantes[i][2].lower()):
-						id_reportado = i
-
-			case 'b':
-				id_posible_reportado = int(input("\nIngrese la id del usuario a reportar: "))
-				if id_posible_reportado >= 0 and id_posible_reportado < cant_estudiantes:
-					id_reportado = id_posible_reportado
-
-			case _:
-				print("\nOpcion incorrecta\n\n")
-	return int(id_reportado)
-def reportar(cant):
-	id_reportante = sesion
-	id_reportado = pedirNombreID()
-	if(id_reportado == -1):
+def reportar():
+	rep = reporte()
+	rep.id_reportante = reg.id
+	rep.id_reportado = pedirNombreID()
+	if(rep.id_reportado == -1):
 		limpiarConsola()
 		print("Usuario no encontrado\n")
-	elif(id_reportante == id_reportado):
+	elif(rep.id_reportante == rep.id_reportado):
 		limpiarConsola()
 		print("No te puedes reportar a ti mismo\n")
 	else:
-		motivo = input("Ingrese el motivo de su reporte: ")
+		rep.motivo = input("Ingrese el motivo de su reporte: ").ljust(150)
 		limpiarConsola()
-		if (cant < len(reportes)):
-			print("Reporte enviado\n")
-			reportes[cant] = [id_reportante,id_reportado,motivo,'0']
-			cant = cant + 1
-		else:
-			print("No se puede reportar mas candidatos\n")
-	return cant
+		ar_fisico, ar_logico = abrirPorTipo(5)
+		longitud_archivo = os.path.getsize(ar_fisico) 
+		ar_logico.seek(longitud_archivo, 0) 
+		pickle.dump(rep, ar_logico)
+		ar_logico.flush()
+		ar_logico.close()
+		print("Reporte enviado\n")
 
 # FUNCIONES MODERADOR
+def desactivarID(idd):
+	ar_fisico, ar_logico = abrirPorTipo(1)
+	longitud_archivo = os.path.getsize(ar_fisico) 
+	reg_est = pickle.load(ar_logico)
+	while (ar_logico.tell() < longitud_archivo and reg_est.id != idd):
+		reg_est = pickle.load(ar_logico)
+	ar_logico.close()
+	reg_est.estado = 0 
+
+	# SE DEBERIAN ELIMINAR LOS LIKES?
+
+	actualizarRegistro(reg_est,1)
+
 def desactivarUsuario():
-	desactivar_usuario_v = input("Ingrese el nombre de usuario que desea desactivar: ").lower()
-	cartel = "No se encontro el nombre del usuario que se queria desactivar\n"
+	id_desactivado = pedirNombreID()
+	if(id_desactivado == -1):
+		limpiarConsola()
+		print("Usuario no encontrado\n")
+	else:
+		print("Desea desactivar al usuario con id",id_desactivado,"definitivamente?")
+		print("\t1. Si")
+		print("\t0. No\n")
+		opcion_desactivar = int(input("Selecciona la opción: "))
+		if(opcion_desactivar == 1):
+			desactivarID(idd)
 
-	for n in range(cant_estudiantes):
-		if (desactivar_usuario_v == estudiantes[n][2].lower()):
-			print("Desea desactivar este usuario?")
-			print("\t1. Si")
-			print("\t0. No\n")
-			opcion_desactivar = int(input("Selecciona la opción: "))
-			limpiarConsola()
+def obtenerNombre(idd):
+	art_fisico, art_logico = abrirPorTipo(1)
+	longitudt_archivo = os.path.getsize(art_fisico) 
 
-			match opcion_desactivar:
-				case 1:
-					estudiantes[n][7] = 0
-					cartel = "El usuario " + estudiantes[n][2] + " de id " + str(n) + " fue correctamente desactivado.\n"
-					for i in range(cant_estudiantes):
-						likes[n][i] = 0
-						likes[i][n] = 0
-				case 0:
-					cartel = ""
-				case _: 
-					limpiarConsola()
-					print("Opción incorrecta.\n")
-
-	print(cartel)
-
+	while (art_logico.tell() < longitudt_archivo):
+		reg_temp = pickle.load(art_logico)
+		if(idd == reg_temp.id):
+			nombre = reg_temp.nombre
+	art_logico.close()
+	return nombre
 def verReportes():
 	sin_nuevos_reportes = True
-	for i in range(cant_reportes):
-		id_reportante = int(reportes[i][0])
-		id_reportado = int(reportes[i][1])
+	
+	ar_fisico, ar_logico = abrirPorTipo(5)
+	longitud_archivo = os.path.getsize(ar_fisico) 
 
-		if (estudiantes[id_reportante][7] == 1 and estudiantes[id_reportado][7] == 1 and reportes[i][3] == '0'):
-			sin_nuevos_reportes = False
-			print("Reporte",i+1)
-			print("\tReportante:",estudiantes[id_reportante][2],"ID:",reportes[i][0])
-			print("\tReportado:",estudiantes[id_reportado][2],"ID:",reportes[i][1])
-			print("\tMotivo:", reportes[i][2], "\n")
-			
+	i = 0
+	while (ar_logico.tell() < longitud_archivo):
+		i = i + 1
+		rep = pickle.load(ar_logico)
+		if(rep.estado == 0):
+			print("Reporte",i)
+			print("\tReportante:",mostrarDato(obtenerNombre(rep.id_reportante)),"ID:",rep.id_reportante)
+			print("\tReportado:",mostrarDato(obtenerNombre(rep.id_reportado)),"ID:",rep.id_reportado)
+			print("\tMotivo:", rep.motivo, "\n")
 			opcion_reporte = input("Seleccione como se quiere proceder:\n\ta) Ignorar reporte\n\tb) Bloquear al reportado\nOpcion: ")
+
 			match opcion_reporte:
 				case 'a':
-					reportes[i][3] = '2'
+					rep.estado = '2'
 					print("\nSe ignoro el reporte.\n\n")
 
 				case 'b':
-					reportes[i][3] = '1'
-					estudiantes[id_reportado][7] = 0
+					rep.estado = '1'
+					desactivarID(rep.id_reportado)
 					print("\nSe bloqueo al reportado.\n\n")
 
 				case _:
 					print("Opción incorrecta.\n")
+	ar_logico.close()
 
 	if sin_nuevos_reportes:
 		print("No hay reportes por mostrar.\n")
@@ -585,24 +644,37 @@ def calcularEdad(nacimiento):
 		edad = edad - 1
 	return edad
 
-def reportesEstadisticos():
+def reporteEstadisticoPropios():
 	match = 0
 	likes_dados_no_recibidos = 0
 	likes_recibidos_no_dados = 0
+	cant_posibles_match = cantRegistros(1) - 1
 
-	for n in range(cant_estudiantes):
-		if n != sesion:
+	ids_likes_dados = [0] * cant_posibles_match 
+	ar_fisico, ar_logico = abrirPorTipo(4)
+	longitud_archivo = os.path.getsize(ar_fisico)
 
-			if likes[sesion][n] == 1 and likes[n][sesion] == 1:
-				match = match + 1
-			
-			if likes[sesion][n] == 1 and likes[n][sesion] == 0:
-				likes_dados_no_recibidos = likes_dados_no_recibidos + 1
-			
-			if likes[sesion][n] == 0 and likes[n][sesion] == 1:
-				likes_recibidos_no_dados = likes_recibidos_no_dados + 1 
+	while (ar_logico.tell() < longitud_archivo):
+		like_temp = pickle.load(ar_logico)
+		if(reg.id == like_temp.id_remitente):
+			ids_likes_dados[likes_dados_no_recibidos] = like_temp.id_destinatario
+			likes_dados_no_recibidos = likes_dados_no_recibidos + 1
+
+	ar_logico.seek(0,0)
+	while (ar_logico.tell() < longitud_archivo):
+		like_temp = pickle.load(ar_logico)
+		if(reg.id == like_temp.id_destinatario):
+			likes_recibidos_no_dados = likes_recibidos_no_dados + 1
+			for i in range(likes_dados_no_recibidos):
+				if(ids_likes_dados[i] == like_temp.id_remitente):
+					ids_likes_dados[i] = ids_likes_dados[likes_dados_no_recibidos]
+					likes_dados_no_recibidos = likes_dados_no_recibidos - 1 
+					likes_recibidos_no_dados = likes_recibidos_no_dados - 1
+					match = match + 1
+				
+	ar_logico.close()
 	
-	porcentaje_matcheos_posibles = (match / (cant_estudiantes - 1)) * 100 
+	porcentaje_matcheos_posibles = match / cant_posibles_match * 100 
 
 	print(f"Matcheados sobre el % posible:{porcentaje_matcheos_posibles:.2f}%")
 	print("Likes dados y no recibidos:", likes_dados_no_recibidos)
@@ -729,39 +801,30 @@ def matcheosCombinados(cant):
 	print("La cantidad de matcheos posibles con la cantidad actual de estudiantes ({}) es de:".format(cant), int(matcheos_posibles),"\n")
 
 ##############################################################
-
 crearArchivos()
-cargaEstudiantes();leerArchivo(1);input()
-cargarMo(0,"b","1");leerArchivo(2);input()
-cargarAd(0,"c","1");leerArchivo(3);input()
-print(cantRegistros(1));input()
-
-cant_estudiantes = cantRegistros(1); cant_mods = cantRegistros(2); cant_adm = cantRegistros(3); 
+if(os.path.getsize(arclik_fisico)==0):
+	likesAuto()
 
 opcion_inicio = -1
 limpiarConsola()
 while(opcion_inicio != 0):
-	cant_mods = cantRegistros(2)
-
 	tipo_sesion = 0 # 0 ninguna # 1 estudiante # 2 moderador # 3 administrador
-	sesion = -1
-	sesion_mod = -1
 	opcion_inicio = -1
 	while(opcion_inicio != 0 and opcion_inicio != 1):
-		cant_estudiantes = cantRegistros(1)
 
 		opcion_inicio = menuInicio()
 		limpiarConsola()
 		match opcion_inicio:
 			case 1:
+				cant_estudiantes = cantRegistros(1)
 				if(cant_estudiantes < 4):
 					print("No hay la cantidad de estudiantes necesarios para iniciar el programa, se necesitan", 4 - cant_estudiantes, "más.\n")
-				elif(cant_mods < 1):
+				elif(cantRegistros(2) < 1):
 					print("No hay la cantidad de moderadores necesarios para iniciar el programa, se necesita al menos uno.\n")
-				elif(cant_adm < 1):
+				elif(cantRegistros(3) < 1):
 					print("No hay la cantidad de administradores necesarios para iniciar el programa, se necesita al menos uno.\n")	
 				else:
-					sesion, sesion_mod, tipo_sesion, reg = login()
+					tipo_sesion, reg = login()
 
 			case 2:
 				registro(1)
@@ -771,18 +834,17 @@ while(opcion_inicio != 0):
 			case 21:
 				edades()
 			case 22:
-				matcheosCombinados(cant_estudiantes)
+				matcheosCombinados(cantRegistros(1))
 
 			case 0:
 				print("Adios!")
 			case _:
 				print("Opción incorrecta.\n")
 
-
 	opcion = -1 # Porque tiene que ser distinto de 0 para entrar al while
-	while(sesion > -1 and opcion != 0 and tipo_sesion == 1):
+	while(opcion != 0 and tipo_sesion == 1): # Estudiante
 
-		opcion = menuPrincipalEstudiante(reg)
+		opcion = menuPrincipalEstudiante()
 		limpiarConsola()
 		match opcion:
 			case 1:
@@ -795,7 +857,7 @@ while(opcion_inicio != 0):
 							editarDatos() 
 
 						case 'b':
-							tipo_sesion = eliminarPerfil()
+							tipo_sesion = eliminarMiPerfil()
 
 						case 'c':
 							limpiarConsola() #volver
@@ -813,7 +875,7 @@ while(opcion_inicio != 0):
 							agregarMatcheo()
 
 						case 'b':
-							cant_reportes = reportar(cant_reportes)
+							reportar()
 							
 						case 'c':
 							limpiarConsola() #volver							
@@ -836,18 +898,16 @@ while(opcion_inicio != 0):
 							print("Opción incorrecta.\n")		
 
 			case 4:
-				reportesEstadisticos()
+				reporteEstadisticoPropios()
 				
 			case 0:
 				print("\nSesión finalizada.\n")
 			case _:
-				print("Opcion incorrecta")	
+				print("Opcion incorrecta")	 
 
-	## ACA DUMPEAR
+	while(opcion != 0 and tipo_sesion == 2): # Moderador
 
-	while(sesion_mod > -1 and opcion != 0 and tipo_sesion == 2):
-
-		opcion = menuPrincipalModerador(sesion_mod)
+		opcion = menuPrincipalModerador()
 		limpiarConsola()
 		match opcion:
 			case 1:
@@ -881,4 +941,6 @@ while(opcion_inicio != 0):
 			case 0:
 				print("\nSesión finalizada.\n")
 			case _:
-				print("Opcion incorrecta")	
+				print("Opcion incorrecta")	 
+
+#	while(opcion != 0 and tipo_sesion == 3): # Administrador
