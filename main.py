@@ -16,13 +16,12 @@ estudiantes = [[""]*8 for n in range(8)] # email | contrasena | nombre | nacimie
 estudiantes[0][0] = "a"; estudiantes[0][1] = "1"; estudiantes[0][2] = "Julian"; estudiantes[0][3] = "2006-01-07"; estudiantes[0][4] = "pescar, nadar"; estudiantes[0][7] = 1;
 estudiantes[1][0] = "estudiante2@ayed.com"; estudiantes[1][1] = "333444"; estudiantes[1][2] = "Pedro"; estudiantes[1][3] = "2005-04-10"; estudiantes[1][4] = "comer, jugar"; estudiantes[1][7] = 1;
 estudiantes[2][0] = "estudiante3@ayed.com"; estudiantes[2][1] = "555666"; estudiantes[2][2] = "Ana"; estudiantes[2][3] = "2004-10-20"; estudiantes[2][4] = "leer sobre jojos"; estudiantes[2][7] = 1;
-cant_estudiantes = 4 # Ya cargado en archivo 
 # Para probar más rápido un mail de estudiante válido es a y su contraseña es 1
 
 mods = [[""]*2 for n in range(4)] # email | contrasena
 mods[0][0] = "b"; mods[0][1] = "1"
-cant_mods = 1
 # Para probar más rápido un mail válido de moderador es b y su contraseña 1
+
 
 reportes = [[""]*4 for n in range(10)] # id_reportante | id_reportado | motivo | estado
 cant_reportes = 0
@@ -51,32 +50,66 @@ class administrador:
 		self.email = ""
 		self.contrasena = ""
 
-regE_temp = estudiante()
-def cargarE(idd, em,co,nom,nac,hob):
-	regE_temp.id = idd
-	regE_temp.email = em
-	regE_temp.contrasena = co
-	regE_temp.nombre = nom
-	regE_temp.nacimiento = nac
-	regE_temp.hobbies = hob
-	arcest_logico = open(arcest_fisico, "r+b")
-	arcest_logico.seek(0, os.SEEK_END) 
-	pickle.dump(regE_temp, arcest_logico)
-	arcest_logico.flush()
-	arcest_logico.close()
 
-def leerArchivo():
-	arcest_logico = open(arcest_fisico, "r+b")
-	X = os.path.getsize(arcest_fisico) 
-	while (arcest_logico.tell() < X):
-		regE_temp = pickle.load(arcest_logico)
-		print (regE_temp.email)
-		print (regE_temp.contrasena)
-	arcest_logico.close()
+if (True):	
+	regE_temp = estudiante()
+	def cargarE(idd, em,co,nom,nac,hob):
+		reg_temp = estudiante()
+		reg_temp.id = idd
+		reg_temp.email = em.ljust(45)
+		reg_temp.contrasena = co.ljust(30)
+		reg_temp.nombre = nom.ljust(30)
+		reg_temp.nacimiento = nac.ljust(10)
+		reg_temp.hobbies = hob.ljust(150)
+		ar_fisico = arcest_fisico
+		ar_logico = open(ar_fisico, "r+b")
+		longitud_archivo = os.path.getsize(ar_fisico)
+		ar_logico.seek(longitud_archivo, 0) 
+		pickle.dump(reg_temp, ar_logico)
+		ar_logico.flush()
+		ar_logico.close()
 
-def cargaEstudiantes():
-	for i in range(3):
-		cargarE(i,estudiantes[i][0],estudiantes[i][1],estudiantes[i][2],estudiantes[i][3],estudiantes[i][4])
+	def cargarMo(idd, em,co):
+		reg_temp = moderador()
+		reg_temp.id = idd
+		reg_temp.email = em.ljust(45)
+		reg_temp.contrasena = co.ljust(30)
+		ar_fisico = arcmod_fisico
+		ar_logico = open(ar_fisico, "w+b")
+		longitud_archivo = os.path.getsize(ar_fisico)
+		ar_logico.seek(longitud_archivo, 0) 
+		pickle.dump(reg_temp, ar_logico)
+		ar_logico.flush()
+		ar_logico.close()
+
+	def cargarAd(idd, em,co):
+		reg_temp = administrador()
+		reg_temp.id = idd
+		reg_temp.email = em.ljust(45)
+		reg_temp.contrasena = co.ljust(30)
+		ar_fisico = arcadm_fisico
+		ar_logico = open(ar_fisico, "w+b")
+		longitud_archivo = os.path.getsize(ar_fisico)
+		ar_logico.seek(longitud_archivo, 0) 
+		pickle.dump(reg_temp, ar_logico)
+		ar_logico.flush()
+		ar_logico.close()
+
+	def leerArchivo(tipo):
+		ar_fisico, ar_logico = abrirPorTipo(tipo)
+		longitud_archivo = os.path.getsize(ar_fisico) 
+		while (ar_logico.tell() < longitud_archivo):
+			reg_temp = pickle.load(ar_logico)
+			print (reg_temp.id)
+			print (reg_temp.email)
+			print (reg_temp.contrasena)
+		ar_logico.close()
+
+	def cargaEstudiantes():
+		temporal = open(arcest_fisico, "w+b")
+		temporal.close()
+		for i in range(3):
+			cargarE(i,estudiantes[i][0],estudiantes[i][1],estudiantes[i][2],estudiantes[i][3],estudiantes[i][4])
 
 def abrirPorTipo(tipo):
 	match tipo:
@@ -90,17 +123,14 @@ def abrirPorTipo(tipo):
 	logico = open(fisico, "r+b")
 	return fisico, logico
 
-def loadPorTipo(tipo, logico):
-	match tipo:
-		case 1:
-			reg = estudiante()
-		case 2:
-			reg = moderador()
-		case 3:
-			reg = administrador()
-	
-	reg = pickle.load(logico)
-	return reg
+def cantRegistros(tipo):
+	ar_fisico, ar_logico = abrirPorTipo(tipo)
+	longitud_archivo = os.path.getsize(ar_fisico)
+	reg = pickle.load(ar_logico)
+	longitud_registro = ar_logico.tell()
+	ar_logico.close()
+	cant_registros = longitud_archivo/longitud_registro
+	return int(cant_registros)
 
 # BASICO
 def crearArchivos():
@@ -150,7 +180,7 @@ def menuLogin():
 	op = int(input("Seleccione la opcion: "))
 	return op
 
-def auxLogin(tipo,cant):
+def auxLogin(tipo):
 	intentos_restantes = 3
 
 	while(intentos_restantes > 0):
@@ -161,16 +191,17 @@ def auxLogin(tipo,cant):
 		limpiarConsola()
 
 		ar_fisico, ar_logico = abrirPorTipo(tipo)
-		X = os.path.getsize(ar_fisico) 
-		while(ar_logico.tell() < X):
-			reg = loadPorTipo(tipo,ar_logico)
+		longitud_archivo = os.path.getsize(ar_fisico) 
+		while(ar_logico.tell() < longitud_archivo):
+			reg = pickle.load(logico)
 
 			if(email == reg.email and contrasena == reg.contrasena):
 				intentos_restantes = 0
 				if(tipo != 1):
-					print("Felicidades",tipo,reg.id,"ingresaste!\n")
+					print("Felicidades",reg.id,"ingresaste!\n")
 				elif(not reg.estado): 
 					print("Su cuenta ha sido deshabilitada\n")
+					reg.id = -1
 				else:
 					print("Felicidades",reg.nombre,"ingresaste!\n")
 			else:
@@ -183,63 +214,65 @@ def auxLogin(tipo,cant):
 	ar_logico.close()
 	return reg
 def login():
-	limpiarConsola()
+	limpiarConsola() 
 	tipo_sesion = 0
 	sesion = -1
 	sesion_mod = -1
 	
 	opcion_login = menuLogin()
-	match opcion_login:
-		case 1:
-			reg_act = auxLogin(1,cant_estudiantes)
-			if(reg_act.id > -1):
-				tipo_sesion = 1
+	if(opcion_login == 1 or opcion_login == 2 or opcion_login == 3):
+		reg_act = auxLogin(opcion_login)
+		if(reg_act.id > -1):
+			tipo_sesion = opcion_login
+			if(opcion_login == 1):  # eliminar este
 				sesion = reg_act.id
-			else:
-				input("Te quedaste sin intentos! Presiona Enter para continuar")
-		case 2:
-			auxLogin(2,cant_mods)
-		case 3:
-			print("falta")
-		case _:
-			print("pipe peluo")
-
+			elif(opcion_login == 2):
+				sesion_mod = reg_act.id
+		else:
+			input("Te quedaste sin intentos! Presiona Enter para continuar")
 
 	return sesion, sesion_mod, tipo_sesion, reg_act
 
-def registro(nueva_sesion):
+def registro(tipo): # tipo 1 estudiante # tipo 2 moderador (usar en menu de admin) #
 	limpiarConsola()
-	if(nueva_sesion < 8):
-		print("REGISTRO\n")
-		email = input("Ingrese un email: ")
+	print("REGISTRO\n")
+	email = input("Ingrese un email: ")
+	nombre = ""
+	if(tipo == 1):
 		nombre = input("Ingrese un nombre: ")
-		for n in range(cant_estudiantes):
-			if(email == estudiantes[n][0]):
-				email = "novalido"
-			elif(n < cant_mods): # no todo dentro del mismo if porque si no busca más allá del array.
-				if(email == mods[n][0]):
-					email = "novalido"
-			if(nombre.lower() == estudiantes[n][2].lower()):
-				nombre = "novalido"
 
-		if(email == "novalido"):
-			limpiarConsola()
-			print("El email ya está siendo utilizado o no es válido\n")
-		elif(nombre == "novalido"):
-			limpiarConsola()
-			print("El nombre ya está siendo utilizado o no es válido\n")
-		else:
-			estudiantes[nueva_sesion][0] = email
-			estudiantes[nueva_sesion][2] = nombre
-			estudiantes[nueva_sesion][1] = input("Ingrese la contraseña: ")
-			estudiantes[nueva_sesion][3] = ingresarNacimiento()
-			estudiantes[nueva_sesion][7] = 1
-			nueva_sesion = nueva_sesion + 1
-			print(nombre, "registrado!\n")
+	limpiarConsola()
+	ar_fisico, ar_logico = abrirPorTipo(tipo)
+	longitud_archivo = os.path.getsize(ar_fisico) 
+	while(ar_logico.tell() < longitud_archivo):
+		reg = pickle.load(ar_logico)
+		if(email == reg.email):
+			email = "novalido"
+		elif(nombre.lower()== reg.nombre.lower() and tipo == 1):
+			nombre = "novalido"
+
+	if(email == "novalido"):
+		limpiarConsola()
+		print("El email ya está siendo utilizado o no es válido\n")
+	elif(nombre == "novalido" and tipo == 1):
+		limpiarConsola()
+		print("El nombre ya está siendo utilizado o no es válido\n")
 	else:
-		print("Ya se alcanzó el máximo de estudiantes\n")
+		reg.id = reg.id + 1
+		reg.email = email.ljust(45)
+		reg.contrasena = input("Ingrese la contraseña: ").ljust(30)
+		if(tipo == 1):
+			reg.nombre = nombre.ljust(30)
+			reg.nacimiento = ingresarNacimiento().ljust(10)
+			reg.estado = 1
+			print(nombre, "registrado!\n")
+		else:
+			print("Moderador de id:",reg.id,"registrado!\n")
 
-	return nueva_sesion
+	ar_logico.seek(longitud_archivo, 0) 
+	pickle.dump(reg, ar_logico)
+	ar_logico.flush()
+	ar_logico.close()
 
 # MENUS ESTUDIANTE
 def menuPrincipalEstudiante(id, nombre):
@@ -692,17 +725,25 @@ def matcheosCombinados(cant):
 ##############################################################
 
 crearArchivos()
-#cargaEstudiantes();leerArchivo();input()
+cargaEstudiantes();leerArchivo(1);input()
+cargarMo(0,"b","1");leerArchivo(2);input()
+cargarAd(0,"c","1");leerArchivo(3);input()
+print(cantRegistros(1));input()
+
+cant_estudiantes = cantRegistros(1); cant_mods = cantRegistros(2); cant_adm = cantRegistros(3); 
 
 opcion_inicio = -1
 limpiarConsola()
 while(opcion_inicio != 0):
+	cant_mods = cantRegistros(2)
 
 	tipo_sesion = 0 # 0 ninguna # 1 estudiante # 2 moderador # 3 administrador
 	sesion = -1
 	sesion_mod = -1
 	opcion_inicio = -1
 	while(opcion_inicio != 0 and opcion_inicio != 1):
+		cant_estudiantes = cantRegistros(1)
+		input();print(cant_estudiantes);input();leerArchivo(1);input()
 		opcion_inicio = menuInicio()
 		limpiarConsola()
 		match opcion_inicio:
@@ -715,7 +756,7 @@ while(opcion_inicio != 0):
 					sesion, sesion_mod, tipo_sesion, reg_act = login()
 
 			case 2:
-				cant_estudiantes = registro(cant_estudiantes)
+				registro(1)
 
 			case 11:
 				ruletaAfinidad()
