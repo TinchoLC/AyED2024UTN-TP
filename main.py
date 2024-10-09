@@ -24,13 +24,18 @@ class estudiante:
 		self.hobbies = "".ljust(150)
 		self.bio = "".ljust(150)
 		self.sexo = "".ljust(10)
-		self.estado = 1
+		self.estado = True
+		
+		self.superlike_disponible = True
+		self.revelarcandidato_disponible = True
+		self.puntaje = 0
 
 class moderador:
 	def __init__(self):
 		self.id = -1
 		self.email = "".ljust(45)
 		self.contrasena = "".ljust(30)
+		self.estado = True
 
 class administrador:
 	def __init__(self):
@@ -230,7 +235,7 @@ def login():
 					encontrado = True
 					if(tipo_sesion != 1):
 						print("Felicidades",reg.id,"ingresaste!\n")
-					elif(reg.estado == 0): 
+					elif(reg.estado == False): 
 						print("Su cuenta ha sido deshabilitada\n")
 						tipo_sesion = 0
 					else:
@@ -303,7 +308,6 @@ def registro(tipo): # tipo 1 estudiante # tipo 2 moderador (usar en menu de admi
 			reg.hobbies = "".ljust(150)
 			reg.bio = "".ljust(150)
 			reg.sexo = "".ljust(10)
-			reg.estado = 1
 			print(mostrarDato(nombre), "registrado!\n")
 		else:
 			print("Moderador de id:",reg.id,"registrado!\n")
@@ -320,6 +324,10 @@ def menuPrincipalEstudiante():
 	print("\t2.  Gestionár candidatos")
 	print("\t3.  Matcheos")
 	print("\t4.  Reportes estadísticos")
+	if(reg.superlike_disponible == True):
+		print("\t31.  Dar SuperLike (solo puede hacerse una vez)")
+	if(reg.revelarcandidato_disponible == True):
+		print("\t32.  Revelar candidatos que te han dado like (solo puede hacerse una vez)")
 	print("\t0.  Salir \n")
 
 	op = int(input("Seleccione la opcion: "))
@@ -521,7 +529,7 @@ def eliminarMiPerfil():
 
 	match opcion_eliminar:
 		case 1:
-			reg.estado = 0 
+			reg.estado = False
 			tipo_ses = 0
 
 			# SE DEBERIAN ELIMINAR LOS LIKES?
@@ -564,7 +572,7 @@ def desactivarID(idd):
 	while (ar_logico.tell() < longitud_archivo and reg_est.id != idd):
 		reg_est = pickle.load(ar_logico)
 	ar_logico.close()
-	reg_est.estado = 0 
+	reg_est.estado = False 
 
 	# SE DEBERIAN ELIMINAR LOS LIKES?
 
@@ -899,6 +907,25 @@ while(opcion_inicio != 0):
 
 			case 4:
 				reporteEstadisticoPropios()
+
+			case 31:
+				if(reg.superlike_disponible == True):
+					# ACA TENES QUE HACER VOS JIMENA, ACA VA LO DEL SUPERLIKE (adentro del IF pls)
+					#hacelo de una todo acá si querés despues lo pasamos a función
+
+
+					reg.superlike_disponible = False
+	
+				
+
+			case 32:
+				if(reg.revelarcandidato_disponible == True):
+					# ACA TENES QUE HACER VOS JIMENA, ACA VA LO DE REVELAR CANDIDATO (adentro del IF pls)
+					#hacelo de una todo acá si querés despues lo pasamos a función
+					
+
+					reg.revelarcandidato_disponible = False
+
 				
 			case 0:
 				print("\nSesión finalizada.\n")
