@@ -405,7 +405,7 @@ def menuAdmGestionUsuarios():
 	print("\tc. Desactivar usuario")
 	print("\td. Volver\n")
 
-	op = int(input("Seleccione la opcion: "))
+	op = input("Seleccione la opcion: ")
 	return op
 
 def menuAdmGestionReportes():
@@ -413,7 +413,7 @@ def menuAdmGestionReportes():
 	print("\ta. Ver reportes")
 	print("\tb. Volver\n")
 
-	op = int(input("Seleccione la opcion: "))
+	op = input("Seleccione la opcion: ")
 	return op
 
 # FUNCIONES ESTUDIANTE
@@ -970,4 +970,56 @@ while(opcion_inicio != 0):
 			case _:
 				print("Opcion incorrecta")	 
 
-#	while(opcion != 0 and tipo_sesion == 3): # Administrador
+
+	while(opcion != 0 and tipo_sesion == 3): # Administrador
+
+		opcion = menuPrincipalAdministrador()
+		limpiarConsola()
+		match opcion:
+			case 1:
+				opcion_gest_usuarios = ''
+				while(opcion_gest_usuarios != 'b'):
+					opcion_gest_usuarios = menuAdmGestionUsuarios()
+					limpiarConsola()
+					match opcion_gest_usuarios:
+						case 'a':
+							print("esto borrarlo pero si no no compila")
+							#crear una funcion que te pregunte si queres desactivar a un usuario
+							#o a un moderador, si queres desactivar un usuario usar dentro de esa
+							#la funcion desactivarUsuario()
+							#para hacer la parte de desactivar moderador recicla codigo de la funcion 
+							#desactivarUsuario tmb
+
+						case 'b':
+							registro(2)
+
+						case 'c':
+							desactivarUsuario()	#muy parecieda al a opcion A, raro
+
+						case 'd':
+							limpiarConsola() #volver
+						case _:
+							print("Opción incorrecta.\n")
+
+			case 2:
+				opcion_gest_reportes = ''
+				while(opcion_gest_reportes != 'b'):
+					opcion_gest_reportes = menuAdmGestionReportes()
+					limpiarConsola()
+					match opcion_gest_reportes:
+						case 'a':
+							verReportes()
+
+						case 'b':
+							limpiarConsola() #volver
+						case _:
+							print("Opción incorrecta.\n")
+
+			case 3:
+				print("en constru")
+				# Aca los reportes estadisticos (ojo que son distintos a los que habiamos hecho antes)
+
+			case 0:
+				print("\nSesión finalizada.\n")
+			case _:
+				print("Opcion incorrecta")	 
