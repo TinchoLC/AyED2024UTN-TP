@@ -153,11 +153,6 @@ def actualizarRegistro(regA,tipo):
 	pickle.dump(regA, ar_logico)
 	ar_logico.flush()
 	ar_logico.close()
-	
-def mostrarDato(string):
-	while string[len(string)-1] == " ":
-		string = string[:len(string)-1]
-	return string
 
 # BASICO
 def limpiarConsola():
@@ -239,7 +234,7 @@ def login():
 						print("Su cuenta ha sido deshabilitada\n")
 						tipo_sesion = 0
 					else:
-						print("Felicidades",mostrarDato(reg.nombre),"ingresaste!\n")
+						print("Felicidades",reg.nombre.strip(),"ingresaste!\n")
 				else:
 					reg.id = -1
 
@@ -302,13 +297,18 @@ def registro(tipo): # tipo 1 estudiante # tipo 2 moderador (usar en menu de admi
 		reg.id = reg.id + 1
 		reg.email = email.ljust(45)
 		reg.contrasena = input("Ingrese la contraseña: ").ljust(30)
+		reg.estado = True
+
 		if(tipo == 1):
 			reg.nombre = nombre.ljust(30)
 			reg.nacimiento = ingresarNacimiento().ljust(10)
 			reg.hobbies = "".ljust(150)
 			reg.bio = "".ljust(150)
 			reg.sexo = "".ljust(10)
-			print(mostrarDato(nombre), "registrado!\n")
+			reg.superlike_disponible = True
+			reg.revelarcandidato_disponible = True
+			reg.puntaje = 0
+			print(nombre.strip(), "registrado!\n")
 		else:
 			print("Moderador de id:",reg.id,"registrado!\n")
 
@@ -319,14 +319,14 @@ def registro(tipo): # tipo 1 estudiante # tipo 2 moderador (usar en menu de admi
 
 # MENUS ESTUDIANTE
 def menuPrincipalEstudiante():
-	print("Menu Principal del estudiante",mostrarDato(reg.nombre),"- con id",reg.id)
+	print("Menu Principal del estudiante", reg.nombre.strip(),"- con id",reg.id)
 	print("\t1.  Gestionar mi perfil")
 	print("\t2.  Gestionár candidatos")
 	print("\t3.  Matcheos")
 	print("\t4.  Reportes estadísticos")
-	if(reg.superlike_disponible == True):
+	if(reg.superlike_disponible):
 		print("\t31.  Dar SuperLike (solo puede hacerse una vez)")
-	if(reg.revelarcandidato_disponible == True):
+	if(reg.revelarcandidato_disponible):
 		print("\t32.  Revelar candidatos que te han dado like (solo puede hacerse una vez)")
 	print("\t0.  Salir \n")
 
@@ -589,7 +589,7 @@ def desactivarUsuario():
 		print("\t0. No\n")
 		opcion_desactivar = int(input("Selecciona la opción: "))
 		if(opcion_desactivar == 1):
-			desactivarID(idd)
+			desactivarID(id_desactivado)
 
 def obtenerNombre(idd):
 	art_fisico, art_logico = abrirPorTipo(1)
@@ -613,8 +613,8 @@ def verReportes():
 		rep = pickle.load(ar_logico)
 		if(rep.estado == 0):
 			print("Reporte",i)
-			print("\tReportante:",mostrarDato(obtenerNombre(rep.id_reportante)),"ID:",rep.id_reportante)
-			print("\tReportado:",mostrarDato(obtenerNombre(rep.id_reportado)),"ID:",rep.id_reportado)
+			print("\tReportante:", obtenerNombre(rep.id_reportante).strip(), "ID:",rep.id_reportante)
+			print("\tReportado:", obtenerNombre(rep.id_reportado).strip(), "ID:",rep.id_reportado)
 			print("\tMotivo:", rep.motivo, "\n")
 			opcion_reporte = input("Seleccione como se quiere proceder:\n\ta) Ignorar reporte\n\tb) Bloquear al reportado\nOpcion: ")
 
@@ -909,7 +909,7 @@ while(opcion_inicio != 0):
 				reporteEstadisticoPropios()
 
 			case 31:
-				if(reg.superlike_disponible == True):
+				if(reg.superlike_disponible): # Bonus 1
 					# ACA TENES QUE HACER VOS JIMENA, ACA VA LO DEL SUPERLIKE (adentro del IF pls)
 					#hacelo de una todo acá si querés despues lo pasamos a función
 
@@ -919,7 +919,7 @@ while(opcion_inicio != 0):
 				
 
 			case 32:
-				if(reg.revelarcandidato_disponible == True):
+				if(reg.revelarcandidato_disponible): # Bonus 2
 					# ACA TENES QUE HACER VOS JIMENA, ACA VA LO DE REVELAR CANDIDATO (adentro del IF pls)
 					#hacelo de una todo acá si querés despues lo pasamos a función
 					
@@ -978,7 +978,7 @@ while(opcion_inicio != 0):
 		match opcion:
 			case 1:
 				opcion_gest_usuarios = ''
-				while(opcion_gest_usuarios != 'b'):
+				while(opcion_gest_usuarios != 'd'):
 					opcion_gest_usuarios = menuAdmGestionUsuarios()
 					limpiarConsola()
 					match opcion_gest_usuarios:
