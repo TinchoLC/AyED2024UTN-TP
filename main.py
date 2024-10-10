@@ -181,11 +181,14 @@ def pedirNombreID():
 
 			case 'b':
 				id_posible_usuario = int(input("\nIngrese la id del usuario: "))
-				
-				while (ar_logico.tell() < longitud_archivo):
-					reg_temp = pickle.load(ar_logico)
-					if(id_posible_usuario == reg_temp.id):
-						id_usuario = reg_temp.id
+				cant_estudiantes = cantRegistros(1)
+				if(id_posible_usuario >= cant_estudiantes):
+					id_usuario = -1
+				else:
+					while (ar_logico.tell() < longitud_archivo):
+						reg_temp = pickle.load(ar_logico)
+						if(id_posible_usuario == reg_temp.id):
+							id_usuario = reg_temp.id
 
 			case _:
 				print("\nOpcion incorrecta\n\n")
@@ -554,6 +557,7 @@ def reportar():
 	if(rep.id_reportado == -1):
 		limpiarConsola()
 		print("Usuario no encontrado\n")
+		input()
 	elif(rep.id_reportante == rep.id_reportado):
 		limpiarConsola()
 		print("No te puedes reportar a ti mismo\n")
@@ -952,7 +956,6 @@ while(opcion_inicio != 0):
 					match opcion_gest_usuarios:
 						case 'a':
 							desactivarUsuario()
-							limpiarConsola()
 
 						case 'b':
 							limpiarConsola() #volver
@@ -1007,7 +1010,6 @@ while(opcion_inicio != 0):
 
 						case 'c':
 							desactivarUsuario()	#muy parecieda al a opcion A, raro
-							limpiarConsola()
 
 						case 'd':
 							limpiarConsola() #volver
