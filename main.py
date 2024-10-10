@@ -340,9 +340,9 @@ def menuPrincipalEstudiante():
 	print("\t3.  Matcheos")
 	print("\t4.  Reportes estadísticos")
 	if(reg.superlike_disponible):
-		print("\t31.  Dar SuperLike (solo puede hacerse una vez)")
+		print("\t32.  Dar SuperLike (solo puede hacerse una vez)")
 	if(reg.revelarcandidato_disponible):
-		print("\t32.  Revelar candidatos que te han dado like (solo puede hacerse una vez)")
+		print("\t33.  Revelar candidatos que te han dado like (solo puede hacerse una vez)")
 	print("\t0.  Salir \n")
 
 	op = int(input("Seleccione la opcion: "))
@@ -934,8 +934,8 @@ while(opcion_inicio != 0):
 			case 4:
 				reporteEstadisticoPropios()
 
-			case 31:
-				if(reg.superlike_disponible): # Bonus 1
+			case 32:
+				if(reg.superlike_disponible): # Bonus 2
 					# ACA TENES QUE HACER VOS JIMENA, ACA VA LO DEL SUPERLIKE (adentro del IF pls)
 					#hacelo de una todo acá si querés despues lo pasamos a función
 
@@ -944,14 +944,13 @@ while(opcion_inicio != 0):
 	
 				
 
-			case 32:
-				if(reg.revelarcandidato_disponible): # Bonus 2
+			case 33:
+				if(reg.revelarcandidato_disponible): # Bonus 3
 					# ACA TENES QUE HACER VOS JIMENA, ACA VA LO DE REVELAR CANDIDATO (adentro del IF pls)
 					#hacelo de una todo acá si querés despues lo pasamos a función
 					
 
 					reg.revelarcandidato_disponible = False
-
 				
 			case 0:
 				print("\nSesión finalizada.\n")
