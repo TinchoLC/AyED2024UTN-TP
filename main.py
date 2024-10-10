@@ -72,19 +72,24 @@ def abrirPorTipo(tipo): # 1 estudiante # 2 moderador # 3 administrador # 4 like 
 	logico = open(fisico, "r+b")
 	return fisico, logico
 
-def cantRegistros(tipo):
+def cantRegistros(tipo,estado_activado):
 	ar_fisico, ar_logico = abrirPorTipo(tipo)
 	longitud_archivo = os.path.getsize(ar_fisico)
-	reg = pickle.load(ar_logico)
+	i = 0
 	longitud_registro = ar_logico.tell()
+	while (ar_logico.tell() < longitud_archivo):
+		i = i + 1
+		reg = pickle.load(ar_logico)
+		if(estado_activado):
+			if(not reg.estado):
+				i = i - 1
 	ar_logico.close()
-	cant_registros = longitud_archivo/longitud_registro
-	return int(cant_registros)
+	return i
 
 def likesAuto():
 	arclik_logico = open(arclik_fisico, "w+b")
 	
-	cant_estudiantes = cantRegistros(1)
+	cant_estudiantes = cantRegistros(1,False)
 	for i in range(cant_estudiantes):
 		for j in range(cant_estudiantes):
 			if (i != j and randint(0, 99) < 60):
@@ -181,7 +186,7 @@ def pedirNombreID():
 
 			case 'b':
 				id_posible_usuario = int(input("\nIngrese la id del usuario: "))
-				cant_estudiantes = cantRegistros(1)
+				cant_estudiantes = cantRegistros(1,False)
 				if(id_posible_usuario >= cant_estudiantes):
 					id_usuario = -1
 				else:
@@ -222,7 +227,7 @@ def login():
 
 		tipo_sesion = 0
 		encontrado = False
-		while(tipo_sesion < 3 and encontrado == False):
+		while(tipo_sesion < 3 and not encontrado):
 			tipo_sesion = tipo_sesion + 1
 			ar_fisico, ar_logico = abrirPorTipo(tipo_sesion)
 			longitud_archivo = os.path.getsize(ar_fisico) 
@@ -234,7 +239,7 @@ def login():
 					encontrado = True
 					if(tipo_sesion != 1):
 						print("Felicidades",reg.id,"ingresaste!\n")
-					elif(reg.estado == False): 
+					elif(not reg.estado): 
 						print("Su cuenta ha sido deshabilitada\n")
 						tipo_sesion = 0
 					else:
@@ -667,7 +672,7 @@ def reporteEstadisticoPropios():
 	match = 0
 	likes_dados_no_recibidos = 0
 	likes_recibidos_no_dados = 0
-	cant_posibles_match = cantRegistros(1) - 1
+	cant_posibles_match = cantRegistros(1,True) - 1
 
 	ids_likes_dados = [0] * cant_posibles_match 
 	ar_fisico, ar_logico = abrirPorTipo(4)
@@ -835,12 +840,12 @@ while(opcion_inicio != 0):
 		limpiarConsola()
 		match opcion_inicio:
 			case 1:
-				cant_estudiantes = cantRegistros(1)
+				cant_estudiantes = cantRegistros(1,True)
 				if(cant_estudiantes < 4):
 					print("No hay la cantidad de estudiantes necesarios para iniciar el programa, se necesitan", 4 - cant_estudiantes, "más.\n")
-				elif(cantRegistros(2) < 1):
+				elif(cantRegistros(2,True) < 1):
 					print("No hay la cantidad de moderadores necesarios para iniciar el programa, se necesita al menos uno.\n")
-				elif(cantRegistros(3) < 1):
+				elif(cantRegistros(3,False) < 1):
 					print("No hay la cantidad de administradores necesarios para iniciar el programa, se necesita al menos uno.\n")	
 				else:
 					tipo_sesion, reg = login()
@@ -853,7 +858,7 @@ while(opcion_inicio != 0):
 			case 21:
 				edades()
 			case 22:
-				matcheosCombinados(cantRegistros(1))
+				matcheosCombinados(cantRegistros(1,True))
 
 			case 0:
 				print("Adios!")
