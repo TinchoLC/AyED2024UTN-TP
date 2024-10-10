@@ -168,6 +168,7 @@ def pedirNombreID():
 		opcion_usu = input("Seleccione que ingresara del usuario\n\ta) Nombre\n\tb) ID\nOpcion: ")
 		ar_fisico, ar_logico = abrirPorTipo(1)
 		longitud_archivo = os.path.getsize(ar_fisico) 
+		limpiarConsola()
 
 		match opcion_usu:
 			case 'a':
@@ -299,6 +300,8 @@ def registro(tipo): # tipo 1 estudiante # tipo 2 moderador (usar en menu de admi
 		reg.contrasena = input("Ingrese la contraseña: ").ljust(30)
 		reg.estado = True
 
+		limpiarConsola()
+
 		if(tipo == 1):
 			reg.nombre = nombre.ljust(30)
 			reg.nacimiento = ingresarNacimiento().ljust(10)
@@ -366,6 +369,7 @@ def menuPrincipalModerador():
 	print("Menu Principal del moderador con id",reg.id)
 	print("\t1. Gestionar usuarios")
 	print("\t2. Gestionar Reportes")
+	print("\t3. Reportes Estadísticos")
 	print("\t0. Salir \n")
 
 	op = int(input("Seleccione la opcion: "))
@@ -392,7 +396,7 @@ def menuPrincipalAdministrador():
 	print("Menu Principal del administrador con id",reg.id)
 	print("\t1. Gestionar usuarios")
 	print("\t2. Gestionar Reportes")
-	print("\t3. Reportes estadisticos")
+	print("\t3. Reportes Estadísticos")
 	print("\t0. Salir \n")
 
 	op = int(input("Seleccione la opcion: "))
@@ -621,14 +625,17 @@ def verReportes():
 			match opcion_reporte:
 				case 'a':
 					rep.estado = '2'
+					limpiarConsola()
 					print("\nSe ignoro el reporte.\n\n")
 
 				case 'b':
 					rep.estado = '1'
 					desactivarID(rep.id_reportado)
+					limpiarConsola()
 					print("\nSe bloqueo al reportado.\n\n")
 
 				case _:
+					limpiarConsola()
 					print("Opción incorrecta.\n")
 	ar_logico.close()
 
@@ -945,6 +952,7 @@ while(opcion_inicio != 0):
 					match opcion_gest_usuarios:
 						case 'a':
 							desactivarUsuario()
+							limpiarConsola()
 
 						case 'b':
 							limpiarConsola() #volver
@@ -964,6 +972,10 @@ while(opcion_inicio != 0):
 							limpiarConsola() #volver
 						case _:
 							print("Opción incorrecta.\n")
+			
+			case 3:
+				print("en constru")
+				# Aca los reportes estadisticos (ojo que son distintos a los que habiamos hecho antes)
 
 			case 0:
 				print("\nSesión finalizada.\n")
@@ -995,6 +1007,7 @@ while(opcion_inicio != 0):
 
 						case 'c':
 							desactivarUsuario()	#muy parecieda al a opcion A, raro
+							limpiarConsola()
 
 						case 'd':
 							limpiarConsola() #volver
