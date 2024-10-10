@@ -36,6 +36,8 @@ class moderador:
 		self.email = "".ljust(45)
 		self.contrasena = "".ljust(30)
 		self.estado = True
+		self.reportes_ignorados = 0
+		self.reportes_aceptados = 0
 
 class administrador:
 	def __init__(self):
@@ -321,6 +323,8 @@ def registro(tipo): # tipo 1 estudiante # tipo 2 moderador (usar en menu de admi
 			reg.puntaje = 0
 			print(nombre.strip(), "registrado!\n")
 		else:
+			reg.reportes_ignorados = 0
+			reg.reportes_aceptados = 0
 			print("Moderador de id:",reg.id,"registrado!\n")
 
 		ar_logico.seek(longitud_archivo, 0) 
@@ -636,12 +640,18 @@ def verReportes():
 					rep.estado = '2'
 					limpiarConsola()
 					print("\nSe ignoro el reporte.\n\n")
+					if(tipo_sesion == 2):
+						reg.reportes_ignorados = reg.reportes_ignorados + 1
+						actualizarRegistro(reg, 2)
 
 				case 'b':
 					rep.estado = '1'
 					desactivarID(rep.id_reportado)
 					limpiarConsola()
 					print("\nSe bloqueo al reportado.\n\n")
+					if(tipo_sesion == 2):
+						reg.reportes_aceptados = reg.reportes_aceptados + 1
+						actualizarRegistro(reg, 2)
 
 				case _:
 					limpiarConsola()
