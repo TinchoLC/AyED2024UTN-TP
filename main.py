@@ -1,4 +1,4 @@
-# Archivo principal:/ ISI 1K03 AyED 2024 - Cabrera Martín, Delgado Mauro, Rodriguez Lautaro, Rossi Dariana
+# Archivo principal:/ ISI 1K03 AyED 2024 - Cabrera Martín, Rodriguez Lautaro, Rossi Dariana, Sanchez Jimena
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
@@ -125,17 +125,29 @@ def crearArchivos():
 		pickle.dump(reg_temp, ar_temporal)
 		ar_temporal.flush()
 
+		reg_temp.id = 3; reg_temp.email = "estudiante4@ayed.com".ljust(45); reg_temp.contrasena = "777888".ljust(30)
+		reg_temp.nombre = "Mauro".ljust(30); reg_temp.nacimiento = "2001-02-02".ljust(10)
+		reg_temp.hobbies = "one piece".ljust(150)
+		pickle.dump(reg_temp, ar_temporal)
+		ar_temporal.flush()
+
 		ar_temporal.close()
 	if not os.path.exists(arcmod_fisico):
 		ar_temporal = open(arcmod_fisico, "w+b")
+		reg_temp = moderador()
 
 		reg_temp.id = 0; reg_temp.email = "b".ljust(45); reg_temp.contrasena = "1".ljust(30)
 		pickle.dump(reg_temp, ar_temporal)
+
+		reg_temp.id = 1; reg_temp.email = "bb".ljust(45); reg_temp.contrasena = "1".ljust(30)
+		pickle.dump(reg_temp, ar_temporal)
+
 		ar_temporal.flush()
 
 		ar_temporal.close()
 	if not os.path.exists(arcadm_fisico):
 		ar_temporal = open(arcadm_fisico, "w+b")
+		reg_temp = administrador()
 		
 		reg_temp.id = 0; reg_temp.email = "c".ljust(45); reg_temp.contrasena = "1".ljust(30)
 		pickle.dump(reg_temp, ar_temporal)
@@ -736,7 +748,20 @@ def calcularEdad(nacimiento):
 		edad = edad - 1
 	return edad
 
-def reporteEstadisticoPropios():
+def likeValido(lik):
+	ar_fisico, ar_logico = abrirPorTipo(1)
+	longitud_archivo = os.path.getsize(ar_fisico) 
+
+	valido = True
+	while (ar_logico.tell() < longitud_archivo and valido):
+		reg_temp = pickle.load(ar_logico)
+		if(not reg_temp.estado and (reg_temp.id == lik.id_destinatario or reg_temp.id == lik.id_remitente)):
+			valido = False
+			
+	ar_logico.close()
+	return valido
+
+def reporteEstadisticoPropio():
 	match = 0
 	likes_dados_no_recibidos = 0
 	likes_recibidos_no_dados = 0
@@ -748,14 +773,14 @@ def reporteEstadisticoPropios():
 
 	while (ar_logico.tell() < longitud_archivo):
 		like_temp = pickle.load(ar_logico)
-		if(reg.id == like_temp.id_remitente):
+		if(reg.id == like_temp.id_remitente and likeValido(like_temp)):
 			ids_likes_dados[likes_dados_no_recibidos] = like_temp.id_destinatario
 			likes_dados_no_recibidos = likes_dados_no_recibidos + 1
 
 	ar_logico.seek(0,0)
 	while (ar_logico.tell() < longitud_archivo):
 		like_temp = pickle.load(ar_logico)
-		if(reg.id == like_temp.id_destinatario):
+		if(reg.id == like_temp.id_destinatario and likeValido(like_temp)):
 			likes_recibidos_no_dados = likes_recibidos_no_dados + 1
 			for i in range(likes_dados_no_recibidos):
 				if(ids_likes_dados[i] == like_temp.id_remitente):
@@ -892,6 +917,81 @@ def matcheosCombinados(cant):
 	matcheos_posibles = cant * (cant-1) / 2
 	print("La cantidad de matcheos posibles con la cantidad actual de estudiantes ({}) es de:".format(cant), int(matcheos_posibles),"\n")
 
+def superLike():
+	print("Selecciona el candidato al que deseas dar el Super-like:")
+	mostrarDatosEstudiantes()  
+	id_candidato = int(input("Ingrese el id del estudiante: "))
+	if(id_candidato >= cantRegistros(1,False)):
+		print("El id no es correcto")
+	else:
+		ar_fisico, ar_logico = abrirPorTipo(4) 
+		longitud_archivo = os.path.getsize(ar_fisico)
+		like_dado = False
+		like_recibido = False
+
+		while ar_logico.tell() < longitud_archivo:
+			like_temp = pickle.load(ar_logico)
+			if like_temp.id_remitente == reg.id and like_temp.id_destinatario == id_candidato:
+				like_dado = True
+			if like_temp.id_remitente == id_candidato and like_temp.id_destinatario == reg.id:
+				like_recibido = True
+			
+		like_n = like()
+		ar_logico.seek(longitud_archivo, 0)
+		if not like_dado:
+			like_n.id_remitente = reg.id
+			like_n.id_destinatario = id_candidato
+			pickle.dump(like_n, ar_logico)
+			ar_logico.flush()
+			
+		if not like_recibido:
+			like_n.id_remitente = id_candidato
+			like_n.id_destinatario = reg.id
+			pickle.dump(like_retorno, ar_logico) 
+			ar_logico.flush()
+			
+			print(f"¡Has dado un Super-like a {id_candidato}! ¡Ahora tienen un match!")
+			
+		ar_logico.close()
+
+def recibioLikeSinDar(id_enamorado):
+	ar_fisico, ar_logico = abrirPorTipo(4)
+	longitud_archivo = os.path.getsize(ar_fisico)
+	ignorado = True
+	enamorado = False
+
+	while ar_logico.tell() < longitud_archivo:
+		like_temp = pickle.load(ar_logico)
+		if like_temp.id_remitente == reg.id and like_temp.id_destinatario == id_enamorado:
+			ignorado = False
+		if like_temp.id_remitente == id_enamorado and like_temp.id_destinatario == reg.id:
+			enamorado = True
+
+	return enamorado and ignorado
+def revelarCandidatos():
+				
+	unEnamorado = False
+	ar_fisico, ar_logico = abrirPorTipo(1)
+	longitud_archivo = os.path.getsize(ar_fisico) 
+	
+	print("Estos son los candidatos que te han dado like y no han sido correspondidos:\n")
+	while (ar_logico.tell() < longitud_archivo):
+		reg_temp = pickle.load(ar_logico)
+		
+		if(recibioLikeSinDar(reg_temp.id)):
+			print("ID de estudiante: ",reg_temp.id)
+			print("Nombre:", reg_temp.nombre)
+			print("Fecha de Nacimiento:", reg_temp.nacimiento)
+			print("Edad:", calcularEdad(reg_temp.nacimiento))
+			print("Biografia:", reg_temp.bio)
+			print("Hobbies: {} \n" .format(reg_temp.hobbies))
+			unEnamorado = True
+	
+	ar_logico.close()
+		
+	if(not unEnamorado):
+		print("Nadie que no hayas likeado busca hacer un matcheo contigo.")
+
 ##############################################################
 crearArchivos()
 if(os.path.getsize(arclik_fisico)==0):
@@ -981,34 +1081,26 @@ while(opcion_inicio != 0):
 					limpiarConsola()
 					match opcion_matcheo:
 						case 'a':
-							print("Ver Matcheos aún no realizado.\n") # VER MATCHEOS
+							print("Ver Matcheos aún no realizado.\n")
 						case 'b':
-							print("Eliminar un Matcheo aún no realizado.\n") # ELIMINAR UN MATCHEO
+							print("Eliminar un Matcheo aún no realizado.\n")
 						case 'c':
 							limpiarConsola() #volver
 						case _:
 							print("Opción incorrecta.\n")		
 
 			case 4:
-				reporteEstadisticoPropios()
+				reporteEstadisticoPropio()
 
 			case 32:
-				if(reg.superlike_disponible): # Bonus 2
-					# ACA TENES QUE HACER VOS JIMENA, ACA VA LO DEL SUPERLIKE (adentro del IF pls)
-					#hacelo de una todo acá si querés despues lo pasamos a función
-
-
-					reg.superlike_disponible = False
-	
-				
+				if(reg.superlike_disponible):
+					superLike()
+				reg.superlike_disponible = False
 
 			case 33:
-				if(reg.revelarcandidato_disponible): # Bonus 3
-					# ACA TENES QUE HACER VOS JIMENA, ACA VA LO DE REVELAR CANDIDATO (adentro del IF pls)
-					#hacelo de una todo acá si querés despues lo pasamos a función
-					
-
-					reg.revelarcandidato_disponible = False
+				if(reg.revelarcandidato_disponible):
+					revelarCandidatos()
+				reg.revelarcandidato_disponible = False
 				
 			case 0:
 				print("\nSesión finalizada.\n")
@@ -1071,11 +1163,6 @@ while(opcion_inicio != 0):
 					match opcion_gest_usuarios:
 						case 'a':
 							eliminaUsuario()
-							#crear una funcion que te pregunte si queres desactivar a un usuario
-							#o a un moderador, si queres desactivar un usuario usar dentro de esa
-							#la funcion desactivarUsuario()
-							#para hacer la parte de desactivar moderador recicla codigo de la funcion 
-							#desactivarUsuario tmb
 
 						case 'b':
 							registro(2)
