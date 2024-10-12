@@ -661,6 +661,64 @@ def verReportes():
 	if sin_nuevos_reportes:
 		print("No hay reportes por mostrar.\n")
 
+#FUNCIONES ADMIN
+def pedirIDModerador():
+    id_moderador = -1
+    ar_fisico, ar_logico = abrirPorTipo(2)
+    longitud_archivo = os.path.getsize(ar_fisico)
+
+    id_posible_moderador = int(input("\nIngrese la ID del moderador: "))
+    cant_moderadores = cantRegistros(2, False)
+
+    if id_posible_moderador >= cant_moderadores:
+        print("\nID no válido.\n")
+    else:
+        while ar_logico.tell() < longitud_archivo:
+            reg_temp = pickle.load(ar_logico)
+            if id_posible_moderador == reg_temp.id:
+                id_moderador = reg_temp.id
+
+    ar_logico.close()
+    return int(id_moderador)
+
+def desactivarModeradorID(id_moderador):
+    ar_fisico, ar_logico = abrirPorTipo(2)
+    longitud_archivo = os.path.getsize(ar_fisico)
+    
+    reg_mod = pickle.load(ar_logico)
+    while ar_logico.tell() < longitud_archivo and reg_mod.id != id_moderador:
+        reg_mod = pickle.load(ar_logico)
+    
+    ar_logico.close()
+
+    reg_mod.estado = False
+
+    actualizarRegistro(reg_mod, 2)
+
+def eliminarModerador():
+	id_mod = pedirIDModerador()
+	if id_mod == -1:
+		print("moderador no encontrado")
+	else:
+		print("Desea desactivar al usuario con id",id_mod,"definitivamente?")
+		print("\t1. Si")
+		print("\t0. No\n")
+		op_desactivar = int(input("Selecciona la opción: "))
+		if(op_desactivar == 1):
+			desactivarModeradorID(id_mod)
+
+def eliminaUsuario():
+	print("1.Estudiante")
+	print("2.Moderador")
+	op_elimina = int(input("Seleccione cual:"))
+	match op_elimina:
+		case 1:
+			desactivarUsuario()
+		case 2:
+			eliminarModerador()
+		case _:
+			print("Opcion incorrecta")
+
 # OTRAS FUNCIONES
 def calcularEdad(nacimiento):
 	ano_actual = datetime.now().year
@@ -1012,7 +1070,7 @@ while(opcion_inicio != 0):
 					limpiarConsola()
 					match opcion_gest_usuarios:
 						case 'a':
-							print("esto borrarlo pero si no no compila")
+							eliminaUsuario()
 							#crear una funcion que te pregunte si queres desactivar a un usuario
 							#o a un moderador, si queres desactivar un usuario usar dentro de esa
 							#la funcion desactivarUsuario()
