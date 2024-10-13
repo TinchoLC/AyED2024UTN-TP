@@ -1021,12 +1021,22 @@ def matcheosCombinados(cant):
 	matcheos_posibles = cant * (cant-1) / 2
 	print("La cantidad de matcheos posibles con la cantidad actual de estudiantes ({}) es de:".format(cant), int(matcheos_posibles),"\n")
 
+def puntajesCandidatos():
+	match = 0
+	likes_dados_no_recibidos = 0
+	likes_recibidos_no_dados = 0
+	cant_posibles_match = cantRegistros(1,True) - 1
+
+	ids_likes_dados = [0] * cant_posibles_match 
+	ar_fisico, ar_logico = abrirPorTipo(4)
+	longitud_archivo = os.path.getsize(ar_fisico)
+
 def superLike():
-	print("Selecciona el candidato al que deseas dar el Super-like:")
+	print("Estos son los candidatos para dar el Super-like\n")
 	mostrarDatosEstudiantes()  
-	id_candidato = int(input("Ingrese el id del estudiante: "))
+	id_candidato = int(input("\n\nIngrese el id del estudiante: "))
 	if(id_candidato >= cantRegistros(1,False)):
-		print("El id no es correcto")
+		print("El id no es correcto\n")
 	else:
 		ar_fisico, ar_logico = abrirPorTipo(4) 
 		longitud_archivo = os.path.getsize(ar_fisico)
@@ -1053,8 +1063,9 @@ def superLike():
 			like_n.id_destinatario = reg.id
 			pickle.dump(like_n, ar_logico) 
 			ar_logico.flush()
-			
-			print(f"¡Has dado un Super-like a {id_candidato}! ¡Ahora tienen un match!")
+
+			limpiarConsola()
+			print(f"¡Has dado un Super-like a {id_candidato}! ¡Ahora tienen un match!\n")
 			
 		ar_logico.close()
 
@@ -1212,7 +1223,7 @@ while(opcion_inicio != 0):
 				print("Opcion incorrecta")	 
 
 	while(opcion != 0 and tipo_sesion == 2): # Moderador
-
+		
 		opcion = menuPrincipalModerador()
 		limpiarConsola()
 		match opcion:
