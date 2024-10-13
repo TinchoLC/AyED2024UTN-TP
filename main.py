@@ -385,7 +385,7 @@ def menuMatcheos():
 	print("\tc. Volver\n")
 
 	print("En construcción...\nNinguna opción es funcional\n")
-	op = int(input("Seleccione la opcion: "))
+	op = input("Seleccione la opcion: ")
 	return op
 
 # MENUS MODERADOR
@@ -421,6 +421,7 @@ def menuPrincipalAdministrador():
 	print("\t1. Gestionar usuarios")
 	print("\t2. Gestionar Reportes")
 	print("\t3. Reportes Estadísticos")
+	print("\t4. Listado de estudiantes con puntaje")
 	print("\t0. Salir \n")
 
 	op = int(input("Seleccione la opcion: "))
@@ -743,7 +744,6 @@ def porcentajeIgnorados():
     ar_logico.close()
     porcentaje_ignorados = (cantidad_ignorados / total_reportes) * 100
     return porcentaje_ignorados
-
 def porcentajeAceptados():
     ar_fisico, ar_logico = abrirPorTipo(5) 
     cantidad_aceptados = 0
@@ -758,7 +758,6 @@ def porcentajeAceptados():
     ar_logico.close()
     porcentaje_aceptados = (cantidad_aceptados / total_reportes) * 100
     return porcentaje_aceptados
-
 def moderadorReporteIgnorados():
     ar_fisico, ar_logico = abrirPorTipo(2)
     mayor_ignorados = -1
@@ -773,7 +772,6 @@ def moderadorReporteIgnorados():
 
     ar_logico.close()
     return moderador_id, mayor_ignorados
-
 def moderadorReporteAceptados():
     ar_fisico, ar_logico = abrirPorTipo(2) 
     mayor_aceptados = -1
@@ -788,7 +786,6 @@ def moderadorReporteAceptados():
 
     ar_logico.close()
     return moderador_id, mayor_aceptados
-
 def moderadorReporteProcesados():
     ar_fisico, ar_logico = abrirPorTipo(2) 
     mayor_procesados = -1
@@ -804,7 +801,6 @@ def moderadorReporteProcesados():
 
     ar_logico.close()
     return moderador_id, mayor_procesados
-
 def mostrarReportesEstadisticos():
 	total_reportes = cantRegistros(5,False)
 	if(total_reportes != 0):
@@ -922,8 +918,7 @@ def menuBonus21():
 	print("\t0. Salir \n")
 
 	op = int(input("Seleccione la opcion: "))
-	return op
-	
+	return op	
 def sort(array):
 	for i in range(len(array)):
 		min_idx = i
@@ -1009,15 +1004,49 @@ def matcheosCombinados(cant):
 	matcheos_posibles = cant * (cant-1) / 2
 	print("La cantidad de matcheos posibles con la cantidad actual de estudiantes ({}) es de:".format(cant), int(matcheos_posibles),"\n")
 
-def puntajesCandidatos():
-	match = 0
-	likes_dados_no_recibidos = 0
-	likes_recibidos_no_dados = 0
+def puntajeCandidato(id_estudiante):
+	puntaje = 0
+	
+	likes_dados = 0
 	cant_posibles_match = cantRegistros(1,True) - 1
 
 	ids_likes_dados = [0] * cant_posibles_match 
 	ar_fisico, ar_logico = abrirPorTipo(4)
 	longitud_archivo = os.path.getsize(ar_fisico)
+
+	while (ar_logico.tell() < longitud_archivo):
+		like_temp = pickle.load(ar_logico)
+		if(id_estudiante == like_temp.id_remitente and likeValido(like_temp)):
+			ids_likes_dados[likes_dados] = like_temp.id_destinatario
+			likes_dados = likes_dados + 1
+
+	racha = 0
+	for i in range(likes_dados):
+		puntaje = puntaje - 1
+		ar_logico.seek(0,0)
+		perdio_racha = True
+		while (ar_logico.tell() < longitud_archivo):
+			like_temp = pickle.load(ar_logico)
+			if(ids_likes_dados[i] == like_temp.id_remitente and id_estudiante == like_temp.id_destinatario and likeValido(like_temp)):
+				puntaje = puntaje + 2
+				racha = racha + 1
+				perdio_racha = False
+				if(racha >= 3):
+					puntaje = puntaje + 1
+		if(perdio_racha):
+			racha = 0
+
+	ar_logico.close()
+	return puntaje
+def listadoPuntaje():
+	ar_fisico, ar_logico = abrirPorTipo(1)
+	longitud_archivo = os.path.getsize(ar_fisico) 
+	while (ar_logico.tell() < longitud_archivo):
+		reg_temp = pickle.load(ar_logico)
+		print("ID de estudiante: ",reg_temp.id)
+		print("\tNombre:", reg_temp.nombre)
+		print("\tPuntaje:",puntajeCandidato(reg_temp.id),"\n")
+	ar_logico.close()
 
 def superLike():
 	print("Estos son los candidatos para dar el Super-like\n")
@@ -1070,6 +1099,7 @@ def recibioLikeSinDar(id_enamorado):
 		if like_temp.id_remitente == id_enamorado and like_temp.id_destinatario == reg.id:
 			enamorado = True
 
+	ar_logico.close()
 	return enamorado and ignorado
 def revelarCandidatos():
 				
@@ -1293,6 +1323,9 @@ while(opcion_inicio != 0):
 
 			case 3:
 				mostrarReportesEstadisticos()
+
+			case 4:
+				listadoPuntaje()
 
 			case 0:
 				print("\nSesión finalizada.\n")
