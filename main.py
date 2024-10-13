@@ -28,7 +28,6 @@ class estudiante:
 		
 		self.superlike_disponible = True
 		self.revelarcandidato_disponible = True
-		self.puntaje = 0
 
 class moderador:
 	def __init__(self):
@@ -191,7 +190,7 @@ def pedirNombreID():
 
 		match opcion_usu:
 			case 'a':
-				nombre_usuario = input("\nIngrese el nombre del usuario: ").lower().ljust(30)
+				nombre_usuario = input("Ingrese el nombre del usuario: ").lower().ljust(30)
 				
 				while (ar_logico.tell() < longitud_archivo):
 					reg_temp = pickle.load(ar_logico)
@@ -199,7 +198,7 @@ def pedirNombreID():
 						id_usuario = reg_temp.id
 
 			case 'b':
-				id_posible_usuario = int(input("\nIngrese la id del usuario: "))
+				id_posible_usuario = int(input("Ingrese la id del usuario: "))
 				cant_estudiantes = cantRegistros(1,False)
 				if(id_posible_usuario >= cant_estudiantes):
 					id_usuario = -1
@@ -210,7 +209,7 @@ def pedirNombreID():
 							id_usuario = reg_temp.id
 
 			case _:
-				print("\nOpcion incorrecta\n\n")
+				print("Opcion incorrecta\n")
 	ar_logico.close()
 	return int(id_usuario)
 
@@ -300,6 +299,7 @@ def registro(tipo): # tipo 1 estudiante # tipo 2 moderador (usar en menu de admi
 	elif(tipo == 2):
 		email = emailRepetido(email,1)
 
+
 	ar_fisico, ar_logico = abrirPorTipo(tipo)
 	longitud_archivo = os.path.getsize(ar_fisico) 
 
@@ -307,15 +307,17 @@ def registro(tipo): # tipo 1 estudiante # tipo 2 moderador (usar en menu de admi
 		reg = pickle.load(ar_logico)
 		if(email == reg.email):
 			email = "novalido"
-		elif(nombre.lower()== reg.nombre.lower() and tipo == 1):
-			nombre = "novalido"
+		elif(tipo == 1 and nombre.lower()== reg.nombre.lower()):
+			if(nombre.lower()== reg.nombre.lower()):
+				nombre = "novalido"
 
 	if(email == "novalido"):
 		limpiarConsola()
 		print("El email ya está siendo utilizado o no es válido\n")
-	elif(nombre == "novalido" and tipo == 1):
-		limpiarConsola()
-		print("El nombre ya está siendo utilizado o no es válido\n")
+	elif(tipo == 1):
+		if(nombre == "novalido"):
+			limpiarConsola()
+			print("El nombre ya está siendo utilizado o no es válido\n")
 	else:
 		reg.id = reg.id + 1
 		reg.email = email.ljust(45)
@@ -332,7 +334,6 @@ def registro(tipo): # tipo 1 estudiante # tipo 2 moderador (usar en menu de admi
 			reg.sexo = "".ljust(10)
 			reg.superlike_disponible = True
 			reg.revelarcandidato_disponible = True
-			reg.puntaje = 0
 			print(nombre.strip(), "registrado!\n")
 		else:
 			reg.reportes_ignorados = 0
@@ -461,11 +462,11 @@ def mostrarDatosEstudiantes():
 		reg_temp = pickle.load(ar_logico)
 		if(reg_temp.id != reg.id):
 			print("ID de estudiante: ",reg_temp.id)
-			print("Nombre:", reg_temp.nombre)
-			print("Fecha de Nacimiento:", reg_temp.nacimiento)
-			print("Edad:", calcularEdad(reg_temp.nacimiento))
-			print("Biografia:", reg_temp.bio)
-			print("Hobbies: {} \n" .format(reg_temp.hobbies))
+			print("\tNombre:", reg_temp.nombre)
+			print("\tFecha de Nacimiento:", reg_temp.nacimiento)
+			print("\tEdad:", calcularEdad(reg_temp.nacimiento))
+			print("\tBiografia:", reg_temp.bio)
+			print("\tHobbies: {} \n" .format(reg_temp.hobbies))
 	ar_logico.close()
 			
 def nombreCorrecto(nombre):
@@ -500,7 +501,7 @@ def agregarMatcheo():
 			while (ar_logico.tell() < longitud_archivo and not like_repetido):
 				like_temp = pickle.load(ar_logico)
 				if(like_temp.id_remitente == reg.id and like_temp.id_destinatario == me_gusta_id):
-					print("Ya le has dado like a", me_gusta)
+					print("Ya le has dado like a", me_gusta, "\n")
 					like_repetido = True
 			if not like_repetido:
 				like_n = like(); like_n.id_remitente = reg.id; like_n.id_destinatario = me_gusta_id
@@ -579,7 +580,6 @@ def reportar():
 	if(rep.id_reportado == -1):
 		limpiarConsola()
 		print("Usuario no encontrado\n")
-		input()
 	elif(rep.id_reportante == rep.id_reportado):
 		limpiarConsola()
 		print("No te puedes reportar a ti mismo\n")
@@ -618,8 +618,10 @@ def desactivarUsuario():
 		print("\t1. Si")
 		print("\t0. No\n")
 		opcion_desactivar = int(input("Selecciona la opción: "))
+		limpiarConsola()
 		if(opcion_desactivar == 1):
 			desactivarID(id_desactivado)
+			print("Se ha deshabilitado al usuario\n")
 
 def obtenerNombre(idd):
 	art_fisico, art_logico = abrirPorTipo(1)
@@ -652,7 +654,7 @@ def verReportes():
 				case 'a':
 					rep.estado = '2'
 					limpiarConsola()
-					print("\nSe ignoro el reporte.\n\n")
+					print("Se ignoro el reporte.\n\n")
 					if(tipo_sesion == 2):
 						reg.reportes_ignorados = reg.reportes_ignorados + 1
 						actualizarRegistro(reg, 2)
@@ -661,7 +663,7 @@ def verReportes():
 					rep.estado = '1'
 					desactivarID(rep.id_reportado)
 					limpiarConsola()
-					print("\nSe bloqueo al reportado.\n\n")
+					print("Se bloqueo al reportado.\n\n")
 					if(tipo_sesion == 2):
 						reg.reportes_aceptados = reg.reportes_aceptados + 1
 						actualizarRegistro(reg, 2)
@@ -710,18 +712,22 @@ def desactivarModeradorID(id_moderador):
 def eliminarModerador():
 	id_mod = pedirIDModerador()
 	if id_mod == -1:
-		print("moderador no encontrado")
+		limpiarConsola()
+		print("Moderador no encontrado\n\n")
 	else:
 		print("Desea desactivar al moderador con id",id_mod,"definitivamente?")
 		print("\t1. Si")
 		print("\t0. No\n")
 		op_desactivar = int(input("Selecciona la opción: "))
+		limpiarConsola()
 		if(op_desactivar == 1):
 			desactivarModeradorID(id_mod)
+			print("Se ha deshabilitado el moderador")
 def eliminaUsuario():
-	print("1.Estudiante")
-	print("2.Moderador")
+	print("1. Estudiante")
+	print("2. Moderador\n")
 	op_elimina = int(input("Seleccione cual:"))
+	limpiarConsola()
 	match op_elimina:
 		case 1:
 			desactivarUsuario()
@@ -812,12 +818,12 @@ def mostrarReportesEstadisticos():
 
 		print("Cantidad de reportes realizados por los estudiantes: ",total_reportes)
 		print(f"Porcentaje de reportes ignorados: {reportes_ignorados:.2f}%")
-		print(f"Porcentaje de reportes aceptados: {reportes_aceptados:.2f}%")
+		print(f"Porcentaje de reportes aceptados: {reportes_aceptados:.2f}%\n")
 		print("El moderador con mayor reportes ignorados ID:", mod_ignorado,"con", cant_ignorados, "reportes.")
 		print("El moderador con mayor reportes aceptados ID:", mod_aceptado,"con", cant_aceptados, "reportes.")
-		print("El moderador con mayor reportes procesados ID:", mod_procesado,"con", cant_procesado, "reportes.")
+		print("El moderador con mayor reportes procesados ID:", mod_procesado,"con", cant_procesado, "reportes.\n\n")
 	else:
-		print("Los estudiantes todavia no generaron ningun reporte")
+		print("Los estudiantes todavia no generaron ningun reporte\n\n")
 
 # OTRAS FUNCIONES
 def calcularEdad(nacimiento):
@@ -1052,7 +1058,8 @@ def superLike():
 	print("Estos son los candidatos para dar el Super-like\n")
 	mostrarDatosEstudiantes()  
 	id_candidato = int(input("\n\nIngrese el id del estudiante: "))
-	if(id_candidato >= cantRegistros(1,False)):
+	if(id_candidato >= cantRegistros(1,False) or id_candidato == reg.id):
+		limpiarConsola()
 		print("El id no es correcto\n")
 	else:
 		ar_fisico, ar_logico = abrirPorTipo(4) 
@@ -1123,7 +1130,8 @@ def revelarCandidatos():
 	ar_logico.close()
 		
 	if(not unEnamorado):
-		print("Nadie que no hayas likeado busca hacer un matcheo contigo.")
+		print("No hay candidatos :(")
+		print("Nadie que no hayas likeado busca hacer un matcheo contigo.\n")
 
 ##############################################################
 crearArchivos()
@@ -1236,7 +1244,7 @@ while(opcion_inicio != 0):
 				reg.revelarcandidato_disponible = False
 				
 			case 0:
-				print("\nSesión finalizada.\n")
+				print("Sesión finalizada.\n")
 			case _:
 				print("Opcion incorrecta")	 
 
@@ -1277,7 +1285,7 @@ while(opcion_inicio != 0):
 				mostrarReportesEstadisticos()
 
 			case 0:
-				print("\nSesión finalizada.\n")
+				print("Sesión finalizada.\n")
 			case _:
 				print("Opcion incorrecta")	 
 
@@ -1328,6 +1336,6 @@ while(opcion_inicio != 0):
 				listadoPuntaje()
 
 			case 0:
-				print("\nSesión finalizada.\n")
+				print("Sesión finalizada.\n")
 			case _:
 				print("Opcion incorrecta")	 
