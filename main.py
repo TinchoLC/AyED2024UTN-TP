@@ -703,10 +703,9 @@ def desactivarModeradorID(id_moderador):
     
     ar_logico.close()
 
-    reg_mod.estado = False
-
-    actualizarRegistro(reg_mod, 2)
-
+    if(reg_mod.id == id_moderador):
+    	reg_mod.estado = False
+    	actualizarRegistro(reg_mod, 2)
 def eliminarModerador():
 	id_mod = pedirIDModerador()
 	if id_mod == -1:
@@ -718,7 +717,6 @@ def eliminarModerador():
 		op_desactivar = int(input("Selecciona la opción: "))
 		if(op_desactivar == 1):
 			desactivarModeradorID(id_mod)
-
 def eliminaUsuario():
 	print("1.Estudiante")
 	print("2.Moderador")
@@ -731,22 +729,10 @@ def eliminaUsuario():
 		case _:
 			print("Opcion incorrecta")
 
-def cantidadReportes():
-    ar_fisico, ar_logico = abrirPorTipo(5)
-    cantidad_reportes = 0
-    longitud_archivo = os.path.getsize(ar_fisico)
-
-    while ar_logico.tell() < longitud_archivo:
-        reg_reporte = pickle.load(ar_logico)
-        cantidad_reportes = cantidad_reportes + 1
-
-    ar_logico.close()
-    return cantidad_reportes
-
 def porcentajeIgnorados():
     ar_fisico, ar_logico = abrirPorTipo(5) 
     cantidad_ignorados = 0
-    total_reportes = cantidadReportes()
+    total_reportes = cantRegistros(5,False)
     longitud_archivo = os.path.getsize(ar_fisico)
 
     while ar_logico.tell() < longitud_archivo:
@@ -761,7 +747,7 @@ def porcentajeIgnorados():
 def porcentajeAceptados():
     ar_fisico, ar_logico = abrirPorTipo(5) 
     cantidad_aceptados = 0
-    total_reportes = cantidadReportes()
+    total_reportes = cantRegistros(5,False)
     longitud_archivo = os.path.getsize(ar_fisico)
 
     while ar_logico.tell() < longitud_archivo:
@@ -820,20 +806,22 @@ def moderadorReporteProcesados():
     return moderador_id, mayor_procesados
 
 def mostrarReportesEstadisticos():
+	total_reportes = cantRegistros(5,False)
+	if(total_reportes != 0):
+		reportes_ignorados = porcentajeIgnorados()
+		reportes_aceptados = porcentajeAceptados()
+		mod_ignorado, cant_ignorados = moderadorReporteIgnorados()
+		mod_aceptado, cant_aceptados = moderadorReporteAceptados()
+		mod_procesado, cant_procesado = moderadorReporteProcesados()
 
-	total_reportes = cantidadReportes()
-	reportes_ignorados = porcentajeIgnorados()
-	reportes_aceptados = porcentajeAceptados()
-	mod_ignorado, cant_ignorados = moderadorReporteIgnorados()
-	mod_aceptado, cant_aceptados = moderadorReporteAceptados()
-	mod_procesado, cant_procesado = moderadorReporteProcesados()
-
-	print("Cantidad de reportes realizados por los estudiantes: ",total_reportes)
-	print(f"Porcentaje de reportes ignorados: {reportes_ignorados:.2f}%")
-	print(f"Porcentaje de reportes aceptados: {reportes_aceptados:.2f}%")
-	print("El moderador con mayor reportes ignorados ID: ", mod_ignorado,"con", cant_ignorados)
-	print("El moderador con mayor reportes aceptados ID: ", mod_aceptado,"con", cant_aceptados)
-	print("El moderador con mayor reportes procesados ID: ", mod_procesado,"con", cant_procesado)
+		print("Cantidad de reportes realizados por los estudiantes: ",total_reportes)
+		print(f"Porcentaje de reportes ignorados: {reportes_ignorados:.2f}%")
+		print(f"Porcentaje de reportes aceptados: {reportes_aceptados:.2f}%")
+		print("El moderador con mayor reportes ignorados ID:", mod_ignorado,"con", cant_ignorados, "reportes.")
+		print("El moderador con mayor reportes aceptados ID:", mod_aceptado,"con", cant_aceptados, "reportes.")
+		print("El moderador con mayor reportes procesados ID:", mod_procesado,"con", cant_procesado, "reportes.")
+	else:
+		print("Los estudiantes todavia no generaron ningun reporte")
 
 # OTRAS FUNCIONES
 def calcularEdad(nacimiento):
@@ -888,7 +876,7 @@ def reporteEstadisticoPropio():
 			likes_recibidos_no_dados = likes_recibidos_no_dados + 1
 			for i in range(likes_dados_no_recibidos):
 				if(ids_likes_dados[i] == like_temp.id_remitente):
-					ids_likes_dados[i] = ids_likes_dados[likes_dados_no_recibidos]
+					ids_likes_dados[i] = ids_likes_dados[likes_dados_no_recibidos - 1] # Hay que salvar el ultimo dato porque el for será de uno menos
 					likes_dados_no_recibidos = likes_dados_no_recibidos - 1 
 					likes_recibidos_no_dados = likes_recibidos_no_dados - 1
 					match = match + 1
@@ -1256,8 +1244,7 @@ while(opcion_inicio != 0):
 							print("Opción incorrecta.\n")
 			
 			case 3:
-				print("en constru")
-				# Aca los reportes estadisticos (ojo que son distintos a los que habiamos hecho antes)
+				mostrarReportesEstadisticos()
 
 			case 0:
 				print("\nSesión finalizada.\n")
