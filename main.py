@@ -683,7 +683,7 @@ def pedirIDModerador():
     cant_moderadores = cantRegistros(2, False)
 
     if id_posible_moderador >= cant_moderadores:
-        print("\nID no válido.\n")
+        print("\nID no encontrado.\n")
     else:
         while ar_logico.tell() < longitud_archivo:
             reg_temp = pickle.load(ar_logico)
@@ -712,7 +712,7 @@ def eliminarModerador():
 	if id_mod == -1:
 		print("moderador no encontrado")
 	else:
-		print("Desea desactivar al usuario con id",id_mod,"definitivamente?")
+		print("Desea desactivar al moderador con id",id_mod,"definitivamente?")
 		print("\t1. Si")
 		print("\t0. No\n")
 		op_desactivar = int(input("Selecciona la opción: "))
@@ -730,6 +730,110 @@ def eliminaUsuario():
 			eliminarModerador()
 		case _:
 			print("Opcion incorrecta")
+
+def cantidadReportes():
+    ar_fisico, ar_logico = abrirPorTipo(5)
+    cantidad_reportes = 0
+    longitud_archivo = os.path.getsize(ar_fisico)
+
+    while ar_logico.tell() < longitud_archivo:
+        reg_reporte = pickle.load(ar_logico)
+        cantidad_reportes = cantidad_reportes + 1
+
+    ar_logico.close()
+    return cantidad_reportes
+
+def porcentajeIgnorados():
+    ar_fisico, ar_logico = abrirPorTipo(5) 
+    cantidad_ignorados = 0
+    total_reportes = cantidadReportes()
+    longitud_archivo = os.path.getsize(ar_fisico)
+
+    while ar_logico.tell() < longitud_archivo:
+        reg_reporte = pickle.load(ar_logico)
+        if reg_reporte.estado == 2:  
+            cantidad_ignorados = cantidad_ignorados + 1
+
+    ar_logico.close()
+    porcentaje_ignorados = (cantidad_ignorados / total_reportes) * 100
+    return porcentaje_ignorados
+
+def porcentajeAceptados():
+    ar_fisico, ar_logico = abrirPorTipo(5) 
+    cantidad_aceptados = 0
+    total_reportes = cantidadReportes()
+    longitud_archivo = os.path.getsize(ar_fisico)
+
+    while ar_logico.tell() < longitud_archivo:
+        reg_reporte = pickle.load(ar_logico)
+        if reg_reporte.estado == 1:
+            cantidad_aceptados = cantidad_aceptados + 1
+
+    ar_logico.close()
+    porcentaje_aceptados = (cantidad_aceptados / total_reportes) * 100
+    return porcentaje_aceptados
+
+def moderadorReporteIgnorados():
+    ar_fisico, ar_logico = abrirPorTipo(2)
+    mayor_ignorados = -1
+    moderador_id = -1
+    longitud_archivo = os.path.getsize(ar_fisico)
+
+    while ar_logico.tell() < longitud_archivo:
+        reg_mod = pickle.load(ar_logico)
+        if reg_mod.reportes_ignorados > mayor_ignorados:
+            mayor_ignorados = reg_mod.reportes_ignorados
+            moderador_id = reg_mod.id
+
+    ar_logico.close()
+    return moderador_id, mayor_ignorados
+
+def moderadorReporteAceptados():
+    ar_fisico, ar_logico = abrirPorTipo(2) 
+    mayor_aceptados = -1
+    moderador_id = -1
+    longitud_archivo = os.path.getsize(ar_fisico)
+
+    while ar_logico.tell() < longitud_archivo:
+        reg_mod = pickle.load(ar_logico)
+        if reg_mod.reportes_aceptados > mayor_aceptados:
+            mayor_aceptados = reg_mod.reportes_aceptados
+            moderador_id = reg_mod.id
+
+    ar_logico.close()
+    return moderador_id, mayor_aceptados
+
+def moderadorReporteProcesados():
+    ar_fisico, ar_logico = abrirPorTipo(2) 
+    mayor_procesados = -1
+    moderador_id = -1
+    longitud_archivo = os.path.getsize(ar_fisico)
+
+    while ar_logico.tell() < longitud_archivo:
+        reg_mod = pickle.load(ar_logico)
+        total_procesados = reg_mod.reportes_ignorados + reg_mod.reportes_aceptados
+        if total_procesados > mayor_procesados:
+            mayor_procesados = total_procesados
+            moderador_id = reg_mod.id
+
+    ar_logico.close()
+    return moderador_id, mayor_procesados
+
+def mostrarReportesEstadisticos():
+
+	total_reportes = cantidadReportes()
+	reportes_ignorados = porcentajeIgnorados()
+	reportes_aceptados = porcentajeAceptados()
+	mod_ignorado, cant_ignorados = moderadorReporteIgnorados()
+	mod_aceptado, cant_aceptados = moderadorReporteAceptados()
+	mod_procesado, cant_procesado = moderadorReporteProcesados()
+
+	print("Cantidad de reportes realizados por los estudiantes: ",total_reportes)
+	print(f"Porcentaje de reportes ignorados: {reportes_ignorados:.2f}%")
+	print(f"Porcentaje de reportes aceptados: {reportes_aceptados:.2f}%")
+	print("El moderador con mayor reportes ignorados ID: ", mod_ignorado,"con", cant_ignorados)
+	print("El moderador con mayor reportes aceptados ID: ", mod_aceptado,"con", cant_aceptados)
+	print("El moderador con mayor reportes procesados ID: ", mod_procesado,"con", cant_procesado)
 
 # OTRAS FUNCIONES
 def calcularEdad(nacimiento):
@@ -947,7 +1051,7 @@ def superLike():
 		if not like_recibido:
 			like_n.id_remitente = id_candidato
 			like_n.id_destinatario = reg.id
-			pickle.dump(like_retorno, ar_logico) 
+			pickle.dump(like_n, ar_logico) 
 			ar_logico.flush()
 			
 			print(f"¡Has dado un Super-like a {id_candidato}! ¡Ahora tienen un match!")
@@ -1190,8 +1294,7 @@ while(opcion_inicio != 0):
 							print("Opción incorrecta.\n")
 
 			case 3:
-				print("en constru")
-				# Aca los reportes estadisticos (ojo que son distintos a los que habiamos hecho antes)
+				mostrarReportesEstadisticos()
 
 			case 0:
 				print("\nSesión finalizada.\n")
