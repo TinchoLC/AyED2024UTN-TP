@@ -77,15 +77,26 @@ def cantRegistros(tipo,estado_activado):
 	ar_fisico, ar_logico = abrirPorTipo(tipo)
 	longitud_archivo = os.path.getsize(ar_fisico)
 	i = 0
-	longitud_registro = ar_logico.tell()
 	while (ar_logico.tell() < longitud_archivo):
 		i = i + 1
-		reg = pickle.load(ar_logico)
+		reg_t = pickle.load(ar_logico)
 		if(estado_activado):
-			if(not reg.estado):
+			if(not reg_t.estado):
 				i = i - 1
 	ar_logico.close()
 	return i
+
+def lenRegistro(tipo):
+	ar_fisico, ar_logico = abrirPorTipo(tipo)
+	longitud_archivo = os.path.getsize(ar_fisico)
+
+	if(longitud_archivo > 0):
+		reg_t = pickle.load(ar_logico)
+		long_registro = ar_logico.tell()
+	else:
+		long_registro = 0
+
+	return long_registro
 
 def likesAuto():
 	arclik_logico = open(arclik_fisico, "w+b")
@@ -299,7 +310,6 @@ def registro(tipo): # tipo 1 estudiante # tipo 2 moderador (usar en menu de admi
 	elif(tipo == 2):
 		email = emailRepetido(email,1)
 
-
 	ar_fisico, ar_logico = abrirPorTipo(tipo)
 	longitud_archivo = os.path.getsize(ar_fisico) 
 
@@ -307,17 +317,21 @@ def registro(tipo): # tipo 1 estudiante # tipo 2 moderador (usar en menu de admi
 		reg = pickle.load(ar_logico)
 		if(email == reg.email):
 			email = "novalido"
-		elif(tipo == 1 and nombre.lower()== reg.nombre.lower()):
-			if(nombre.lower()== reg.nombre.lower()):
+		elif(tipo == 1):
+			if(nombre.lower() == reg.nombre.lower()):
 				nombre = "novalido"
+
+	nombre_valido = True
+	if(tipo == 1): # Parche para que funcione con moderadores
+		if(nombre == "novalido"):
+			nombre_valido = False 
 
 	if(email == "novalido"):
 		limpiarConsola()
 		print("El email ya está siendo utilizado o no es válido\n")
-	elif(tipo == 1):
-		if(nombre == "novalido"):
-			limpiarConsola()
-			print("El nombre ya está siendo utilizado o no es válido\n")
+	elif(not nombre_valido):
+		limpiarConsola()
+		print("El nombre ya está siendo utilizado o no es válido\n")
 	else:
 		reg.id = reg.id + 1
 		reg.email = email.ljust(45)
@@ -448,12 +462,13 @@ def menuAdmGestionReportes():
 
 # FUNCIONES ESTUDIANTE
 def ingresarNacimiento():
-    fecha = input("Formato (año-mes-dia)\nxxxx-xx-xx\nIngrese la fecha de nacimiento: ")
-    while len(fecha) != 10:
-        print("La longitud de la fecha es incorrecta\n")
-        fecha = input("Formato (año-mes-dia)\nxxxx-xx-xx\nIngrese la fecha de nacimiento: ")
-    limpiarConsola()
-    return fecha
+	fecha = input("Formato (año-mes-dia)\nxxxx-xx-xx\nIngrese la fecha de nacimiento: ")
+	while len(fecha) != 10:
+		limpiarConsola()
+		print("La longitud de la fecha es incorrecta\n")
+		fecha = input("Formato (año-mes-dia)\nxxxx-xx-xx\nIngrese la fecha de nacimiento: ")
+	limpiarConsola()
+	return fecha
 
 def mostrarDatosEstudiantes():
 	ar_fisico, ar_logico = abrirPorTipo(1)
@@ -634,11 +649,9 @@ def obtenerNombre(idd):
 	art_logico.close()
 	return nombre
 def verReportes():
-	sin_nuevos_reportes = True
-	
 	ar_fisico, ar_logico = abrirPorTipo(5)
 	longitud_archivo = os.path.getsize(ar_fisico) 
-
+	longitud_registro = lenRegistro(5)
 	i = 0
 	while (ar_logico.tell() < longitud_archivo):
 		i = i + 1
@@ -652,7 +665,7 @@ def verReportes():
 
 			match opcion_reporte:
 				case 'a':
-					rep.estado = '2'
+					rep.estado = 2
 					limpiarConsola()
 					print("Se ignoro el reporte.\n\n")
 					if(tipo_sesion == 2):
@@ -660,7 +673,7 @@ def verReportes():
 						actualizarRegistro(reg, 2)
 
 				case 'b':
-					rep.estado = '1'
+					rep.estado = 1
 					desactivarID(rep.id_reportado)
 					limpiarConsola()
 					print("Se bloqueo al reportado.\n\n")
@@ -671,10 +684,14 @@ def verReportes():
 				case _:
 					limpiarConsola()
 					print("Opción incorrecta.\n")
+			
+			ar_logico.seek(ar_logico.tell()-longitud_registro)
+			pickle.dump(rep, ar_logico)
+			ar_logico.flush()
+
 	ar_logico.close()
 
-	if sin_nuevos_reportes:
-		print("No hay reportes por mostrar.\n")
+	print("No hay nuevos reportes por mostrar.\n")
 
 #FUNCIONES ADMIN
 def pedirIDModerador():
@@ -819,9 +836,9 @@ def mostrarReportesEstadisticos():
 		print("Cantidad de reportes realizados por los estudiantes: ",total_reportes)
 		print(f"Porcentaje de reportes ignorados: {reportes_ignorados:.2f}%")
 		print(f"Porcentaje de reportes aceptados: {reportes_aceptados:.2f}%\n")
-		print("El moderador con mayor reportes ignorados ID:", mod_ignorado,"con", cant_ignorados, "reportes.")
-		print("El moderador con mayor reportes aceptados ID:", mod_aceptado,"con", cant_aceptados, "reportes.")
-		print("El moderador con mayor reportes procesados ID:", mod_procesado,"con", cant_procesado, "reportes.\n\n")
+		print("El moderador con mayor cantidad de reportes ignorados ID:", mod_ignorado,"(con", cant_ignorados, "reportes)")
+		print("El moderador con mayor cantidad de reportes aceptados ID:", mod_aceptado,"(con", cant_aceptados, "reportes)")
+		print("El moderador con mayor cantidad de reportes procesados ID:", mod_procesado,"(con", cant_procesado, "reportes)\n\n")
 	else:
 		print("Los estudiantes todavia no generaron ningun reporte\n\n")
 
@@ -1237,11 +1254,13 @@ while(opcion_inicio != 0):
 				if(reg.superlike_disponible):
 					superLike()
 				reg.superlike_disponible = False
+				actualizarRegistro(reg,1)
 
 			case 33:
 				if(reg.revelarcandidato_disponible):
 					revelarCandidatos()
 				reg.revelarcandidato_disponible = False
+				actualizarRegistro(reg,1)
 				
 			case 0:
 				print("Sesión finalizada.\n")
