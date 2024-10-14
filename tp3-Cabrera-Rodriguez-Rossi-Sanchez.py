@@ -695,37 +695,37 @@ def verReportes():
 
 #FUNCIONES ADMIN
 def pedirIDModerador():
-    id_moderador = -1
-    ar_fisico, ar_logico = abrirPorTipo(2)
-    longitud_archivo = os.path.getsize(ar_fisico)
+	id_moderador = -1
+	ar_fisico, ar_logico = abrirPorTipo(2)
+	longitud_archivo = os.path.getsize(ar_fisico)
 
-    id_posible_moderador = int(input("\nIngrese la ID del moderador: "))
-    cant_moderadores = cantRegistros(2, False)
+	id_posible_moderador = int(input("\nIngrese la ID del moderador: "))
+	cant_moderadores = cantRegistros(2, False)
 
-    if id_posible_moderador >= cant_moderadores:
-        print("\nID no encontrado.\n")
-    else:
-        while ar_logico.tell() < longitud_archivo:
-            reg_temp = pickle.load(ar_logico)
-            if id_posible_moderador == reg_temp.id:
-                id_moderador = reg_temp.id
+	if id_posible_moderador >= cant_moderadores:
+		print("\nID no encontrado.\n")
+	else:
+		while ar_logico.tell() < longitud_archivo:
+			reg_temp = pickle.load(ar_logico)
+			if id_posible_moderador == reg_temp.id:
+				id_moderador = reg_temp.id
 
-    ar_logico.close()
-    return int(id_moderador)
+	ar_logico.close()
+	return int(id_moderador)
 
 def desactivarModeradorID(id_moderador):
-    ar_fisico, ar_logico = abrirPorTipo(2)
-    longitud_archivo = os.path.getsize(ar_fisico)
-    
-    reg_mod = pickle.load(ar_logico)
-    while ar_logico.tell() < longitud_archivo and reg_mod.id != id_moderador:
-        reg_mod = pickle.load(ar_logico)
-    
-    ar_logico.close()
+	ar_fisico, ar_logico = abrirPorTipo(2)
+	longitud_archivo = os.path.getsize(ar_fisico)
 
-    if(reg_mod.id == id_moderador):
-    	reg_mod.estado = False
-    	actualizarRegistro(reg_mod, 2)
+	reg_mod = pickle.load(ar_logico)
+	while ar_logico.tell() < longitud_archivo and reg_mod.id != id_moderador:
+		reg_mod = pickle.load(ar_logico)
+
+	ar_logico.close()
+
+	if(reg_mod.id == id_moderador):
+		reg_mod.estado = False
+		actualizarRegistro(reg_mod, 2)
 def eliminarModerador():
 	id_mod = pedirIDModerador()
 	if id_mod == -1:
@@ -754,76 +754,76 @@ def eliminaUsuario():
 			print("Opcion incorrecta")
 
 def porcentajeIgnorados():
-    ar_fisico, ar_logico = abrirPorTipo(5) 
-    cantidad_ignorados = 0
-    total_reportes = cantRegistros(5,False)
-    longitud_archivo = os.path.getsize(ar_fisico)
+	ar_fisico, ar_logico = abrirPorTipo(5) 
+	cantidad_ignorados = 0
+	total_reportes = cantRegistros(5,False)
+	longitud_archivo = os.path.getsize(ar_fisico)
 
-    while ar_logico.tell() < longitud_archivo:
-        reg_reporte = pickle.load(ar_logico)
-        if reg_reporte.estado == 2:  
-            cantidad_ignorados = cantidad_ignorados + 1
+	while ar_logico.tell() < longitud_archivo:
+		reg_reporte = pickle.load(ar_logico)
+		if reg_reporte.estado == 2:  
+			cantidad_ignorados = cantidad_ignorados + 1
 
-    ar_logico.close()
-    porcentaje_ignorados = (cantidad_ignorados / total_reportes) * 100
-    return porcentaje_ignorados
+	ar_logico.close()
+	porcentaje_ignorados = (cantidad_ignorados / total_reportes) * 100
+	return porcentaje_ignorados
 def porcentajeAceptados():
-    ar_fisico, ar_logico = abrirPorTipo(5) 
-    cantidad_aceptados = 0
-    total_reportes = cantRegistros(5,False)
-    longitud_archivo = os.path.getsize(ar_fisico)
+	ar_fisico, ar_logico = abrirPorTipo(5) 
+	cantidad_aceptados = 0
+	total_reportes = cantRegistros(5,False)
+	longitud_archivo = os.path.getsize(ar_fisico)
 
-    while ar_logico.tell() < longitud_archivo:
-        reg_reporte = pickle.load(ar_logico)
-        if reg_reporte.estado == 1:
-            cantidad_aceptados = cantidad_aceptados + 1
+	while ar_logico.tell() < longitud_archivo:
+		reg_reporte = pickle.load(ar_logico)
+		if reg_reporte.estado == 1:
+			cantidad_aceptados = cantidad_aceptados + 1
 
-    ar_logico.close()
-    porcentaje_aceptados = (cantidad_aceptados / total_reportes) * 100
-    return porcentaje_aceptados
+	ar_logico.close()
+	porcentaje_aceptados = (cantidad_aceptados / total_reportes) * 100
+	return porcentaje_aceptados
 def moderadorReporteIgnorados():
-    ar_fisico, ar_logico = abrirPorTipo(2)
-    mayor_ignorados = -1
-    moderador_id = -1
-    longitud_archivo = os.path.getsize(ar_fisico)
+	ar_fisico, ar_logico = abrirPorTipo(2)
+	mayor_ignorados = -1
+	moderador_id = -1
+	longitud_archivo = os.path.getsize(ar_fisico)
 
-    while ar_logico.tell() < longitud_archivo:
-        reg_mod = pickle.load(ar_logico)
-        if reg_mod.reportes_ignorados > mayor_ignorados:
-            mayor_ignorados = reg_mod.reportes_ignorados
-            moderador_id = reg_mod.id
+	while ar_logico.tell() < longitud_archivo:
+		reg_mod = pickle.load(ar_logico)
+		if reg_mod.reportes_ignorados > mayor_ignorados:
+			mayor_ignorados = reg_mod.reportes_ignorados
+			moderador_id = reg_mod.id
 
-    ar_logico.close()
-    return moderador_id, mayor_ignorados
+	ar_logico.close()
+	return moderador_id, mayor_ignorados
 def moderadorReporteAceptados():
-    ar_fisico, ar_logico = abrirPorTipo(2) 
-    mayor_aceptados = -1
-    moderador_id = -1
-    longitud_archivo = os.path.getsize(ar_fisico)
+	ar_fisico, ar_logico = abrirPorTipo(2) 
+	mayor_aceptados = -1
+	moderador_id = -1
+	longitud_archivo = os.path.getsize(ar_fisico)
 
-    while ar_logico.tell() < longitud_archivo:
-        reg_mod = pickle.load(ar_logico)
-        if reg_mod.reportes_aceptados > mayor_aceptados:
-            mayor_aceptados = reg_mod.reportes_aceptados
-            moderador_id = reg_mod.id
+	while ar_logico.tell() < longitud_archivo:
+		reg_mod = pickle.load(ar_logico)
+		if reg_mod.reportes_aceptados > mayor_aceptados:
+			mayor_aceptados = reg_mod.reportes_aceptados
+			moderador_id = reg_mod.id
 
-    ar_logico.close()
-    return moderador_id, mayor_aceptados
+	ar_logico.close()
+	return moderador_id, mayor_aceptados
 def moderadorReporteProcesados():
-    ar_fisico, ar_logico = abrirPorTipo(2) 
-    mayor_procesados = -1
-    moderador_id = -1
-    longitud_archivo = os.path.getsize(ar_fisico)
+	ar_fisico, ar_logico = abrirPorTipo(2) 
+	mayor_procesados = -1
+	moderador_id = -1
+	longitud_archivo = os.path.getsize(ar_fisico)
 
-    while ar_logico.tell() < longitud_archivo:
-        reg_mod = pickle.load(ar_logico)
-        total_procesados = reg_mod.reportes_ignorados + reg_mod.reportes_aceptados
-        if total_procesados > mayor_procesados:
-            mayor_procesados = total_procesados
-            moderador_id = reg_mod.id
+	while ar_logico.tell() < longitud_archivo:
+		reg_mod = pickle.load(ar_logico)
+		total_procesados = reg_mod.reportes_ignorados + reg_mod.reportes_aceptados
+		if total_procesados > mayor_procesados:
+			mayor_procesados = total_procesados
+			moderador_id = reg_mod.id
 
-    ar_logico.close()
-    return moderador_id, mayor_procesados
+	ar_logico.close()
+	return moderador_id, mayor_procesados
 def mostrarReportesEstadisticos():
 	total_reportes = cantRegistros(5,False)
 	if(total_reportes != 0):
